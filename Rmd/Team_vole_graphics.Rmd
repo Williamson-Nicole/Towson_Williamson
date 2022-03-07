@@ -16,16 +16,26 @@ knitr::opts_chunk$set(echo = TRUE)
 Model of climate change driven nutrient addition impacts on interspecific competition, and vole herbivory of E. vaginatum. Red arrows indicate positive feedbacks, blue indicate negative feedbacks, and gray indicates that the effect can be positive or negative depending on the abundance. The cumulative effects of these disturbances are unclear.  
 
 <img src="../Images/Tundra_model.png" class="center">  
-
+```{r, echo=FALSE}
+xfun::embed_file('../Images/Tundra_model.png', text = 'Click HERE to download image')
+```
 
 ### Figure 2: 
 Team voles experimental design explained. This setup is repeated three times at each of our locations (Toolik, Barrow, and Nome).  
 
 <img src="../Images/Team_vole_experimental_design.png" class="center">  
+```{r, echo=FALSE}
+xfun::embed_file('../Images/Team_vole_experimental_design.png', text = 'Click HERE to download image')
+```  
 
 
 ### Figure 3:  
 Exampled of vole activity, especially pertaining to *E. vaginatum* (1) voles eat the rhizomes of E. vaginatum which servers and kill the leaves (2) voles bury into the tussock mounds for shelter (3) voles eat the leaves off the top of tussocks (4) in the winter voles shelter within the subnivean zone and use chopped up E. vaginatum leaves as bedding. They create tunnels through the snow to access food stores.  
 
-<img src="../Images/Vole_activity.png" class="center">
+<img src="../Images/Vole_activity.png" class="center">  
+```{r, echo=FALSE}
+xfun::embed_file('../Images/Vole_activity.png', text = 'Click HERE to download image')
+```  
+
+
   
