@@ -15,20 +15,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 [Shareable leaflet map code](Rmd/Sharable-map-code.Rmd)    
 
-### Fun graphics/pictures:  
+## Fun graphics/pictures:  
 
 [Team vole graphics](Rmd/Team_vole_graphics.Rmd)  
 
-[LTER graphics](Rmd/LTER_graphics.Rmd)
+[LTER graphics](Rmd/LTER_graphics.Rmd)  
 
-## Thesis codes:  
+[Summer 2021 Feild Photos](Rmd/summer_2021_feild_photos.Rmd)
 
+## Thesis Data:  
 
 [Simulated Herbivory](Rmd/Simulated_Herbivory.Rmd)  
 
+[LTER 06MAT Plant Cover](Rmd/LTER_06MAT_cover_thesis.Rmd)
 
 [Toolik Team Vole Plant Cover](Rmd/Team_Vole_cover.Rmd)
-
-test
 
 <img src="Images/mountains.png" class="center">

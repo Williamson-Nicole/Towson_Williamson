@@ -9,19 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, include=FALSE}
-colorize <- function(x, color) {
-  if (knitr::is_latex_output()) {
-    sprintf("\\textcolor{%s}{%s}", color, x)
-  } else if (knitr::is_html_output()) {
-    sprintf("<span style='color: %s;'>%s</span>", color,
-      x)
-  } else x
-}
-```
-
-`r colorize("words go here", "red")`
-
 # Helpful Tips  
 
 **Useful keyboard shortcuts**
@@ -30,7 +17,6 @@ colorize <- function(x, color) {
 - `Cntrl` + `Z` functions like the Undo button in word or excel. Undoes whatever action you just did
 - `Cntrl` + `Alt` + `I` inserts a new code chunk
 - `Cntrl` + `Enter` runs the code that your courser is on (good for if you want to run small sections of code within a larger code chunk)
-- `Cntrl` + `Shift` + `M` inserts the pipe functions ` %>% `
 - `Cntrl` + `F` allows you to find things within the document (can be useful if you want to replace the name of an object everywhere in the document at the same time)
 - `Cntrl` + `Shift` + `O` opens a document outline that you can use to quickly navigate between titled sections of your document 
 - `Cntrl` + `C` to copy, `Cntrl` + `V` to paste
@@ -222,6 +208,7 @@ MyMerge       <- function(x, y){
   df$Row.names  <- NULL
   return(df)
 }
+
 relcov_func_08_21           <- Reduce(MyMerge, list(bg, ds, es, gr, sed, fb, lich, lit, ms, std))
 
 

@@ -8,18 +8,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, include=FALSE}
-colorize <- function(x, color) {
-  if (knitr::is_latex_output()) {
-    sprintf("\\textcolor{%s}{%s}", color, x)
-  } else if (knitr::is_html_output()) {
-    sprintf("<span style='color: %s;'>%s</span>", color,
-      x)
-  } else x
-}
-```
-
-`r colorize("words go here", "red")`
 
 # Helpful Tips  
 
@@ -630,7 +618,7 @@ ggplot(data = ht.avg.block, aes(x = d_sub2, y = avg_t_ht3, ymin = avg_t_ht3-std_
   #facet_grid( ~ clip)  #horizontally stacked
 
 
-ggsave("Linegraph_tiller_heights2.jpeg")
+#ggsave("Linegraph_tiller_heights2.jpeg")
 
 ```
 
@@ -915,7 +903,7 @@ PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(a
     #theme(legend.position="bottom")+
          facet_grid(clip ~ .)
   
-ggsave("finalheights_all.jpeg")
+#ggsave("finalheights_all.jpeg")
 ```
 
 ```{r}
@@ -939,7 +927,7 @@ PG_all$plot <- factor(PG_all$plot, levels = c("CT", "F2", "F5", "F10"))
     #theme(legend.position="bottom")+
      facet_grid(clip ~ .)
   
-ggsave("finalheights_all_BOXPLOT.jpeg")
+#ggsave("finalheights_all_BOXPLOT.jpeg")
 ```
 
  
