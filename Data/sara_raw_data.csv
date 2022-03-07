@@ -1,0 +1,289 @@
+Pot Number,Sum of total germinants by pot:,Mat Number,Site
+2,3,1A,Bens Run
+1,0,1B,Bens Run
+87,5,2A,Bens Run
+88,6,2A,Bens Run
+89,5,2A,Bens Run
+90,18,2A,Bens Run
+91,15,2A,Bens Run
+92,8,2A,Bens Run
+93,3,2A,Bens Run
+94,30,2A,Bens Run
+95,12,2A,Bens Run
+120,28,2B,Bens Run
+121,15,2B,Bens Run
+122,3,3A,Bens Run
+123,3,3B,Bens Run
+124,0,4A,Bens Run
+125,2,4B,Bens Run
+81,0,,Control
+82,0,,Control
+83,0,,Control
+119,0,,Control
+162,0,,Control
+185,0,,Control
+210,0,,Control
+246,0,,Control
+285,0,,Control
+286,0,,Control
+287,0,,Control
+288,0,,Control
+179,9,1A,Covered Bridge
+7,1,1B,Covered Bridge
+23,6,2A,Covered Bridge
+24,19,2A,Covered Bridge
+211,37,2B,Covered Bridge
+142,20,3A,Covered Bridge
+143,11,3A,Covered Bridge
+144,31,3A,Covered Bridge
+145,19,3A,Covered Bridge
+146,7,3A,Covered Bridge
+147,2,3A,Covered Bridge
+148,1,3A,Covered Bridge
+149,61,3A,Covered Bridge
+150,18,3A,Covered Bridge
+151,13,3A,Covered Bridge
+152,23,3A,Covered Bridge
+153,28,3A,Covered Bridge
+154,16,3A,Covered Bridge
+155,18,3A,Covered Bridge
+174,7,3B,Covered Bridge
+15,31,4A,Covered Bridge
+16,0,4A,Covered Bridge
+13,0,4B,Covered Bridge
+14,0,4B,Covered Bridge
+219,9,1A,Dead Run
+220,28,1A,Dead Run
+221,36,1A,Dead Run
+194,6,1B,Dead Run
+212,88,2A,Dead Run
+213,62,2A,Dead Run
+214,57,2A,Dead Run
+215,42,2A,Dead Run
+216,37,2A,Dead Run
+217,65,2A,Dead Run
+218,36,2A,Dead Run
+198,41,2B,Dead Run
+199,27,3A,Dead Run
+200,24,3A,Dead Run
+201,97,3A,Dead Run
+186,29,3B,Dead Run
+269,92,4A,Dead Run
+228,14,4B,Dead Run
+279,25,1A,East Beaverdam
+176,99,1B,East Beaverdam
+183,0,2B,East Beaverdam
+109,3,3A,East Beaverdam
+110,3,3A,East Beaverdam
+111,4,3A,East Beaverdam
+112,7,3A,East Beaverdam
+113,3,3A,East Beaverdam
+114,5,3A,East Beaverdam
+115,5,3A,East Beaverdam
+116,12,3A,East Beaverdam
+117,12,3A,East Beaverdam
+118,16,3A,East Beaverdam
+56,26,3B,East Beaverdam
+59,5,4A,East Beaverdam
+60,10,4A,East Beaverdam
+61,17,4A,East Beaverdam
+62,10,4A,East Beaverdam
+63,13,4A,East Beaverdam
+64,12,4A,East Beaverdam
+65,21,4A,East Beaverdam
+66,12,4A,East Beaverdam
+67,13,4A,East Beaverdam
+68,21,4A,East Beaverdam
+69,10,4A,East Beaverdam
+70,11,4A,East Beaverdam
+71,27,4A,East Beaverdam
+72,14,4A,East Beaverdam
+53,1,4B,East Beaverdam
+247,3,5A,East Beaverdam
+248,2,5A,East Beaverdam
+249,3,5A,East Beaverdam
+250,0,5A,East Beaverdam
+251,1,5A,East Beaverdam
+252,2,5A,East Beaverdam
+253,2,5A,East Beaverdam
+254,2,5A,East Beaverdam
+255,3,5A,East Beaverdam
+256,8,5A,East Beaverdam
+257,3,5A,East Beaverdam
+258,2,5A,East Beaverdam
+259,3,5A,East Beaverdam
+260,0,5A,East Beaverdam
+261,0,5A,East Beaverdam
+175,10,1A,Goodwin Run
+209,47,1B,Goodwin Run
+207,6,2A,Goodwin Run
+180,3,2B,Goodwin Run
+223,1,3A,Goodwin Run
+177,11,3B,Goodwin Run
+9,3,4A,Goodwin Run
+171,7,4B,Goodwin Run
+230,36,1B,Gwynn Falls Chartly
+50,35,2A,Gwynn Falls Chartly
+51,51,2A,Gwynn Falls Chartly
+52,64,2A,Gwynn Falls Chartly
+46,2,2B,Gwynn Falls Chartly
+75,59,3A,Gwynn Falls Chartly
+76,55,3A,Gwynn Falls Chartly
+41,6,3B,Gwynn Falls Chartly
+77,207,4A,Gwynn Falls Chartly
+78,129,4A,Gwynn Falls Chartly
+79,100,4A,Gwynn Falls Chartly
+80,118,4A,Gwynn Falls Chartly
+184,84,4B,Gwynn Falls Chartly
+280,32,5A,Gwynn Falls Chartly
+35,3,1A,Kelly Branch
+36,15,1A,Kelly Branch
+37,0,1A,Kelly Branch
+38,10,1A,Kelly Branch
+39,23,1A,Kelly Branch
+196,2,1B,Kelly Branch
+197,0,1B,Kelly Branch
+17,5,2A,Kelly Branch
+18,12,2A,Kelly Branch
+19,1,2A,Kelly Branch
+20,15,2A,Kelly Branch
+21,39,2A,Kelly Branch
+22,16,2A,Kelly Branch
+164,1,2B,Kelly Branch
+188,20,3A,Kelly Branch
+189,16,3A,Kelly Branch
+190,4,3A,Kelly Branch
+191,22,3A,Kelly Branch
+192,17,3A,Kelly Branch
+193,32,3A,Kelly Branch
+182,14,3B,Kelly Branch
+135,18,4A,Kelly Branch
+136,29,4A,Kelly Branch
+137,9,4A,Kelly Branch
+138,9,4A,Kelly Branch
+139,14,4A,Kelly Branch
+140,12,4A,Kelly Branch
+141,15,4A,Kelly Branch
+11,3,4B,Kelly Branch
+102,0,1A,Minebank 
+103,2,1A,Minebank 
+104,9,1A,Minebank 
+105,1,1A,Minebank 
+106,2,1A,Minebank 
+107,3,1A,Minebank 
+108,0,1A,Minebank 
+163,46,1B,Minebank 
+195,3,2A,Minebank 
+187,6,2B,Minebank 
+202,1,3A,Minebank 
+203,1,3A,Minebank 
+204,3,3A,Minebank 
+205,0,3A,Minebank 
+206,3,3A,Minebank 
+284,2,3B,Minebank 
+224,3,4A,Minebank 
+84,3,4B,Minebank 
+55,0,1A,Moores Branch
+4,2,1B,Moores Branch
+262,31,2A,Moores Branch
+263,28,2A,Moores Branch
+264,22,2A,Moores Branch
+265,8,2A,Moores Branch
+266,29,2A,Moores Branch
+267,20,2A,Moores Branch
+268,27,2A,Moores Branch
+165,0,2B,Moores Branch
+86,19,3A,Moores Branch
+49,0,3B,Moores Branch
+85,1,4A,Moores Branch
+3,4,4B,Moores Branch
+43,2,1A,Scotts Level McDonogh
+44,15,1A,Scotts Level McDonogh
+45,11,1B,Scotts Level McDonogh
+29,27,2A,Scotts Level McDonogh
+30,15,2A,Scotts Level McDonogh
+31,17,2A,Scotts Level McDonogh
+32,8,2A,Scotts Level McDonogh
+33,14,2A,Scotts Level McDonogh
+34,14,2A,Scotts Level McDonogh
+229,1,2B,Scotts Level McDonogh
+156,31,3A,Scotts Level McDonogh
+157,24,3A,Scotts Level McDonogh
+158,43,3A,Scotts Level McDonogh
+159,26,3A,Scotts Level McDonogh
+160,17,3A,Scotts Level McDonogh
+161,5,3A,Scotts Level McDonogh
+168,106,3B,Scotts Level McDonogh
+181,52,4A,Scotts Level McDonogh
+178,25,4B,Scotts Level McDonogh
+166,6,1A,Scotts Level Park
+222,1,1B,Scotts Level Park
+169,17,2A,Scotts Level Park
+170,25,2B,Scotts Level Park
+54,14,3A,Scotts Level Park
+74,0,3B,Scotts Level Park
+57,21,4A,Scotts Level Park
+58,31,4A,Scotts Level Park
+42,3,4B,Scotts Level Park
+126,22,1A,Towson Run
+127,26,1A,Towson Run
+128,9,1A,Towson Run
+129,26,1A,Towson Run
+130,23,1A,Towson Run
+131,14,1A,Towson Run
+132,6,1A,Towson Run
+133,6,1A,Towson Run
+134,14,1A,Towson Run
+6,4,1B,Towson Run
+5,4,1B ,Towson Run
+227,2,2A,Towson Run
+172,0,2B,Towson Run
+173,1,2B,Towson Run
+281,5,3A,Towson Run
+282,13,3A,Towson Run
+283,5,3A,Towson Run
+96,1,3B,Towson Run
+97,8,4A,Towson Run
+98,12,4A,Towson Run
+99,26,4A,Towson Run
+100,6,4A,Towson Run
+101,5,4A,Towson Run
+73,0,4B,Towson Run
+8,5,1A,Tributary to Gwynn Falls
+40,23,1B,Tributary to Gwynn Falls
+27,13,2A,Tributary to Gwynn Falls
+28,23,2A,Tributary to Gwynn Falls
+25,9,2B,Tributary to Gwynn Falls
+26,1,3A,Tributary to Gwynn Falls
+12,3,3B,Tributary to Gwynn Falls
+167,4,4A,Tributary to Gwynn Falls
+10,2,4B,Tributary to Gwynn Falls
+231,34,1A,Wellwood
+232,22,1A,Wellwood
+233,23,1A,Wellwood
+234,22,1A,Wellwood
+235,17,1A,Wellwood
+236,21,1A,Wellwood
+237,40,1A,Wellwood
+238,32,1A,Wellwood
+226,25,1B,Wellwood
+239,21,2A,Wellwood
+240,21,2A,Wellwood
+241,8,2A,Wellwood
+242,10,2A,Wellwood
+243,16,2A,Wellwood
+244,21,2A,Wellwood
+245,24,2A,Wellwood
+47,11,2B,Wellwood
+48,4,3A,Wellwood
+225,1,3B,Wellwood
+270,2,4A,Wellwood
+271,11,4A,Wellwood
+272,11,4A,Wellwood
+273,5,4A,Wellwood
+274,33,4A,Wellwood
+275,7,4A,Wellwood
+276,5,4A,Wellwood
+277,5,4A,Wellwood
+278,4,4A,Wellwood
+208,55,4B,Wellwood

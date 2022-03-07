@@ -1,0 +1,165 @@
+---
+title: "Sara_data_box_whisker"
+author: "Nicole"
+date: "3/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Helpful Tips  
+
+**Useful keyboard shortcuts**
+*these work for windows, they may be different for Macs*
+
+- `Cntrl` + `Z` functions like the Undo button in word or excel. Undoes whatever action you just did
+- `Cntrl` + `Alt` + `I` inserts a new code chunk
+- `Cntrl` + `Enter` runs the code that your courser is on (good for if you want to run small sections of code within a larger code chunk)
+- `Cntrl` + `Shift` + `M` inserts the pipe functions ` %>% `
+- `Cntrl` + `F` allows you to find things within the document (can be useful if you want to replace the name of an object everywhere in the document at the same time)
+- `Cntrl` + `Shift` + `O` opens a document outline that you can use to quickly navigate between titled sections of your document 
+- `Cntrl` + `C` to copy, `Cntrl` + `V` to paste
+- `Cntrl` + `S` to save
+
+Use `rm(list = ls())` to Clear workspace (if desired/needed). If run correctly will clear everything from your environment tab. Typically it's good to do this at the start of each of your sessions. Defiantly should do it if you open a new Rmd file.
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
+Use this`getwd()` to check working directory. Will most likely be whatever folder your Rmd file is in. If you need to change it for some reason use `setwd()` 
+```{r, echo = FALSE, include=FALSE}
+getwd()
+#setwd()
+```
+
+# Downloading/loading packages
+
+Use `install.packages` to download and install a new R package. You only need to do this once, then you can just use `library()` to load it and be able to call functions within it. and load the package libraries.  
+
+**TIP: It's generally considered best practice to keep the commands to call all the packages you need to use at the top of the document**  
+
+`tidyr`, `dplyr`, and `readr` are probably the most commonly used packages for data wrangling/cleaning.`ggplot2` is very common for creating publication quality figures.  
+
+**Note: The order which you install packages is important. Functions with the same names will be masked by packages loaded in after the previous.**  
+Ex: The `select()` function from `MASS` will be masked by `select()` from `dplyar` 
+```{r, message=FALSE, warning=FALSE}
+library("tidyr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+library("ggpubr")
+```
+
+# Data Wrangling  
+
+Read in your data 
+```{r}
+data_orig <- read.csv("../Data/sara_raw_data.csv")
+```  
+
+
+Look at the data to see what it contains  
+*Make sure the column names in each data set match so they can be merged together*
+```{r, message=FALSE, results='hide'}
+head(data_orig) #opens first 6 rows
+tail(data_orig) #opens last 6 rows
+summary(data_orig)
+str(data_orig) #tells us what data types (numbers, factors, etc) are in the data frame
+```
+
+
+
+### Remove any data that you will not need for the analysis
+
+Check unique values 
+```{r}
+unique(data_orig$Site)
+```
+
+drop the controls 
+```{r}
+data_orig <- data_orig %>% filter(Site != "Control")
+```
+
+```{r}
+data_sum_by_plot <- (data_orig) %>% 
+  group_by(Site, Mat.Number) %>% 
+  summarise(sumBYmat = sum(Sum.of.total.germinants.by.pot.), n = n())
+```
+
+```{r}
+rst <- (data_sum_by_plot) %>% 
+  filter(Site == "Dead Run" | Site== "East Beaverdam" | Site == "Gwynn Falls Chartly" | Site == "Kelly Branch" | Site == "Scotts Level McDonogh" | Site =="Towson Run" | Site == "Wellwood")
+
+urst <- (data_sum_by_plot) %>%
+  filter(Site == "Bens Run" | Site== "Covered Bridge" | Site == "Goodwin Run" | Site == "Minebank " | Site == "Moores Branch" | Site =="Scotts Level Park" | Site == "Tributary to Gwynn Falls")
+
+#unique(urst$Site)
+
+#create vectors 
+rest <- c("restored")
+unrest <- c("unrestored")
+
+#assign staus in new column 
+rst["status"] <-rest
+urst["status"] <-unrest
+
+
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+status_sum_by_plot           <- Reduce(MyMerge, list(rst, urst))
+```
+
+```{r}
+
+  BoxPlotall <- ggplot(status_sum_by_plot, aes(x= status, y=sumBYmat, fill = status))+
+      geom_boxplot(position=position_dodge(.85))+
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "Mean # of seeds", x = "Stream status")
+
+print(BoxPlotall)
+
+#ggsave("Figures/Sara_BOXPLOT.jpeg")
+  
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
