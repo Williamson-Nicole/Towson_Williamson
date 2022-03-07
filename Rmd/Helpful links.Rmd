@@ -1,0 +1,51 @@
+---
+title: "Helpful links"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Coding turtorials  
+
+[R CHEAT SHEETS](https://www.rstudio.com/resources/cheatsheets/)  
+
+[ARC R data course book link](https://learning.nceas.ucsb.edu/2022-02-arctic/index.html#reproducible-research-techniques-for-synthesis)  
+
+[SET UP SSH KEY](https://happygitwithr.com/ssh-keys.html)  
+
+[R for data science](https://r4ds.had.co.nz/)  
+
+[Data visualization -interactive graphs](https://cengel.github.io/R-data-viz/interactive-graphs.html)  
+
+[Blog-down](https://bookdown.org/yihui/blogdown/)
+
+- create websites via R  
+
+[Patchwork](https://patchwork.data-imaginist.com/)
+
+[Color selection for science](https://doi.org/10.1038/s41467-020-19160-7)
+
+[Referencing & Citing Content](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content)
+
+[Coloring text](https://bookdown.org/yihui/rmarkdown-cookbook/chunk-styling.html)  
+
+
+
+## Repositorys & Githubs 
+[DATAone](https://www.dataone.org/)
+
+- Search 44 servers at the same time
+
+[ARC R git repo link](https://github.com/NCEAS/nceas-training)
+
+
+
+## Connect with other coders 
+
+[Coding club](https://ourcodingclub.github.io/)
+
+[Rladies](https://rladies.org/)
+
+

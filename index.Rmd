@@ -13,7 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Helpful tutorials:  
 
-[Shareable leaflet map code](Rmd/Sharable-map-code.html)    
+[Shareable leaflet map code](Rmd/Sharable-map-code.html)  
+
+[Links to helpful websites](Rmd/Helpful links.html)
 
 ## Fun graphics/pictures:  
 
