@@ -10,33 +10,52 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Coding turtorials  
 
 [R CHEAT SHEETS](https://www.rstudio.com/resources/cheatsheets/)  
+  *Super helpful quick guides to many common packages*
 
-[ARC R data course book link](https://learning.nceas.ucsb.edu/2022-02-arctic/index.html#reproducible-research-techniques-for-synthesis)  
+  - ggplot2
+  - dplyr
+  - readr
+  - tidyr
+
+[ARC R data course book link](https://learning.nceas.ucsb.edu/2022-02-arctic/index.html#reproducible-research-techniques-for-synthesis) 
+
+  *Link to book we used in the class I took through the Arctic Data Center. It has lots of really helpful information and walks you through how to do many basic but essential data cleaning/visualization*
 
 [SET UP SSH KEY](https://happygitwithr.com/ssh-keys.html)  
 
+  *Instructions for setting up an SSH key for connecting Github to your local RStudio.*
+
 [R for data science](https://r4ds.had.co.nz/)  
 
-[Data visualization -interactive graphs](https://cengel.github.io/R-data-viz/interactive-graphs.html)  
+[Data visualization-Interactive Graphs](https://cengel.github.io/R-data-viz/interactive-graphs.html)  
 
-[Blog-down](https://bookdown.org/yihui/blogdown/)
+[Blog-down](https://bookdown.org/yihui/blogdown/)  
 
-- create websites via R  
+  *Create websites via R* 
 
-[Patchwork](https://patchwork.data-imaginist.com/)
+[Patchwork](https://patchwork.data-imaginist.com/)  
 
-[Color selection for science](https://doi.org/10.1038/s41467-020-19160-7)
+  *Lets you neatly create figures with multiple graphs/other figures all together*
+
+[Color selection for science](https://doi.org/10.1038/s41467-020-19160-7)  
+
+  *Article on ideal color selection for scientific figures*
+  
+[Color Brewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3)  
+
+*Website that helps you create color pallets. Its designed for map mapping but I have found it helpful for picking colors for graphs too. You can also filter suggestions that are safe for printing and colorblind individuals*
 
 [Referencing & Citing Content](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content)
 
 [Coloring text](https://bookdown.org/yihui/rmarkdown-cookbook/chunk-styling.html)  
 
+  *How to create colored text in Rmd files*
 
 
 ## Repositorys & Githubs 
-[DATAone](https://www.dataone.org/)
+[DATAone](https://www.dataone.org/)  
 
-- Search 44 servers at the same time
+  *Search 44 servers at the same time*
 
 [ARC R git repo link](https://github.com/NCEAS/nceas-training)
 
