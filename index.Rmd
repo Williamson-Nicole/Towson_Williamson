@@ -34,7 +34,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 [LTER graphics](Rmd/LTER_graphics.html)  
 
-[Summer 2021 Feild Photos](Rmd/summer_2021_feild_photos.html)
+[Summer 2021 Field Photos](Rmd/summer_2021_feild_photos.html)
 
 <img src="Images/tundra graphic.png" class="center">
 
