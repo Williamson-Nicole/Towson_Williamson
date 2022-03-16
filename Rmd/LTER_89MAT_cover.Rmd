@@ -1,0 +1,325 @@
+---
+title: "89MAT_relcov"
+author: "Nicole"
+date: "3/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
+Use this`getwd()` to check working directory. Will most likely be whatever folder your Rmd file is in. If you need to change it for some reason use `setwd()` 
+```{r, echo = FALSE, include=FALSE}
+getwd()
+#setwd()
+```
+
+# Downloading/loading packages
+
+Use `install.packages` to download and install a new R package. You only need to do this once, then you can just use `library()` to load it and be able to call functions within it. and load the package libraries.  
+
+**TIP: It's generally considered best practice to keep the commands to call all the packages you need to use at the top of the document**  
+
+`tidyr`, `dplyr`, and `readr` are probably the most commonly used packages for data wrangling/cleaning.`ggplot2` is very common for creating publication quality figures.  
+
+**Note: The order which you install packages is important. Functions with the same names will be masked by packages loaded in after the previous.**  
+```{r, message=FALSE, warning=FALSE}
+library("tidyr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+library("ggpubr")
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+```
+
+
+
+# Data Wrangling
+
+### Load in data and merge datasets:
+
+Load in each years .csv files containing raw cover data 
+
+- Eliminates empty rows separating data that we labeled "drop" in the date column
+- Changes date column from being read as a character to date
+```{r}
+raw_2018 <- read.csv("../Data/LTER_89MAT_raw_cover_2018.csv", header = TRUE) %>%
+  filter(date != "drop" & date != "drop ")%>%
+  mutate(date = as.Date(date, "%m/%d/%Y"))
+
+raw_2019 <- read.csv("../Data/LTER_89MAT_raw_cover_2019.csv", header = TRUE)%>%
+  filter(date != "drop" & date != "drop ")%>%
+  mutate(date = as.Date(date, "%m/%d/%Y"))
+
+raw_2021 <- read.csv("../Data/LTER_89MAT_raw_cover_2021.csv", header = TRUE)%>%
+  filter(date != "drop" & date != "drop ")%>%
+  mutate(date = as.Date(date, "%m/%d/%Y"))
+
+```
+
+Combine all years together: **MAKE SURE ALL HEADINGS MATCH**
+```{r}
+raw_orignial           <- Reduce(MyMerge, list(raw_2018, raw_2019, raw_2021))
+```
+**LOGIC CHECK** - Do the number of observation in `raw_original` equal to the sum of the observations in the data sets you combined?
+
+- YES -> Great continue on 
+- NO -> Data is likely being dropped and you need to figure out why. (Could be due to column names being slightly different)
+
+### Transform from wide to long format
+```{r}
+raw_long <- raw_orignial %>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad_num", values_to = "cover") 
+```
+**LOGIC CHECK** - Do the number of observation in `raw_long` equal to the number of observations in the`raw_original`X8 ?  
+
+- YES -> Great continue on 
+- NO -> Data is likely being dropped and you need to figure out why.
+
+
+### Remove any data that you will not need for the analysis
+In this case we can remove unknowns, vole activity, tussock number...ect.
+```{r}
+#Returns a list of unique species names. Use this to see what you want to eliminate. Rerun after you remove data to make sure it worked. 
+unique(raw_long$species) 
+
+#Remove data you don't need/want
+raw_long <- raw_long %>%
+  filter(species != "Unk.N2" & species != "vole hole (#)" & species != "chopped vole litter " & species != "tussock #" & species != "sampled " & species != "latrienes (%)" & species != "vole trail (%)" & species != "Severed vole litter" & species != "trampled " & species != "tarp" & species != "trampled" & species != "sampled" & species != "trampling" & species != "Unk. 1" & species != "Green House Structure" & species != "GH structure" & species != "Distructive" & species != "Trampled" & species != "Mushrooms" & species != "Sampling" & species != "# of shrooms" & species != "sampling" & species != "Smapled" & species != "# TUSS." & species != "Structure" & species != "Trample" & species != "Sampled" & species != "Trampling" & species != "Unk.1")
+```
+
+### Fix naming convention errors
+
+Check unique vales in each column to make sure that there are not naming errors
+```{r, results='hide'}
+unique(raw_long$treatment)
+```
+
+If there are mistakes then rename them using the code below and recheck unique values again to make sure the recode worked. *make sure you didn't loose any observations*
+
+Examples of naming convention corrections: 
+
+- Changed species names in all caps to 1st letter capitalized and everything else lower case (EX: "BET NAN" = "Bet nan")
+- Standing dead ID to species were renames to just "Std"
+- Dead ID to species were renames to just "Dead"
+- Litter ID to species were renames to just "litter"
+```{r}
+#fix naming convention errors in treatment names 
+raw_long$treatment <- raw_long$treatment %>% 
+  recode("EXC-NP" = "96NFNP", "EXNPNF" = "96NFNP")
+
+#fix naming convention errors in species names 
+raw_long$species <- raw_long$species %>% 
+  recode("Other dead" = "St D", "Other S.D." = "St D", "GRASS ex." = "grass", "POL BIS" = "Pol bis", "other S.D" = "St D", "St. D. other" = "St D", "DEAD BET" = "St D Bet", "LED PAL" = "Led pal", "RUB CHA" = "Rub cha", "St. D. Bet." = "St D Bet", "St.D. other" = "St D", "AND POL" = "And pol", "DEAD EV." = "St D", "LICHEN" = "lichen", "SAL PUL" = "Sal pul", "Calcan" = "Cal can", "ARC ALP" = "Arc alp", "EMP NIG" = "Emp nig", "LITTER" = "litter", "SAL RET"="Sal ret", "Car big/other" = "grass", "BARE GR." = "bare", "ERI VAG" = "Eri vag", "MOSS" = "moss", "VAC ULI" = "Vac uli", "BET NAN" = "Bet nan", "EV. LITTER" = "litter", "PED LAP" = "Ped lap", "VAC VIT" = "Vac vit", "Grass" = "grass", "CAR BIG" = "Car big", "FR BOIL" = "Fr boil", "PET FRI"= "Pet fri", "CAS TET" = "Cas tet", "Winter kill" = "Win kill", "frost boil" = "Fr boil")
+
+```
+
+Sum functional cover across species within quadrats. This likely wont change the relative cover for most species unless they were listed more than once in a quadrat but it's good to do to insure accuracy after fixing naming conventions.  
+
+  - The column "n" tells  you the number of observations the data was summed across. For most species it will likely just be 1. However for things originally identified to species that we changed to a broader category (Ex: "EV litter" became "litter") it might report that it summed across 2 observations because it combined the values originally reported separately. 
+```{r}
+raw_clean<- (raw_long) %>% 
+  group_by(date, year, region, site, treatment, block, species, quad_num) %>% 
+  summarise(cover = sum(cover, na.rm = TRUE), n = n())
+```
+
+
+### Relativize cover
+
+1. First we need to sum cover values across all species within a quadrat
+```{r}
+quad_sum <- (raw_clean) %>% 
+  group_by(date, year, region, site, treatment, block, quad_num) %>%
+  summarise(sum_quad = sum(cover)) %>%
+  ungroup()
+```  
+
+2. Then we join the new table (that has the sum of all the species cover for a quadrat), with original table
+```{r}
+cover_join <- left_join(raw_clean, quad_sum, by= c("date", "year", "region", "site", "treatment", "block", "quad_num"))
+```  
+
+3. Then we divide each cover value for a species in a quadrat by the sum of all cover values in that quadrat to relativize the values. We will also drop the columns we don't need anymore.  
+```{r}
+relcov_new_clean <- cover_join %>%
+  mutate(relcov = cover/sum_quad) %>%
+  mutate(relcov = relcov*100)%>%
+  select(-sum_quad, -cover)
+```
+**LOGIC CHECK:** # of observations should be the same as you had in raw_clean
+
+```{r}
+unique(relcov_new_clean$treatment)
+```
+
+# Combine existing online dataset with this new data
+
+### Load in and prep the old data  
+
+Load in data
+```{r}
+relcov_old <- read.csv("../Data/LTER_89MAT_relcov_2012-2017.csv")
+```
+
+Delete extra columns, rename column headings to match the other data set, change site to "89MAT"
+```{r}
+head(relcov_old)
+unique(relcov_old$site)
+
+relcov_old <- relcov_old %>%
+  select(-Treatment.Start.Year, -Treatment.End.Year, -Plant.name.or.category) %>%
+  rename("year" = "Year", "site" = "Site", "treatment" = "Treatment", "block" = "Block", "quad_num" = "Plot", "species" = "Species.Code", "relcov" = "Relative.Cover", "latin_name_or_catagory" = "Accepted.Latin.Name.or.category")
+```
+
+Subset then assign treatment code
+```{r}
+relcov_old_CT <- relcov_old %>% filter(treatment == "Control") %>% mutate(treatment_code = "CT")
+relcov_old_P <- relcov_old %>% filter(treatment == "Phosphorus") %>% mutate(treatment_code = "P")
+relcov_old_N <- relcov_old %>% filter(treatment == "Nitrogen") %>% mutate(treatment_code = "N")
+relcov_old_NP <- relcov_old %>% filter(treatment == "Nitrogen Phosphorus") %>% mutate(treatment_code = "NP")
+relcov_old_GHCT <- relcov_old %>% filter(treatment == "Greenhouse Control") %>% mutate(treatment_code = "GHCT")
+relcov_old_96NFNP <- relcov_old %>% filter(treatment == "Nitrogen Phosphorus Unfenced") %>% mutate(treatment_code = "96NFNP")
+relcov_old_96SFCT <- relcov_old %>% filter(treatment == "Small Fenced No Fertilizer") %>% mutate(treatment_code = "96SFCT")
+```
+
+Merge data together 
+```{r}
+relcov_old_clean           <- Reduce(MyMerge, list(relcov_old_CT, relcov_old_P, relcov_old_N, relcov_old_NP, relcov_old_GHCT, relcov_old_96NFNP, relcov_old_96SFCT))
+```
+
+Fix naming conventions 
+```{r}
+unique(relcov_old_clean$species)
+
+relcov_old_clean$species <- relcov_old_clean$species %>%
+  recode("Moss"="moss", "St. D. Sal pul"="St D", "Dead ledum" = "St D", "frost boil" = "Fr boil", "St. D. Bet." = "St D Bet", "Ped sp." = "Ped sp", "Tofieldia" = "Tof sp") 
+
+relcov_old_clean <- relcov_old_clean %>%
+  filter(species != "vole hole" & species != "vole litter")
+```
+
+```{r}
+relcov_old_clean<- (relcov_old_clean) %>% 
+  group_by(year, site, treatment, block, species, quad_num, latin_name_or_catagory, treatment_code) %>% 
+  summarise(relcov = sum(relcov, na.rm = TRUE), n = n())
+```
+
+
+### Prep new data
+
+Change treatment column name to treatment_code. Then subset and assign full treatment name in a new column called treatment.
+```{r}
+relcov_new_clean <- relcov_new_clean %>%
+  rename("treatment_code" = "treatment") %>%
+  select(-date, -region)
+```
+
+Add new column called `treatment` with full treatment name 
+```{r}
+relcov_new_CT <- relcov_new_clean %>% filter(treatment_code == "CT2") %>% mutate(treatment = "Control 2")
+relcov_new_NP <- relcov_new_clean %>% filter(treatment_code == "NP") %>% mutate(treatment = "Nitrogen Phosphorus")
+relcov_new_GHCT <- relcov_new_clean %>% filter(treatment_code == "GHCT") %>% mutate(treatment = "Greenhouse Control")
+relcov_new_GHNP <- relcov_new_clean %>% filter(treatment_code == "GHNP") %>% mutate(treatment = "Greenhouse Nitrogen Phosphorus")
+relcov_new_96NFNP <- relcov_new_clean %>% filter(treatment_code == "96NFNP") %>% mutate(treatment = "Nitrogen Phosphorus Unfenced")
+
+#Merge back together
+relcov_new_clean           <- Reduce(MyMerge, list(relcov_new_CT, relcov_new_NP, relcov_new_GHCT, relcov_new_GHNP, relcov_new_96NFNP))
+```
+
+Change site name to full name used in the original dataset
+```{r}
+unique(relcov_new_clean$treatment_code)
+
+relcov_new_site1 <- relcov_new_clean %>% filter(treatment_code == "96NFNP") %>% mutate(site = "LTER Moist Acidic Tussock 1989: 1996 Exclosures")
+relcov_new_site2 <- relcov_new_clean %>% filter(treatment_code != "96NFNP" ) %>% mutate(site = "LTER Moist Acidic Tussock 1989")
+
+relcov_new_clean           <- Reduce(MyMerge, list(relcov_new_site1, relcov_new_site2))
+```
+
+```{r}
+unique(relcov_old_clean$latin_name_or_catagory)
+head(relcov_old_clean)
+```
+
+Add latin names/catagory column 
+```{r}
+s1 <- relcov_new_clean %>% filter(species == "And pol") %>% mutate(latin_name_or_catagory = "Andromeda polifolia")
+s2 <- relcov_new_clean %>% filter(species == "bare") %>% mutate(latin_name_or_catagory = "Bare soil")
+s3 <- relcov_new_clean %>% filter(species == "Bet nan") %>% mutate(latin_name_or_catagory = "Betula nana")
+s4 <- relcov_new_clean %>% filter(species == "Car big") %>% mutate(latin_name_or_catagory = "Carex Bigelowii")
+s5 <- relcov_new_clean %>% filter(species == "Cas tet") %>% mutate(latin_name_or_catagory = "Cassiope tetragona")
+s6 <- relcov_new_clean %>% filter(species == "Emp nig") %>% mutate(latin_name_or_catagory = "Empetrum nigrum")
+s7 <- relcov_new_clean %>% filter(species == "Eri vag") %>% mutate(latin_name_or_catagory = "Eriophorum vaginatum")
+s8 <- relcov_new_clean %>% filter(species == "Fr boil") %>% mutate(latin_name_or_catagory = "Soil Frost boil")
+s9 <- relcov_new_clean %>% filter(species == "Led pal") %>% mutate(latin_name_or_catagory = "Ledum palustre")
+s10 <- relcov_new_clean %>% filter(species == "lichen") %>% mutate(latin_name_or_catagory = "Mixed Lichens")
+s11 <- relcov_new_clean %>% filter(species == "litter") %>% mutate(latin_name_or_catagory = "Mixed dead litter")
+s12 <- relcov_new_clean %>% filter(species == "moss") %>% mutate(latin_name_or_catagory = "Mixed moss")
+s13 <- relcov_new_clean %>% filter(species == "Ped lap") %>% mutate(latin_name_or_catagory = "Pedicularis lapponica")
+s14 <- relcov_new_clean %>% filter(species == "Pol bis") %>% mutate(latin_name_or_catagory = "Persicaria bistorta")
+s15 <- relcov_new_clean %>% filter(species == "Rub cha") %>% mutate(latin_name_or_catagory = "Rubus chamaemorus")
+s16 <- relcov_new_clean %>% filter(species == "Sal pul") %>% mutate(latin_name_or_catagory = "Salix pulchra")
+s17 <- relcov_new_clean %>% filter(species == "St D Bet") %>% mutate(latin_name_or_catagory = "Standing Dead Betula nana")
+s18 <- relcov_new_clean %>% filter(species == "Vac uli") %>% mutate(latin_name_or_catagory = "Vaccinium uliginosum")
+s19 <- relcov_new_clean %>% filter(species == "Vac vit") %>% mutate(latin_name_or_catagory = "Vaccinium vitis-idaea")
+s20 <- relcov_new_clean %>% filter(species == "grass") %>% mutate(latin_name_or_catagory = "Mixed grass")
+s21 <- relcov_new_clean %>% filter(species == "Win kill") %>% mutate(latin_name_or_catagory = "Winter kill")
+s22 <- relcov_new_clean %>% filter(species == "Cal can") %>% mutate(latin_name_or_catagory = "Calamagrostis canadensis")
+s23 <- relcov_new_clean %>% filter(species == "St D") %>% mutate(latin_name_or_catagory = "Mixed Standing Dead")
+s24 <- relcov_new_clean %>% filter(species == "Arc alp") %>% mutate(latin_name_or_catagory = "Arctous alpina")
+s25 <- relcov_new_clean %>% filter(species == "Pet fri") %>% mutate(latin_name_or_catagory = "Petasites frigidus")
+s26 <- relcov_new_clean %>% filter(species == "Sal ret") %>% mutate(latin_name_or_catagory = "Salix reticulata")
+
+relcov_new_clean           <- Reduce(MyMerge, list(s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26))
+```
+
+Recode quad numbers from "Q1, Q2, Q3..." to just "1, 2, 3"
+```{r}
+relcov_new_clean$quad_num <- relcov_new_clean$quad_num %>%
+  recode("Q1" = 1, "Q2" = 2, "Q3" = 3, "Q4" = 4, "Q5" = 5, "Q6" = 6, "Q7" = 7, "Q8" = 8)
+```
+
+### Combine the old and new data into one dataset 
+
+Drop extra columns we don't need anymore:
+```{r}
+relcov_new_clean <- relcov_new_clean %>% select(-n, -region, -date)
+relcov_old_clean <- relcov_old_clean %>% select(-n)
+
+head(relcov_new_clean)
+```
+
+Join the datasets! 
+```{r}
+relcov_all_clean <- full_join(relcov_new_clean, relcov_old_clean, by= c("year", "site", "treatment", "treatment_code", "block", "quad_num", "species", "relcov", "latin_name_or_catagory"))
+
+#reorder the columns 
+col_order <- c("year", "site", "treatment", "treatment_code", "block", "quad_num", "species", "relcov", "latin_name_or_catagory")
+
+relcov_all_clean <- relcov_all_clean[, col_order]
+
+write.csv(relcov_all_clean, file = "../Derived CSVs/LTER_89MAT_relcov_clean_for_ONLINE.csv")
+```
+
+Generate list of species in the plots
+```{r}
+species_list_89MAT <- unique(relcov_all_clean$latin_name_or_catagory)
+
+write.csv(species_list_89MAT, file = "../Derived CSVs/LTER_89MAT_species_list.csv")
+```
+
+
+

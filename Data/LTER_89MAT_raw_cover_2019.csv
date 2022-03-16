@@ -1,0 +1,566 @@
+date ,year,region,site,treatment,block,species,Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,moss,3,1,0,0,0.5,0.5,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,lichen,0,0,0,0.5,0.5,0,0.5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,litter,10,8,3,21,13,4,23,12
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Bet nan,46,42,78,44,62,62,29,28
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Car big,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Emp nig,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Eri vag,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Led pal,2,2,3,4,3,3,2,1
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Rub cha,26,28,8,19,10,10,32,31
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Sal pul,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Vac uli,0,0,0,0,0,0,0.5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Vac vit,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,St. D. Bet.,21,18,12,24,17,17,24,24
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Winter kill,0,0.5,0,0,0,0,0.5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Unk.N2,0,0.5,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,vole hole (#),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,vole trail (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,chopped vole litter ,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,Severed vole litter,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,1,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,CT2,1,moss,38,27,16,22,14,7,27,18
+7/24/2019,2019,Toolik,89MAT,CT2,1,lichen,3,8,1,3,2,3,6,1
+7/24/2019,2019,Toolik,89MAT,CT2,1,litter,5,12,7,8,5,10,9,6
+7/24/2019,2019,Toolik,89MAT,CT2,1,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,bare,0,1,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,And pol,0,0,0,0,4,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,Bet nan,4,9,14,8,7,10,9,10
+7/24/2019,2019,Toolik,89MAT,CT2,1,Car big,0,0,3,2,1,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,Cas tet,11,5,6,3,3,9,0.5,2
+7/24/2019,2019,Toolik,89MAT,CT2,1,Emp nig,2,2,6,6,8,2,0.5,1
+7/24/2019,2019,Toolik,89MAT,CT2,1,Eri vag,10,20,10,14,6,33,27,10
+7/24/2019,2019,Toolik,89MAT,CT2,1,Led pal,9,3,8,23,3,6,15,12
+7/24/2019,2019,Toolik,89MAT,CT2,1,Ped lap,0,0,0,0.5,1,0.5,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,1,Pol bis,0,0,0.5,0.5,0,0,0,1
+7/24/2019,2019,Toolik,89MAT,CT2,1,Rub cha,6,2,6,9,7,3,2,9
+7/24/2019,2019,Toolik,89MAT,CT2,1,Sal pul,0,0,5,7,3,0,1,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,1,Vac uli,0,0,0,4,0,0,0,3
+7/24/2019,2019,Toolik,89MAT,CT2,1,Vac vit,5,14,15,15,13,6,6,9
+7/24/2019,2019,Toolik,89MAT,CT2,1,St. D. Bet.,0.5,2,0.5,0.5,0.5,0.5,0,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,1,Winter kill,0.5,0,0,0,0,0,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,1,other S.D,1,1,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,vole hole (#),0,0,3,2,0,0,1,3
+7/24/2019,2019,Toolik,89MAT,CT2,1,vole trail (%),0,0,1,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,chopped vole litter ,0.5,2,2,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,1,Severed vole litter,0,0,0,0,0,0,1,2
+7/24/2019,2019,Toolik,89MAT,CT2,1,tussock #,6,7,7,5,4,7,6,5
+drop,,,,,,,,,,,,,,
+7/26/2019,2019,Toolik,89MAT,GHNP,1,moss,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,lichen,0,0,0,0,0,0,16,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,litter,3,11,20,21,22,14,0,6
+7/26/2019,2019,Toolik,89MAT,GHNP,1,frost boil,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,bare,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,And pol,0,0,0,0,0,0,43,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Bet nan,63,36,20,42,25,30,0,58
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Car big,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Cas tet,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Emp nig,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Eri vag,0,0,0.5,0,2,0,3,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Led pal,3,7,6,3,0.5,2,0,1
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Ped lap,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Pol bis,0,0,0,0,0,0,32,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Rub cha,11,32,62,46,58,63,0,15
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Sal pul,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Vac uli,0,0,0,0,0,0,0.5,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Vac vit,0,0,0,0,0,0,7,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,St. D. Bet.,12,42,16,8,12,22,0,16
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Winter kill,0,0,0,0,0,0,1,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,sampled ,0,0,0.5,1,0.5,1,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,trampled ,0,3,0,4,8,4,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,latrienes (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,vole hole (#),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,vole trail (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,chopped vole litter ,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,Severed vole litter,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,1,tussock #,0,0,0,0,1,0,0,0
+drop,,,,,,,,,,,,,,
+7/25/2019,2019,Toolik,89MAT,GHCT,1,moss,6,5,0,2,18,5,5,6
+7/25/2019,2019,Toolik,89MAT,GHCT,1,lichen,0,0,0,0,0.5,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,litter,9,7,10,10,8,13,11,6
+7/25/2019,2019,Toolik,89MAT,GHCT,1,frost boil,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,bare,0,0,0,0,0,4,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,And pol,0.5,0,0.5,0,0,0.5,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Bet nan,7,8,16,16,24,13,22,13
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Car big,4,2,0.5,0,0.5,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Cas tet,1,1,1,0,0.5,1,0.5,0.5
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Emp nig,1,0.5,6,2,4,0.5,0,2
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Eri vag,2,4,5,18,16,28,9,3
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Led pal,2,7,32,14,9,0,16,4
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Ped lap,0.5,0,0.5,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Pol bis,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Rub cha,60,16,20,17,26,9,21,32
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Sal pul,6,0,15,9,5,0.5,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Vac uli,0,0,0,0,0,0.5,0,2
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Vac vit,1,3,17,2,7,9,3,0.5
+7/25/2019,2019,Toolik,89MAT,GHCT,1,St. D. Bet.,4,5,0.5,0,0.5,0.5,6,12
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Winter kill,0,2,0,0.5,0,0.5,0,0.5
+7/25/2019,2019,Toolik,89MAT,GHCT,1,sampling,0,4,0,16,8,0,45,3
+7/25/2019,2019,Toolik,89MAT,GHCT,1,trampling,0,0,0,8,12,38,16,11
+7/25/2019,2019,Toolik,89MAT,GHCT,1,tarp,4,0,11,0,0,11,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Green House Structure,0,8,0,0,0,0,1,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,latrienes (%),0,0,0,0.5,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,vole hole (#),1,0,0,0,0,1,2,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,vole trail (%),0,1,0,0,0,0,0,2
+7/25/2019,2019,Toolik,89MAT,GHCT,1,chopped vole litter ,2,5,0,0,0,2,3,0
+7/25/2019,2019,Toolik,89MAT,GHCT,1,Severed vole litter,0,0,0,0,0,0,0,5
+7/25/2019,2019,Toolik,89MAT,GHCT,1,tussock #,0,0,0,3,6,3,0,1
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,NP,1,moss,8,4,3,3,0,0,0.5,0
+7/24/2019,2019,Toolik,89MAT,NP,1,lichen,0.5,0.5,0.5,0.5,0.5,0,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,litter,26,11,16,28,20,17,43,13
+7/24/2019,2019,Toolik,89MAT,NP,1,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Bet nan,4,4,12,10,14,56,10,29
+7/24/2019,2019,Toolik,89MAT,NP,1,Car big/other,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Emp nig,0,0,0,0,0,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,Eri vag,0,0,0,0,0,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,Led pal,0,0,0,0,1,2,0.5,2
+7/24/2019,2019,Toolik,89MAT,NP,1,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Rub cha,11,8,9,16,33,21,28,18
+7/24/2019,2019,Toolik,89MAT,NP,1,Sal pul,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,Vac vit,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,St. D. Bet.,48,59,64,35,25,12,20,34
+7/24/2019,2019,Toolik,89MAT,NP,1,Winter kill,0,0,0,0,0,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,Unk.1,0,0,0,0,0.5,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,vole hole (#),0,0,0,0,0,0,1,0
+7/24/2019,2019,Toolik,89MAT,NP,1,vole trail (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,1,chopped vole litter ,0,0,0,3,0,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,Severed vole litter,0,0,0,0,0,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,NP,1,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,NP,2,moss,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,lichen,0.5,0,0,0,0.5,0.5,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,NP,2,litter,14,30,9,16,52,15,24,16
+7/24/2019,2019,Toolik,89MAT,NP,2,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Bet nan,2,3,14,11,4,10,18,48
+7/24/2019,2019,Toolik,89MAT,NP,2,Car big,0,0,0,0,0.5,0.5,0,1
+7/24/2019,2019,Toolik,89MAT,NP,2,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Emp nig,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Eri vag,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Led pal,0,4,2,0,1,0,1,0.5
+7/24/2019,2019,Toolik,89MAT,NP,2,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Rub cha,56,52,37,32,35,44,65,16
+7/24/2019,2019,Toolik,89MAT,NP,2,Sal pul,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Vac vit,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,St. D. Bet.,3,40,21,37,26,23,14,40
+7/24/2019,2019,Toolik,89MAT,NP,2,Winter kill,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,vole hole (#),0,0,0,0,1,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,vole trail (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,chopped vole litter ,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,Severed vole litter,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,2,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/26/2019,2019,Toolik,89MAT,GHCT,2,moss,13,7,8,1,3,3,21,8
+7/26/2019,2019,Toolik,89MAT,GHCT,2,lichen,0.5,0.5,0,0,0.5,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,litter,12,12,11,12,18,11,12,5
+7/26/2019,2019,Toolik,89MAT,GHCT,2,frost boil,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,bare,1,0,1,4,6,4,0,1
+7/26/2019,2019,Toolik,89MAT,GHCT,2,And pol,0,0,0,0,0,0,1,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Bet nan,15,19,11,26,19,11,25,23
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Car big,0,0,1,0,0.5,0.5,0.5,2
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Cas tet,0,0,0,3,0.5,0.5,0.5,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Emp nig,3,0,0.5,2,16,5,1,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Eri vag,9,8,7,7,3,10,0.5,4
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Led pal,7,13,8,7,0,8,7,8
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Ped lap,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Pol bis,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Rub cha,21,17,27,23,18,19,27,37
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Sal pul,1,0,14,2,4,2,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Vac uli,0.5,0,0,9,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Vac vit,1,1,1,0,1,3,2,2
+7/26/2019,2019,Toolik,89MAT,GHCT,2,St. D. Bet.,10,19,6,2,4,11,11,7
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Winter kill,0.5,0.5,0,7,0.5,0,2,0.5
+7/26/2019,2019,Toolik,89MAT,GHCT,2,sampled ,1,3,2,0,5,0,10,2
+7/26/2019,2019,Toolik,89MAT,GHCT,2,trampled,4,16,0,0,0,16,12,2
+7/26/2019,2019,Toolik,89MAT,GHCT,2,GH structure,8,0,0,0,0,8,0,15
+7/26/2019,2019,Toolik,89MAT,GHCT,2,# of shrooms,3,0,0,0,0,0,0,1
+7/26/2019,2019,Toolik,89MAT,GHCT,2,latrienes (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,vole hole (#),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,vole trail (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,chopped vole litter ,0,0,0,2,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,Severed vole litter,0,3,0,0,0,0,1,0
+7/26/2019,2019,Toolik,89MAT,GHCT,2,tussock #,3,5,4,3,2,5,1,2
+drop ,,,,,,,,,,,,,,
+7/26/2019,2019,Toolik,89MAT,GHNP,2,moss,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,lichen,0,0,0,0,0,0.5,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,litter,3,4,8,3,7,9,10,5
+7/26/2019,2019,Toolik,89MAT,GHNP,2,frost boil,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,bare,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,And pol,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Bet nan,20,3,25,60,14,27,6,50
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Car big,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Cas tet,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Emp nig,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Eri vag,0,0,0,0,0,0,0.5,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Led pal,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Ped lap,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Pol bis,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Rub cha,31,66,20,21,78,15,38,23
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Sal pul,3,48,6,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Vac uli,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Vac vit,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,St. D. Bet.,39,16,24,14,18,31,33,28
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Winter kill,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Distructive,0,0,12,0,2,12,12,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Smapled,0,0,0,0,3,0,3,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,latrienes (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,vole hole (#),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,vole trail (%),0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,chopped vole litter ,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,Severed vole litter,0,0,0,0,0,0,0,0
+7/26/2019,2019,Toolik,89MAT,GHNP,2,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,moss,3,1,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,lichen,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,litter,11,12,13,12,5,10,8,7
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,bare,0.5,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Bet nan,3,12,5,0.5,0,0.5,0,10
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Car big,0,0,0.5,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Emp nig,0,0,0,1,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Eri vag,0,0,0,0.5,0.5,0,0,0.5
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Led pal,0,0,0.5,1,0.5,4,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Rub cha,54,40,79,72,85,70,86,58
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Sal pul,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Vac vit,0,0,0.5,0.5,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,St. D. Bet.,24,21,7,6,0.5,19,1,19
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Winter kill,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,vole hole (#),0,0,0,0,0,0,0,1
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,vole trail (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,chopped vole litter ,1,0,0,0,0,0,0,1
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,Severed vole litter,0,0,0,0,0,0,0,1
+7/24/2019,2019,Toolik,89MAT,EXNPNF,2,tussock #,0,0,0,0,0,0,1,0
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,CT2,2,moss,17,28,18,6,31,8,13,9
+7/24/2019,2019,Toolik,89MAT,CT2,2,lichen,0.5,4,14,3,3,2,3,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,2,litter,1,7,5,5,5,5,3,6
+7/24/2019,2019,Toolik,89MAT,CT2,2,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,2,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,2,And pol,0,0.5,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,2,Bet nan,12,8,5,7,26,17,18,7
+7/24/2019,2019,Toolik,89MAT,CT2,2,Car big,1,0,3,1,0.5,1,6,3
+7/24/2019,2019,Toolik,89MAT,CT2,2,Cas tet,23,7,9,4,0.5,0.5,3,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,2,Emp nig,0,3,2,1,0,0.5,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,2,Eri vag,3,19,3,13,15,17,12,18
+7/24/2019,2019,Toolik,89MAT,CT2,2,Led pal,8,4,5,10,6,7,5,9
+7/24/2019,2019,Toolik,89MAT,CT2,2,Ped lap,0.5,0.5,2,2,0.5,0.5,1,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,2,Pol bis,0.5,0,0.5,0.5,0,0,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,2,Rub cha,14,16,13,14,6,2,5,8
+7/24/2019,2019,Toolik,89MAT,CT2,2,Sal pul,0,4,7,12,0,1,10,6
+7/24/2019,2019,Toolik,89MAT,CT2,2,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,2,Vac vit,5,9,4,5,6,6,7,6
+7/24/2019,2019,Toolik,89MAT,CT2,2,St. D. Bet.,1,2,0.5,2,5,1,1,1
+7/24/2019,2019,Toolik,89MAT,CT2,2,Winter kill,0.5,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/25/2019,2019,Toolik,89MAT,CT2,3,moss,15,6,18,9,17,31,18,5
+7/25/2019,2019,Toolik,89MAT,CT2,3,lichen,4,2,2,4,3,2,2,1
+7/25/2019,2019,Toolik,89MAT,CT2,3,litter,9,2,4,5,3,8,6,10
+7/25/2019,2019,Toolik,89MAT,CT2,3,frost boil,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,bare,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,And pol,0,0,0,1,9,0,0.5,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Bet nan,12,24,6,12,8,10,15,17
+7/25/2019,2019,Toolik,89MAT,CT2,3,Car big,9,0,4,8,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Cas tet,8,2,2,8,1,1,0,3
+7/25/2019,2019,Toolik,89MAT,CT2,3,Grass,0,1,0,0,0,0,0,1
+7/25/2019,2019,Toolik,89MAT,CT2,3,Emp nig,4,3,4,2,1,0,0,2
+7/25/2019,2019,Toolik,89MAT,CT2,3,Eri vag,5,17,5,3,7,11,6,19
+7/25/2019,2019,Toolik,89MAT,CT2,3,Led pal,7,8,4,6,13,7,3,9
+7/25/2019,2019,Toolik,89MAT,CT2,3,Ped lap,0.5,0,0.5,0.5,0,0.5,0.5,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Pol bis,0.5,0.5,0.5,1,0.5,0,0.5,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Rub cha,14,8,17,10,22,11,23,6
+7/25/2019,2019,Toolik,89MAT,CT2,3,Sal pul,3,1,1,0,1,1,7,1
+7/25/2019,2019,Toolik,89MAT,CT2,3,Vac uli,0,0,0,0,1,0.5,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Vac vit,12,15,15,12,38,6,5,13
+7/25/2019,2019,Toolik,89MAT,CT2,3,St. D. Bet.,1,1,3,2,0.5,5,12,3
+7/25/2019,2019,Toolik,89MAT,CT2,3,Winter kill,0,0.5,0,0,1,0.5,0,2
+7/25/2019,2019,Toolik,89MAT,CT2,3,# of shrooms,0,0,1,0,1,1,1,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,Other S.D.,0,0,0,0.5,3,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,latrienes (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,vole hole (#),0,1,0,2,1,1,0,2
+7/25/2019,2019,Toolik,89MAT,CT2,3,vole trail (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,CT2,3,chopped vole litter ,0,3,0,0,0,4,4,3
+7/25/2019,2019,Toolik,89MAT,CT2,3,Severed vole litter,0,0,0,0,0,0,0,1
+7/25/2019,2019,Toolik,89MAT,CT2,3,tussock #,2,8,0,1,4,5,3,6
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,NP,3,moss,0,0,1,1,0,0,0.5,2
+7/24/2019,2019,Toolik,89MAT,NP,3,lichen,0,0.5,0.5,0.5,1,0,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,NP,3,litter,12,17,14,34,15,16,12,23
+7/24/2019,2019,Toolik,89MAT,NP,3,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Bet nan,61,67,48,58,1,7,13,4
+7/24/2019,2019,Toolik,89MAT,NP,3,Car big,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Emp nig,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Eri vag,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Led pal,0,0,0,1,2,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Rub cha,5,13,8,10,8,18,19,35
+7/24/2019,2019,Toolik,89MAT,NP,3,Sal pul,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Vac vit,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,St. D. Bet.,36,14,35,30,58,51,52,30
+7/24/2019,2019,Toolik,89MAT,NP,3,Winter kill,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,# of shrooms,0,0,2,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,vole hole (#),0,0,1,1,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,vole trail (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,chopped vole litter ,0,0,2,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,Severed vole litter,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,NP,3,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/29/2019,2019,Toolik,89MAT,GHCT,3,moss,1,0.5,3,7,3,1,0.5,0.5
+7/29/2019,2019,Toolik,89MAT,GHCT,3,lichen,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,litter,9,8,9,14,15,19,25,14
+7/29/2019,2019,Toolik,89MAT,GHCT,3,frost boil,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,bare,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,And pol,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Bet nan,65,44,24,29,30,26,23,38
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Car big,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Cas tet,0,0,0,1,0,0,0,0.5
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Emp nig,0,0.5,2,1,4,3,1,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Eri vag,0,0,0,1,0,0,0.5,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Led pal,7,8,3,9,4,6,4,4
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Ped lap,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Pol bis,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Rub cha,23,26,42,44,38,68,52,38
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Sal pul,0,15,11,7,4,2,9,8
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Vac uli,0,0,2,0,1,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Vac vit,2,1,0.5,1,5,1,0.5,1
+7/29/2019,2019,Toolik,89MAT,GHCT,3,St. D. Bet.,13,13,13,18,32,24,15,16
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Winter kill,2,0.5,0.5,0,0.5,0,1,8
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Trampled,14,5,4,10,5,2,4,8
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Sampled,5,13,2,8,4,0,23,14
+7/29/2019,2019,Toolik,89MAT,GHCT,3,St. D. other,0,0,0,0,0,3,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,latrienes (%),1,2,0,0,0,1,3,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,vole hole (#),0,0,0,0,0,1,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,vole trail (%),0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,chopped vole litter ,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,Severed vole litter,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHCT,3,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/29/2019,2019,Toolik,89MAT,GHNP,3,moss,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,lichen,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,litter,9,12,14,5,10,13,8,10
+7/29/2019,2019,Toolik,89MAT,GHNP,3,frost boil,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,bare,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,And pol,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Bet nan,49,96,73,82,67,93,88,65
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Car big,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Cas tet,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Emp nig,0,0,0,0,0,0,0,2
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Eri vag,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Led pal,5,1,8,3,0,0,2,14
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Ped lap,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Pol bis,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Rub cha,31,10,7,2,10,4,17,18
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Sal pul,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Vac uli,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Vac vit,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,St. D. Bet.,11,2,36,19,39,12,10,17
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Winter kill,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Trampled,0,0,20,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Sampled,6,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,latrienes (%),0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,vole hole (#),0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,vole trail (%),0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,chopped vole litter ,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,Severed vole litter,0,0,0,0,0,0,0,0
+7/29/2019,2019,Toolik,89MAT,GHNP,3,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,moss,0,2,0,1,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,lichen,0,0.5,1,0,0.5,0.5,0,0.5
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,litter,9,14,20,24,11,31,7,32
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,frost boil,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,bare,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,And pol,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Bet nan,47,30,12,14,37,18,4,36
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Car big/other,0,0,0.5,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Cas tet,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Emp nig,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Eri vag,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Led pal,0,0,0,0,0,0.5,0,1
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Ped lap,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Pol bis,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Rub cha,17,8,23,16,22,12,23,20
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Sal pul,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Vac uli,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Vac vit,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,St. D. Bet.,25,38,36,30,39,57,25,35
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Winter kill,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,latrienes (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,vole hole (#),0,2,0,1,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,vole trail (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,chopped vole litter ,2,0,0,5,0,0,0,2
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,Severed vole litter,3,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,EXNPNF,3,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/25/2019,2019,Toolik,89MAT,NP,4,moss,0.5,0,0.5,0,0.5,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,lichen,0,0.5,0.5,0.5,0,0.5,1,1
+7/25/2019,2019,Toolik,89MAT,NP,4,litter,14,16,23,12,32,15,20,12
+7/25/2019,2019,Toolik,89MAT,NP,4,frost boil,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,bare,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,And pol,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Bet nan,18,7,0,3,28,18,35,34
+7/25/2019,2019,Toolik,89MAT,NP,4,Car big,0,0,0,0,0,0.5,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Cas tet,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Emp nig,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Eri vag,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Led pal,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Ped lap,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Pol bis,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Rub cha,14,16,54,25,16,18,18,8
+7/25/2019,2019,Toolik,89MAT,NP,4,Sal pul,0,0,6,5,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Vac uli,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Vac vit,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,St. D. Bet.,47,60,36,46,36,40,42,40
+7/25/2019,2019,Toolik,89MAT,NP,4,Winter kill,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,latrienes (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,vole hole (#),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,vole trail (%),0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,chopped vole litter ,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,Severed vole litter,0,0,0,0,0,0,0,0
+7/25/2019,2019,Toolik,89MAT,NP,4,tussock #,0,0,0,0,0,0,0,0
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,CT2,4,moss,9,7,8,17,10,14,16,5
+7/24/2019,2019,Toolik,89MAT,CT2,4,lichen,8,6,3,2,2,3,3,9
+7/24/2019,2019,Toolik,89MAT,CT2,4,litter,7,8,7,7,4,6,6,6
+7/24/2019,2019,Toolik,89MAT,CT2,4,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,bare,0,0,0,0,0,3,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,And pol,0,0,0.5,1,1,0.5,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Bet nan,7,6,6,9,0.5,12,12,2
+7/24/2019,2019,Toolik,89MAT,CT2,4,Car big,0.5,2,0.5,2,0.5,0,2,2
+7/24/2019,2019,Toolik,89MAT,CT2,4,Cas tet,14,5,4,1,0.5,4,4,2
+7/24/2019,2019,Toolik,89MAT,CT2,4,Emp nig,2,9,4,2,2,3,1,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Eri vag,9,7,8,8,10,15,14,13
+7/24/2019,2019,Toolik,89MAT,CT2,4,Led pal,9,4,5,5,2,4,3,5
+7/24/2019,2019,Toolik,89MAT,CT2,4,Ped lap,0.5,1,0.5,0.5,1,0.5,0.5,0.5
+7/24/2019,2019,Toolik,89MAT,CT2,4,Pol bis,2,0.5,0.5,0.5,5,3,0.5,1
+7/24/2019,2019,Toolik,89MAT,CT2,4,Rub cha,8,17,13,12,8,15,3,3
+7/24/2019,2019,Toolik,89MAT,CT2,4,Sal pul,0,1,0,2,6,3,1,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Vac uli,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Vac vit,6,6,6,6,7,10,5,7
+7/24/2019,2019,Toolik,89MAT,CT2,4,St. D. Bet.,1,0.5,0.5,0.5,3,2,2,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Winter kill,0.5,0,0.5,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,St.D. other,0,3,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,vole hole (#),1,0,0,0,0,1,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,vole trail (%),0,0,0,0,0,0,0,1
+7/24/2019,2019,Toolik,89MAT,CT2,4,chopped vole litter ,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,Severed vole litter,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,CT2,4,tussock #,7,7,2,6,7,6,6,6
+drop,,,,,,,,,,,,,,
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,moss,0,0,0,0,0.5,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,lichen,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,litter,13,15,15,20,17,17,35,41
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,frost boil,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,bare,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,And pol,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Bet nan,20,28,7,0.5,4,6,1,6
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Car big/other,0,0,0,0,0,10,0.5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Cas tet,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Emp nig,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Eri vag,0,0.5,5,1,3,0.5,0.5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Led pal,0.5,0,0,1,4,6,5,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Ped lap,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Pol bis,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Rub cha,14,12,34,47,43,31,45,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Sal pul,0,0,0,0,0,3,0,2
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Vac uli,0,0,0,0,0,1,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Vac vit,0,0,0,0,1,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,St. D. Bet.,40,37,50,9,17,13,18,24
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Winter kill,0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Calcan,0,0,0,0,8,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,latrienes (%),0,0,0,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,vole hole (#),0,1,1,0,0,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,vole trail (%),0,0,0,0,0,12,3,3
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,chopped vole litter ,1,1,1,1,3,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,Severed vole litter,0,1,2,3,4,0,0,0
+7/24/2019,2019,Toolik,89MAT,EXNPNF,4,tussock #,0,1,1,3,1,1,1,0
+drop,,,,,,,,,,,,,,
+6/26/2019,2019,Toolik,89MAT,GHNP,4,moss,6,4,10,5,3,4,4,3
+6/26/2019,2019,Toolik,89MAT,GHNP,4,lichen,0,0,0,0,0,0,0,1
+6/26/2019,2019,Toolik,89MAT,GHNP,4,litter,7,12,13,9,17,12,0,9
+6/26/2019,2019,Toolik,89MAT,GHNP,4,frost boil,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,bare,6,0,2,0,0,0,0,4
+6/26/2019,2019,Toolik,89MAT,GHNP,4,And pol,0.5,0,0.5,0.5,3,0,0,0.5
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Bet nan,10,13,11,15,23,6,6,8
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Car big,0,0,0.5,1,0,1,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Cas tet,0,0.5,0,0,2,5,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Emp nig,1,1,1,0.5,0,0.5,0,0.5
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Eri vag,6,16,16,12,10,13,9,12
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Led pal,9,7,6,7,4,4,8,19
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Ped lap,0.5,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Pol bis,0,0,0,0,0,0.5,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Rub cha,23,9,19,15,9,8,3,7
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Sal pul,8,7,9,2,17,12,11,5
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Vac uli,0,0,0,4,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Vac vit,5,4,4,0,3,0.5,3,6
+6/26/2019,2019,Toolik,89MAT,GHNP,4,St. D. Bet.,5,4,6,16,7,7,5,5
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Winter kill,0.5,1,0.5,2,0.5,1,2,1
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Structure,0,13,0,0,0,0,13,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Sampling,8,6,2,2,2,1,7,6
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Trample,6,12,5,10,4,10,10,5
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Other dead,0,4,6,1,0,4,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,latrienes (%),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,vole hole (#),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,vole trail (%),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,chopped vole litter ,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,Severed vole litter,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHNP,4,tussock #,2,8,6,6,5,4,7,4
+drop,,,,,,,,,,,,,,
+6/26/2019,2019,Toolik,89MAT,GHCT,4,moss,0,0,0,0,0,0,1,2
+6/26/2019,2019,Toolik,89MAT,GHCT,4,lichen,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,litter,6,17,12,5,15,9,10,16
+6/26/2019,2019,Toolik,89MAT,GHCT,4,frost boil,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,bare,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,And pol,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Bet nan,50,44,49,39,13,44,29,41
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Car big,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Cas tet,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Emp nig,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Eri vag,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Led pal,0,1,3,1,0,2,5,3
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Ped lap,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Pol bis,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Rub cha,7,9,19,6,19,16,23,22
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Sal pul,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Vac uli,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Vac vit,0,1,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,St. D. Bet.,14,28,39,37,54,46,35,21
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Winter kill,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Sampling,1,1,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Trampling,0,0,0,0,8,4,8,3
+6/26/2019,2019,Toolik,89MAT,GHCT,4,latrienes (%),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,vole hole (#),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,vole trail (%),0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,chopped vole litter ,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,Severed vole litter,0,0,0,0,0,0,0,0
+6/26/2019,2019,Toolik,89MAT,GHCT,4,tussock #,0,0,0,0,0,0,0,0
