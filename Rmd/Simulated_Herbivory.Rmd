@@ -53,7 +53,7 @@ library("ggpubr")
 
 ```
 
-Load in each years .csv files containing the data. 2021 will be aded after since it already has the new codes
+Load in each years .csv files containing the data. 2021 will be added after since it already has the new codes
 ```{r}
 #TH_2018 <- read.csv(file.choose(), header = TRUE)
 
@@ -116,9 +116,7 @@ TH_19_18_20$plot <- recode(TH_19_18_20$plot, "F10 " = "F10")
 
 Once naming conventions have been checked, the next step is to create a new column in the spread sheet that will be filled out with the new clipping codes...(PU1/PU2 or PR1/PR2 instead of CL# 1-4)
 
-
 To do this, the 1st step is to create vectors for the information you plan to add to the columns. In this case we will then list the names of all of the new clipping codes...
-
 
 ~vectors for filling out "new_id" column~
 ```{r}
@@ -684,6 +682,8 @@ ggplot(data = PR_18_sub, aes(x = d_sub2, y = avg_t_ht2, color = plot, shape = bl
   
 
 ```
+
+
 
 
 #STATISTICS II
