@@ -1,0 +1,563 @@
+---
+title: "Simulated_Herbivory_II"
+author: "Nicole"
+date: "3/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Helpful Tips  
+
+**Useful keyboard shortcuts**
+*these work for windows, they may be different for Macs*
+
+- `Cntrl` + `Z` functions like the Undo button in word or excel. Undoes whatever action you just did
+- `Cntrl` + `Alt` + `I` inserts a new code chunk
+- `Cntrl` + `Enter` runs the code that your courser is on (good for if you want to run small sections of code within a larger code chunk)
+- `Cntrl` + `Shift` + `M` inserts the pipe functions ` %>% `
+- `Cntrl` + `F` allows you to find things within the document (can be useful if you want to replace the name of an object everywhere in the document at the same time)
+- `Cntrl` + `Shift` + `O` opens a document outline that you can use to quickly navigate between titled sections of your document 
+- `Cntrl` + `C` to copy, `Cntrl` + `V` to paste
+- `Cntrl` + `S` to save
+
+Use `rm(list = ls())` to Clear workspace (if desired/needed). If run correctly will clear everything from your environment tab. Typically it's good to do this at the start of each of your sessions. Defiantly should do it if you open a new Rmd file.
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
+Use this`getwd()` to check working directory. Will most likely be whatever folder your Rmd file is in. If you need to change it for some reason use `setwd()` 
+```{r, echo = FALSE, include=FALSE}
+getwd()
+#setwd()
+```
+
+# Downloading/loading packages
+
+Use `install.packages` to download and install a new R package. You only need to do this once, then you can just use `library()` to load it and be able to call functions within it. and load the package libraries.  
+
+**TIP: It's generally considered best practice to keep the commands to call all the packages you need to use at the top of the document**  
+
+`tidyr`, `dplyr`, and `readr` are probably the most commonly used packages for data wrangling/cleaning.`ggplot2` is very common for creating publication quality figures.  
+
+**Note: The order which you install packages is important. Functions with the same names will be masked by packages loaded in after the previous.**  
+Ex: The `select()` function from `MASS` will be masked by `select()` from `dplyar` 
+```{r, message=FALSE, warning=FALSE}
+library("tidyr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+library("ggpubr")
+```
+
+Load in each years .csv files containing the data. 2021 will be added after since it already has the new codes
+```{r}
+#TH_2018 <- read.csv(file.choose(), header = TRUE)
+
+TH_2018 <- read.csv("../Data/2018_tiller_heights_QAQCed.csv", header = TRUE)
+
+TH_2019 <- read.csv("../Data/2019_tiller_heights_QAQCed.csv", header = TRUE)
+
+TH_2020 <- read.csv("../Data/2020_tiller_heights_QAQCed.csv", header = TRUE)
+
+TH_2021 <- read.csv("../Data/2021_tiller_heights_QAQCed.csv", header = TRUE)
+```
+
+Then merge the years together  
+*2018-2020 ONLY -- 2021 must be added later as it only has new clipping codes*
+
+**!IMPORTANT!** all the names of columns need to be exactly the same name (capitalization and spaces included)**
+```{r}
+
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+TH_19_18_20           <- Reduce(MyMerge, list(TH_2018, TH_2019, TH_2020))
+
+```
+
+Check unique vales in each column to make sure that there are not naming errors 
+```{r, results='hide'}
+unique(TH_19_18_20$plot)
+```
+
+Remove or rename -- important step! EX: 18 observations in the merge were labeled "F10 " instead of "F10".
+```{r}
+#example rename
+TH_19_18_20$plot <- recode(TH_19_18_20$plot, "F10 " = "F10")
+```
+
+Once naming conventions have been checked, the next step is to create a new column in the spread sheet that will be filled out with the new clipping codes...(PU1/PU2 or PR1/PR2 instead of CL# 1-4)
+
+To do this, the 1st step is to create vectors for the information you plan to add to the columns. In this case we will then list the names of all of the new clipping codes...
+
+~vectors for filling out "new_id" column~
+```{r}
+CT1 <- c("CT1")
+CT2 <- c("CT2")
+PU1 <- c("PU1")
+PU2 <- c("PU2")
+PR1 <- c("PR1")
+PR2 <- c("PR2")
+
+```
+
+The next step is to dived the data set up into groups based on what corresponds to each clip_id. 
+
+~subset the dataset~
+```{r}
+
+  ## BLOCK 1 ##
+
+#B1CT
+B1.CT.CT1 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CT1")
+B1.CT.CT2 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CT2")
+B1.CT.CL1 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CL1")
+B1.CT.CL2 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CL2")
+B1.CT.CL3 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CL3")
+B1.CT.CL4 <- subset(TH_19_18_20, block=="1" & plot=="CT" & old_id=="CL4")
+
+#B1F2
+B1.F2.CT1 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CT1")
+B1.F2.CT2 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CT2")
+B1.F2.CL1 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CL1")
+B1.F2.CL2 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CL2")
+B1.F2.CL3 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CL3")
+B1.F2.CL4 <- subset(TH_19_18_20, block=="1" & plot=="F2" & old_id=="CL4")
+
+#B1F5
+B1.F5.CT1 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CT1")
+B1.F5.CT2 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CT2")
+B1.F5.CL1 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CL1")
+B1.F5.CL2 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CL2")
+B1.F5.CL3 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CL3")
+B1.F5.CL4 <- subset(TH_19_18_20, block=="1" & plot=="F5" & old_id=="CL4")
+
+#B1F10
+B1.F10.CT1 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CT1")
+B1.F10.CT2 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CT2")
+B1.F10.CL1 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CL1")
+B1.F10.CL2 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CL2")
+B1.F10.CL3 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CL3")
+B1.F10.CL4 <- subset(TH_19_18_20, block=="1" & plot=="F10" & old_id=="CL4")
+
+  ## BLOCK 2 ##
+
+#B2CT
+B2.CT.CT1 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CT1")
+B2.CT.CT2 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CT2")
+B2.CT.CL1 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CL1")
+B2.CT.CL2 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CL2")
+B2.CT.CL3 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CL3")
+B2.CT.CL4 <- subset(TH_19_18_20, block=="2" & plot=="CT" & old_id=="CL4")
+
+#B2F2
+B2.F2.CT1 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CT1")
+B2.F2.CT2 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CT2")
+B2.F2.CL1 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CL1")
+B2.F2.CL2 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CL2")
+B2.F2.CL3 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CL3")
+B2.F2.CL4 <- subset(TH_19_18_20, block=="2" & plot=="F2" & old_id=="CL4")
+
+#B2F5
+B2.F5.CT1 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CT1")
+B2.F5.CT2 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CT2")
+B2.F5.CL1 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CL1")
+B2.F5.CL2 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CL2")
+B2.F5.CL3 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CL3")
+B2.F5.CL4 <- subset(TH_19_18_20, block=="2" & plot=="F5" & old_id=="CL4")
+
+#B2F10
+B2.F10.CT1 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CT1")
+B2.F10.CT2 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CT2")
+B2.F10.CL1 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CL1")
+B2.F10.CL2 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CL2")
+B2.F10.CL3 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CL3")
+B2.F10.CL4 <- subset(TH_19_18_20, block=="2" & plot=="F10" & old_id=="CL4")
+
+  ## BLOCK 3 ##
+
+#B3CT
+B3.CT.CT1 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CT1")
+B3.CT.CT2 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CT2")
+B3.CT.CL1 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CL1")
+B3.CT.CL2 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CL2")
+B3.CT.CL3 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CL3")
+B3.CT.CL4 <- subset(TH_19_18_20, block=="3" & plot=="CT" & old_id=="CL4")
+
+#B3F2
+B3.F2.CT1 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CT1")
+B3.F2.CT2 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CT2")
+B3.F2.CL1 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CL1")
+B3.F2.CL2 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CL2")
+B3.F2.CL3 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CL3")
+B3.F2.CL4 <- subset(TH_19_18_20, block=="3" & plot=="F2" & old_id=="CL4")
+
+#B3F5
+B3.F5.CT1 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CT1")
+B3.F5.CT2 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CT2")
+B3.F5.CL1 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CL1")
+B3.F5.CL2 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CL2")
+B3.F5.CL3 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CL3")
+B3.F5.CL4 <- subset(TH_19_18_20, block=="3" & plot=="F5" & old_id=="CL4")
+
+#B3F10
+B3.F10.CT1 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CT1")
+B3.F10.CT2 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CT2")
+B3.F10.CL1 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CL1")
+B3.F10.CL2 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CL2")
+B3.F10.CL3 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CL3")
+B3.F10.CL4 <- subset(TH_19_18_20, block=="3" & plot=="F10" & old_id=="CL4")
+
+```
+
+You can then create a new column in the data set and tell R how to fill it for each of the subset groups
+  #fill with the new clipping ID codes -- SEE METADATA SHEET FOR TABLE OF OLD CODES TO NEW
+```{r}
+    
+  ## BLOCK 1 ##
+
+  #CT
+B1.CT.CT1["clip_id"] <- CT1
+B1.CT.CT2["clip_id"] <- CT2
+B1.CT.CL1["clip_id"] <- PR1
+B1.CT.CL2["clip_id"] <- PR2
+B1.CT.CL3["clip_id"] <- PU1
+B1.CT.CL4["clip_id"] <- PU2
+  #F2
+B1.F2.CT1["clip_id"] <- CT1
+B1.F2.CT2["clip_id"] <- CT2
+B1.F2.CL1["clip_id"] <- PU1
+B1.F2.CL2["clip_id"] <- PU2
+B1.F2.CL3["clip_id"] <- PR1
+B1.F2.CL4["clip_id"] <- PR2
+  #F5
+B1.F5.CT1["clip_id"] <- CT1
+B1.F5.CT2["clip_id"] <- CT2
+B1.F5.CL1["clip_id"] <- PU1
+B1.F5.CL2["clip_id"] <- PU2
+B1.F5.CL3["clip_id"] <- PR1
+B1.F5.CL4["clip_id"] <- PR2
+  #F10
+B1.F10.CT1["clip_id"] <- CT1
+B1.F10.CT2["clip_id"] <- CT2
+B1.F10.CL1["clip_id"] <- PU1
+B1.F10.CL2["clip_id"] <- PU2
+B1.F10.CL3["clip_id"] <- PR1
+B1.F10.CL4["clip_id"] <- PR2
+
+    ## BLOCK 2 ##
+
+  #CT
+B2.CT.CT1["clip_id"] <- CT1
+B2.CT.CT2["clip_id"] <- CT2
+B2.CT.CL1["clip_id"] <- PR1
+B2.CT.CL2["clip_id"] <- PR2
+B2.CT.CL3["clip_id"] <- PU1
+B2.CT.CL4["clip_id"] <- PU2
+  #F2
+B2.F2.CT1["clip_id"] <- CT1
+B2.F2.CT2["clip_id"] <- CT2
+B2.F2.CL1["clip_id"] <- PU1
+B2.F2.CL2["clip_id"] <- PU2
+B2.F2.CL3["clip_id"] <- PR1
+B2.F2.CL4["clip_id"] <- PR2
+  #F5
+B2.F5.CT1["clip_id"] <- CT1
+B2.F5.CT2["clip_id"] <- CT2
+B2.F5.CL1["clip_id"] <- PU1
+B2.F5.CL2["clip_id"] <- PU2
+B2.F5.CL3["clip_id"] <- PR1
+B2.F5.CL4["clip_id"] <- PR2
+  #F10
+B2.F10.CT1["clip_id"] <- CT1
+B2.F10.CT2["clip_id"] <- CT2
+B2.F10.CL1["clip_id"] <- PU1
+B2.F10.CL2["clip_id"] <- PR1
+B2.F10.CL3["clip_id"] <- PR2
+B2.F10.CL4["clip_id"] <- PU2   
+  
+    ## BLOCK 3 ##
+
+  #CT
+B3.CT.CT1["clip_id"] <- CT1
+B3.CT.CT2["clip_id"] <- CT2
+B3.CT.CL1["clip_id"] <- PR1
+B3.CT.CL2["clip_id"] <- PU1
+B3.CT.CL3["clip_id"] <- PU2
+B3.CT.CL4["clip_id"] <- PR2
+  #F2
+B3.F2.CT1["clip_id"] <- CT1
+B3.F2.CT2["clip_id"] <- CT2
+#B3.F2.CL1["clip_id"] <- na
+#B3.F2.CL2["clip_id"] <- na
+#B3.F2.CL3["clip_id"] <- na
+#B3.F2.CL4["clip_id"] <- na
+  #F5
+B3.F5.CT1["clip_id"] <- CT1
+B3.F5.CT2["clip_id"] <- CT2
+B3.F5.CL1["clip_id"] <- PU1
+B3.F5.CL2["clip_id"] <- PU2
+B3.F5.CL3["clip_id"] <- PR1
+B3.F5.CL4["clip_id"] <- PR2
+  #F10
+B3.F10.CT1["clip_id"] <- CT1
+B3.F10.CT2["clip_id"] <- CT2
+B3.F10.CL1["clip_id"] <- PR1
+B3.F10.CL2["clip_id"] <- PR2
+B3.F10.CL3["clip_id"] <- PU1
+B3.F10.CL4["clip_id"] <- PU2
+  
+```
+
+Then merge all these subsets back together -- 
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+TH_new_19_18_20           <- Reduce(MyMerge, list(
+  B1.CT.CT1, B1.CT.CT2, B1.CT.CL1, B1.CT.CL2, B1.CT.CL3, B1.CT.CL4, B1.F2.CT1, B1.F2.CT2, B1.F2.CL1, B1.F2.CL2, B1.F2.CL3,
+  B1.F2.CL4, B1.F5.CT1, B1.F5.CT2, B1.F5.CL1, B1.F5.CL2, B1.F5.CL3, B1.F5.CL4, B1.F10.CT1, B1.F10.CT2, B1.F10.CL1,
+  B1.F10.CL2, B1.F10.CL3, B1.F10.CL4,
+  B2.CT.CT1, B2.CT.CT2, B2.CT.CL1, B2.CT.CL2, B2.CT.CL3, B2.CT.CL4, B2.F2.CT1, B2.F2.CT2, B2.F2.CL1, B2.F2.CL2, B2.F2.CL3,
+  B2.F2.CL4, B2.F5.CT1, B2.F5.CT2, B2.F5.CL1, B2.F5.CL2, B2.F5.CL3, B2.F5.CL4, B2.F10.CT1, B2.F10.CT2, B2.F10.CL1,
+  B2.F10.CL2, B2.F10.CL3, B2.F10.CL4,
+  B3.CT.CT1, B3.CT.CT2, B3.CT.CL1, B3.CT.CL2, B3.CT.CL3, B3.CT.CL4, B3.F2.CT1, B3.F2.CT2, B3.F2.CL1, B3.F2.CL2, B3.F2.CL3,
+  B3.F2.CL4, B3.F5.CT1, B3.F5.CT2, B3.F5.CL1, B3.F5.CL2, B3.F5.CL3, B3.F5.CL4, B3.F10.CT1, B3.F10.CT2, B3.F10.CL1,
+  B3.F10.CL2, B3.F10.CL3, B3.F10.CL4
+  ))
+
+```
+
+!IMPORTANT! -- make sure the number of observations in the new merge match the number of observations in the original
+
+
+Then merge the 2021 data set with the rest of the years...
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+TH_all           <- Reduce(MyMerge, list(TH_new_19_18_20, TH_2021))
+
+```
+
+!IMPORTANT! -- make sure the number of observations in the new merge match the sum of observations in TH_new_19_18_20 and TH_2021
+
+
+```{r}
+TH_all <- TH_all %>%
+  select(date, block, plot, rep, t_num, clip_id, g_ht)
+```
+
+Now we create two new columns for two different kinds of date replacement
+Subset by date...
+```{r}
+
+  ##2018##
+jul.06.18 <- subset(TH_all, date=="7/6/2018")
+jul.07.18 <- subset(TH_all, date=="7/7/2018")
+jul.09.18 <- subset(TH_all, date=="7/9/2018")
+jul.13.18 <- subset(TH_all, date=="7/13/2018")
+jul.20.18 <- subset(TH_all, date=="7/20/2018")
+jul.30.18 <- subset(TH_all, date=="7/30/2018")
+
+  ##2019##
+jun.21.19 <- subset(TH_all, date=="6/21/2019")
+jun.23.19 <- subset(TH_all, date=="6/23/2019")
+jun.24.19 <- subset(TH_all, date=="6/24/2019")
+jul.06.19 <- subset(TH_all, date=="7/6/2019")
+jul.17.19 <- subset(TH_all, date=="7/17/2019")
+aug.02.19 <- subset(TH_all, date=="8/2/2019")
+
+  ##2020##
+jul.31.20 <- subset(TH_all, date=="7/31/2020")
+
+  ##2021##
+jun.19.21 <- subset(TH_all, date=="6/19/2021")
+jul.07.21 <- subset(TH_all, date=="7/7/2021") 
+jul.21.21 <- subset(TH_all, date=="7/21/2021")
+aug.03.21 <- subset(TH_all, date=="8/3/2021")
+
+```
+
+Fill the columns
+```{r}
+#sub2
+  ##2018##
+jul.06.18["d_sub2"] <- c(1)
+jul.07.18["d_sub2"] <- c(1)
+jul.09.18["d_sub2"] <- c(1)
+jul.13.18["d_sub2"] <- c(2)
+jul.20.18["d_sub2"] <- c(3)
+jul.30.18["d_sub2"] <- c(4)
+
+jul.06.18["year"] <- c(2018)
+jul.07.18["year"] <- c(2018)
+jul.09.18["year"] <- c(2018)
+jul.13.18["year"] <- c(2018)
+jul.20.18["year"] <- c(2018)
+jul.30.18["year"] <- c(2018)
+
+  ##2019##
+jun.21.19["d_sub2"] <- c(5) 
+jun.23.19["d_sub2"] <- c(5)
+jun.24.19["d_sub2"] <- c(5)
+jul.06.19["d_sub2"] <- c(6)
+jul.17.19["d_sub2"] <- c(7)
+aug.02.19["d_sub2"] <- c(8)
+
+jun.21.19["year"] <- c(2019) 
+jun.23.19["year"] <- c(2019)
+jun.24.19["year"] <- c(2019)
+jul.06.19["year"] <- c(2019)
+jul.17.19["year"] <- c(2019)
+aug.02.19["year"] <- c(2019)
+
+  ##2020##
+jul.31.20["d_sub2"] <- c(9)
+
+jul.31.20["year"] <- c(2020)
+
+  ##2021##
+jun.19.21["d_sub2"] <- c(10)
+jul.07.21["d_sub2"] <- c(11)
+jul.21.21["d_sub2"] <- c(12) 
+aug.03.21["d_sub2"] <- c(13)
+
+jun.19.21["year"] <- c(2021)
+jul.07.21["year"] <- c(2021)
+jul.21.21["year"] <- c(2021) 
+aug.03.21["year"] <- c(2021)
+
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+TH_all           <- Reduce(MyMerge, list(jul.06.18, jul.07.18,jul.09.18, jul.13.18, jul.20.18, jul.30.18, jun.21.19, jun.23.19, jun.24.19, jul.06.19, jul.17.19, aug.02.19, jul.31.20, jun.19.21, jul.07.21, jul.21.21, aug.03.21))
+
+```
+
+Now we need to add a new column for the overarching clipping treatments 
+
+Then subset by clip_id...
+```{r}
+
+g_CT1 <- subset(TH_all, clip_id=="CT1")
+g_CT2 <- subset(TH_all, clip_id=="CT2")
+g_PU1 <- subset(TH_all, clip_id=="PU1")
+g_PU2 <- subset(TH_all, clip_id=="PU2")
+g_PR1 <- subset(TH_all, clip_id=="PR1")
+g_PR2 <- subset(TH_all, clip_id=="PR2")
+
+```
+
+Fill the columns
+```{r}
+
+g_CT1["clip"] <- c("CT")
+g_CT2["clip"] <- c("CT")
+g_PU1["clip"] <- c("PU")
+g_PU2["clip"] <- c("PU")
+g_PR1["clip"] <- c("PR")
+g_PR2["clip"] <- c("PR")
+
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+TH_all           <- Reduce(MyMerge, list(g_CT1, g_CT2, g_PU1, g_PU2, g_PR1, g_PR2))
+```
+
+STATISTICS I
+--------------------------------------------------------
+
+Calculate basic basic stats (avg, SD, Max, Min....Ex)
+*for both tiller heights and # of tillers
+```{r}
+  
+  ## Tiller heights ##
+
+#average cross replicates on each tussock 
+ht.avg.rep <- (TH_all) %>% group_by(d_sub2, year, block, plot, clip, clip_id) %>% summarise_at(vars(g_ht), list(avg_t_ht1 = mean, std_ht1 = sd, max_ht1 = max, min_ht1 = min), na.rm = TRUE)
+
+#average across type of clip treatment 
+ht.avg.clip <- (ht.avg.rep) %>% group_by(d_sub2, year, block, plot, clip) %>% summarise_at(vars(avg_t_ht1), list(avg_t_ht2 = mean, std_ht2 = sd, max_ht2 = max, min_ht2 = min), na.rm = TRUE)
+
+#average across the blocks
+ht.avg.block <- (ht.avg.clip) %>% group_by(d_sub2, year, plot, clip) %>% summarise_at(vars(avg_t_ht2), list(avg_t_ht3 = mean, std_ht3 = sd, max_ht3 = max, min_ht3 = min), na.rm = TRUE)
+```
+
+ID max tiller heights for each treatment for each year 
+```{r}
+peak_2018 <- ht.avg.block %>%
+  filter(year == "2018")
+```
+
+
+
+
+```{r}
+PG_all$plot <- factor(PG_all$plot, levels = c("CT", "F2", "F5", "F10"))
+  PG_all$clip <- factor(PG_all$clip, levels = c("CT", "PU", "PR"))
+
+  BoxPlotall <- ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
+    geom_hline(yintercept = 15, color="#D0CECE")+
+      geom_boxplot(position=position_dodge(.85))+
+      scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+     theme_light()+
+     scale_y_continuous(limits = c(2.5,23), breaks=seq(0,25,5))+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "Mean final tiller height (cm)", x = "")+
+    #theme(legend.position="bottom")+
+     facet_grid(clip ~ .)
+  
+#ggsave("finalheights_all_BOXPLOT.jpeg")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
