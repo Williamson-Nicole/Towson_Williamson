@@ -31,22 +31,11 @@ getwd()
 Install/load the package libraries. **Once you have installed a package, you only need to load the library for future use.**
 ```{r}
 
-#install.packages("tidyverse")
-library(tidyverse)
-
-#install.packages("ggplot2")
+library("tidyverse")
 library("ggplot2")
-
-#install.packages("agricolae")
 library("agricolae")
-
-#install.packages("ggpubr")
 library("ggpubr")
-
-#install.packages("ggpubr")
 library("dplyr")
-
-#install.packages("nlme")
 library("nlme")
 
 ```
@@ -54,11 +43,11 @@ library("nlme")
 Load in each years .csv files containing the data
 ```{r}
 
-TV_2018 <- read.csv("C:/Users/willi/OneDrive/Documents/Towson University/Data/Cover data/Team vole/2018_calculated_cover.csv", header = TRUE)
+TV_2018 <- read.csv("../Data/Toolik_TeamVole_2018_cover.csv", header = TRUE)
 
-TV_2019 <- read.csv("C:/Users/willi/OneDrive/Documents/Towson University/Data/Cover data/Team vole/2019_calculated_cover.csv", header = TRUE)
+TV_2019 <- read.csv("../Data/Toolik_TeamVole_2019_cover.csv", header = TRUE)
 
-TV_2021 <- read.csv("C:/Users/willi/OneDrive/Documents/Towson University/Data/Cover data/Team vole/2021_calculated_cover.csv", header = TRUE)
+TV_2021 <- read.csv("../Data/Toolik_TeamVole_2021_cover.csv", header = TRUE)
 
 ```
 
@@ -198,8 +187,8 @@ Vectors for assigning functional groups
 bare <- c("Bare ground")
 dec_shrub <- c("Deciduous shrubs")
 ev_shrub <- c("Evergreen shrubs")
-grass <- c("Grass")
-sedge <- c("Sedge")
+gram <- c("Gramminoid")
+Eri_Vag <- c("Eriophorum")
 lichen <- c("Lichen")
 litter <- c("Litter")
 moss <- c("Moss")
@@ -219,7 +208,7 @@ es <- subset(TV_ALL, species== "Emp nig" | species== "Led pal" | species== "Vac 
 
 gr <- subset(TV_ALL, species== "calcan" | species== "Car big") #Grass
 
-sed <- subset(TV_ALL, species== "Eri vag") #Sedge
+eri <- subset(TV_ALL, species== "Eri vag") #Sedge
 
 fb <- subset(TV_ALL, species== "Bis viv" | species== "flower" | species== "Ped lap" | species== "Ped sp" | species== "Pet fri" | species== "Pol bis" | species== "Pyr gra" | species== "Rub cha" | species== "Sax pun" | species== "Ste edw" | species== "Stel lon") #forbs
 
@@ -239,8 +228,8 @@ Creates a new column named "func.group" and fills it with the the name of the fu
 bg["func.group"] <-bare
 ds["func.group"] <-dec_shrub
 es["func.group"] <-ev_shrub
-gr["func.group"] <-grass
-sed["func.group"] <-sedge
+gr["func.group"] <-gram
+eri["func.group"] <-Eri_Vag
 fb["func.group"] <-Forb
 lich["func.group"] <-lichen
 lit["func.group"] <-litter
@@ -262,10 +251,10 @@ MyMerge       <- function(x, y){
   df$Row.names  <- NULL
   return(df)
 }
-TV_ALL_funcgrp           <- Reduce(MyMerge, list(bg, ds, es, gr, sed, fb, lich, lit, ms, std))
+TV_ALL_funcgrp           <- Reduce(MyMerge, list(bg, ds, es, gr, eri, fb, lich, lit, ms, std))
 
 #use this if you want to export these data to csv at this point
-write.csv(TV_ALL_funcgrp, file = "relcov_funcgrp_ALL.csv")
+write.csv(TV_ALL_funcgrp, file = "../Derived CSVs/TeamVole_relcov_funcgrp_ALL.csv")
 
 ```
 
@@ -305,7 +294,7 @@ Calculate average/SD across sites
 avg.func.site <- (avg.quad.func) %>% group_by(year, treatment, func.group) %>% summarise_at(vars(avg.quad), list(avg.site = mean, site.SD = sd), na.rm = TRUE)
 
 #export this file
-write.csv(avg.func.site, file = "avg_relcov_site.csv")
+#write.csv(avg.func.site, file = "avg_relcov_site.csv")
 
 ```
 
@@ -355,7 +344,7 @@ ggplot(data = avg.func.site, aes(fill=func.group, x = treatment, y = avg.site)) 
   #theme(legend.position="bottom")+
   facet_grid(. ~ year) #vertically stacked
 
-ggsave("toolik_cover_treatment_avrg.jpeg") #exports a jpeg image of the graph
+#ggsave("toolik_cover_treatment_avrg.jpeg") #exports a jpeg image of the graph
 ```
 
 ```{r}
@@ -401,7 +390,7 @@ ggplot(data = avg.quad.func, aes(fill=func.group, x = treatment, y = avg.quad)) 
   #theme(legend.position="bottom")+
   facet_grid(site ~ year) #vertically stacked
 
-ggsave("toolik_cover_treatment_site_avrg.jpeg") #exports a jpeg image of the graph
+#ggsave("toolik_cover_treatment_site_avrg.jpeg") #exports a jpeg image of the graph
 ```
 
 
