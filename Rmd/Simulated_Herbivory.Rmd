@@ -876,7 +876,7 @@ TukeyHSD(ANOVA_21, which = "clip:plot")
 
 ```
 
-  Step 7 - create bar graphs --> all years
+## bar graphs --> all years
 ```{r}
 PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(avg_t_ht1), list(avg_t_ht = mean, std_ht = sd, max_ht = max, min_ht = min), na.rm = TRUE)
 
@@ -905,7 +905,7 @@ PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(a
   
 #ggsave("finalheights_all.jpeg")
 ```
-
+## box plot 
 ```{r}
 PG_all$plot <- factor(PG_all$plot, levels = c("CT", "F2", "F5", "F10"))
   PG_all$clip <- factor(PG_all$clip, levels = c("CT", "PU", "PR"))

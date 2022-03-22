@@ -1,0 +1,370 @@
+---
+title: "NDVI_exploration"
+author: "Nicole"
+date: "3/21/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
+```{r, message=FALSE, warning=FALSE}
+library("tidyr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+library("ggpubr")
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+```
+
+# Team vole NDVI/COVER
+
+## Load in NDVI data 
+```{r}
+TV_NDVI_orig_2021 <- read.csv("../Data/2021_Toolik_NDVI.csv", header = TRUE) 
+TV_NDVI_orig_2020 <- read.csv("../Data/2020_Toolik_NDVI.csv", header = TRUE) 
+TV_NDVI_orig_2019 <- read.csv("../Data/2019_Toolik_NDVI.csv", header = TRUE) 
+TV_NDVI_orig_2018 <- read.csv("../Data/2018_Toolik_NDVI.csv", header = TRUE) 
+```
+
+## Prep the Team Vole NDVI data
+
+Remove data we don't need
+```{r}
+TV_NDVI_clean_2021 <-  TV_NDVI_orig_2021 %>%
+  select(Site, Treatment, Quadrat.Chamber.., Replicate.., NDVI) %>%
+  filter(Quadrat.Chamber.. != "CH1" & Quadrat.Chamber.. != "CH2" & Quadrat.Chamber.. != "CH3" & Quadrat.Chamber.. != "") %>%
+  rename("quad" = "Quadrat.Chamber..", "treatment" = "Treatment", "site" = "Site", "rep" = "Replicate..") %>%
+  mutate(year = "2021")
+    
+      TV_NDVI_clean_2021$quad <- TV_NDVI_clean_2021$quad %>%
+        recode("Q1" = "1", "Q2"= "2", "Q3"= "3", "Q4"= "4", "Q5"= "5", "Q6"= "6", "Q7"= "7", "Q8"= "8") 
+
+
+TV_NDVI_clean_2020 <-  TV_NDVI_orig_2020 %>%
+  select(Site, Treatment, Quadrat, Scan, NDVI) %>%
+  rename("quad" = "Quadrat", "treatment" = "Treatment", "site" = "Site", "rep" = "Scan")%>%
+  filter(quad != "MISCAN")%>%
+  mutate(year = "2020")
+
+TV_NDVI_clean_2019 <-  TV_NDVI_orig_2019 %>%
+  select(Site, Treatment, Quadrat, NDVI) %>%
+  filter(Quadrat != "CH1" & Quadrat != "CH2" & Quadrat != "CH3") %>%
+  rename("quad" = "Quadrat", "treatment" = "Treatment", "site" = "Site")%>%
+  mutate(year = "2019")
+
+      TV_NDVI_clean_2019$quad <- TV_NDVI_clean_2019$quad %>%
+        recode("Q1" = "1", "Q2"= "2", "Q3"= "3", "Q4"= "4", "Q5"= "5", "Q6"= "6", "Q7"= "7", "Q8"= "8")
+
+TV_NDVI_clean_2018 <-  TV_NDVI_orig_2018 %>%
+  select(SITE, TREATMENT, QUAD2, NDVI) %>%
+  filter(QUAD2 != "F1" & QUAD2 != "F2" & QUAD2 != "F3" & QUAD2 != "") %>%
+  rename("quad" = "QUAD2", "treatment" = "TREATMENT", "site" = "SITE")%>%
+  mutate(year = "2018")
+
+      TV_NDVI_clean_2018$quad <- TV_NDVI_clean_2018$quad %>%
+       recode("C1" = "1", "C2"= "2", "C3"= "3", "C4"= "4", "C5"= "5", "C6"= "6", "C7"= "7", "C8"= "8")
+      
+unique(TV_NDVI_clean_2018$quad)
+```
+
+Merge the years together 
+```{r}
+TV_NDVI_CLEAN           <- Reduce(MyMerge, list(TV_NDVI_clean_2021, TV_NDVI_clean_2020, TV_NDVI_clean_2019, TV_NDVI_clean_2018))%>%
+  mutate(quad = as.numeric(quad))
+```
+
+Average across reps, then across quadrants.  
+
+**NOTE:** 2018 and 2019 didn't have columns to indicate rep number, they just listed the same quad info multiple times. This will still work with the code below because we do not need to group by rep.  
+**LOGIC CHECK:** N should equal 8 since there should have been 8 reps. 7 is also acceptable (we might have only done 7 or we could have removed a scan for an error). If any other numbers show up then investigate why its not 7 or 8 and correct the mistake.
+```{r}
+TV_NDVI_avg_rep <- TV_NDVI_CLEAN %>%
+  group_by(year, site, treatment, quad) %>%
+  summarise(NDVI_avg = mean(NDVI, na.rm = TRUE), n = n(), sd_rep = sd(NDVI, na.rm = TRUE))
+
+TV_NDVI_avg <- TV_NDVI_avg_rep %>%
+  group_by(year, site, treatment) %>%
+  summarise(avg_NDVI = mean(NDVI_avg, na.rm = TRUE), n = n(), sd = sd(NDVI_avg, na.rm = TRUE))
+```
+
+### Box plot - NDVI
+
+```{r}
+TV_NDVI_avg$treatment <- factor(TV_NDVI_avg$treatment, levels = c("CT", "EX", "PU", "PR"))
+
+  ggplot(TV_NDVI_avg, aes(x= year, y=avg_NDVI, fill = treatment))+
+    geom_hline(yintercept = 0.6, color="#D0CECE")+
+      geom_boxplot(position=position_dodge(.85))+
+    scale_fill_manual(values=c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+    
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "Mean NDVI", x = "")
+    #theme(legend.position="bottom")
+  
+ggsave("../Figures/Teamvole_boxplot_NDVI.jpeg")
+```
+
+```{r}
+TV_NDVI_avg_rep$treatment <- factor(TV_NDVI_avg_rep$treatment, levels = c("CT", "EX", "PU", "PR"))
+
+  ggplot(TV_NDVI_avg_rep, aes(x= year, y=NDVI_avg, fill = treatment))+
+    geom_hline(yintercept = 0.6, color="#D0CECE")+
+      geom_boxplot(position=position_dodge(.85))+
+    scale_fill_manual(values=c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+    
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "Mean NDVI", x = "")+
+    theme(legend.position="bottom")+
+     facet_grid(site ~ .)
+  
+ggsave("../Figures/Teamvole_boxplot_NDVI_sites.jpeg")
+```
+
+## Load in Team Vole cover data
+
+```{r}
+TV_cover_orig <- read.csv("../Derived CSVs/TeamVole_relcov_funcgrp_ALL.csv", header = TRUE) 
+```
+
+## Prep TV cover  
+
+1. Only looking at a few species, so the rest can be deleted
+1. Need to change cover from long to wide format so it can be plot against NDVI data 
+```{r}
+TV_cover_subset <- TV_cover_orig %>%
+  select(year, site, treatment, quad, species, cover)%>%
+  filter(species == "Eri vag" | species == "Bet nan" | species == "Rub cha") %>%
+  pivot_wider(names_from = species, values_from = cover) %>%
+  rename("Bet_nan" = "Bet nan", "Eri_vag" = "Eri vag", "Rub_cha" = "Rub cha") %>%
+  mutate(year = as.character(year), quad = as.numeric(quad))
+```
+
+### Join NDVI and COVER data 
+
+Join the dataset, drop columns we don't need, delete 2020 data as we don't have cover for that year
+```{r}
+TV_join <- left_join(TV_NDVI_avg_rep, TV_cover_subset, by= c("year", "site", "treatment", "quad")) %>%
+  select(-n, sd_rep) %>%
+  filter(year != "2020")
+```
+
+### Scatter plot of NDVI vs species cover
+
+Bet nan vs NDVI
+```{r, message=FALSE}
+#specify factor levels for treatments
+TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
+
+highlight_2018 <- TV_join %>% filter(year == "2018")
+highlight_2019 <- TV_join %>% filter(year == "2019")
+highlight_2021 <- TV_join %>% filter(year == "2021")
+
+
+
+ggplot(data = highlight_2018, aes(x = Bet_nan, y = NDVI_avg, color = treatment)) +
+  scale_color_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  geom_point(shape = 15, size = 2)+
+  geom_point(data=highlight_2019, 
+             aes(x = Bet_nan, y = NDVI_avg), 
+             shape = 17, size = 2)+
+  geom_point(data=highlight_2021, 
+             aes(x = Bet_nan, y = NDVI_avg), 
+             shape=16, size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
+  scale_fill_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Bet nan")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="bottom")+
+  facet_grid(site ~ .)
+  #facet_grid(. ~ site)
+
+ggsave("../Figures/Teamvole_regrestion_Betnan_NDVI.jpeg")
+```
+
+Eri vag vs NDVI
+```{r, message=FALSE}
+#specify factor levels for treatments
+TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
+
+highlight_2018 <- TV_join %>% filter(year == "2018")
+highlight_2019 <- TV_join %>% filter(year == "2019")
+highlight_2021 <- TV_join %>% filter(year == "2021")
+
+
+
+ggplot(data = highlight_2018, aes(x = Eri_vag, y = NDVI_avg, color = treatment)) +
+  scale_color_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  geom_point(shape = 15, size = 2)+
+  geom_point(data=highlight_2019, 
+             aes(x = Eri_vag, y = NDVI_avg), 
+             shape = 17, size = 2)+
+  geom_point(data=highlight_2021, 
+             aes(x = Eri_vag, y = NDVI_avg), 
+             shape=16, size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
+  scale_fill_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Eri vag")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="bottom")+
+  facet_grid(site ~ .)
+  #facet_grid(. ~ site)
+
+ggsave("../Figures/Teamvole_regrestion_Erivag_NDVI.jpeg")
+```
+
+Rub cha vs NDVI
+```{r, message=FALSE}
+#specify factor levels for treatments
+TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
+
+highlight_2018 <- TV_join %>% filter(year == "2018")
+highlight_2019 <- TV_join %>% filter(year == "2019")
+highlight_2021 <- TV_join %>% filter(year == "2021")
+
+
+
+ggplot(data = highlight_2018, aes(x = Rub_cha, y = NDVI_avg, color = treatment)) +
+  scale_color_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  geom_point(shape = 15, size = 2)+
+  geom_point(data=highlight_2019, 
+             aes(x = Rub_cha, y = NDVI_avg), 
+             shape = 17, size = 2)+
+  geom_point(data=highlight_2021, 
+             aes(x = Rub_cha, y = NDVI_avg), 
+             shape=16, size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
+  scale_fill_manual(values = c("CT" = "#a6611a", 
+                                "EX" = "#dfc27d",
+                                "PU" = "#80cdc1",
+                                "PR" = "#018571"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Rub cha")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="bottom")+
+  facet_grid(site ~ .)
+  #facet_grid(. ~ site)
+
+ggsave("../Figures/Teamvole_regrestion_Rubcha_NDVI.jpeg")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# LTER NDVI/COVER
+
+Read in LTER NDVI data
+```{r}
+#LTER_NDVI_orig <- read.csv("../Data/2008_2011_LMAT_NDVI.csv", header = TRUE)
+```
+
+
+
+Read in cover data
+```{r}
+#LTER_cover_origninal <- read.csv("../Data/", header = TRUE)
+```
+
+
+
+
+
+
+

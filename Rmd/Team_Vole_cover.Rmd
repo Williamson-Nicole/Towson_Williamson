@@ -30,24 +30,21 @@ getwd()
 
 Install/load the package libraries. **Once you have installed a package, you only need to load the library for future use.**
 ```{r}
-
-library("tidyverse")
-library("ggplot2")
-library("agricolae")
-library("ggpubr")
+library("tidyr")
 library("dplyr")
-library("nlme")
-
+library("readr")
+library("ggplot2")
+library("ggpubr")
 ```
 
 Load in each years .csv files containing the data
 ```{r}
 
-TV_2018 <- read.csv("../Data/Toolik_TeamVole_2018_cover.csv", header = TRUE)
+TV_2018 <- read.csv("../Data/TeamVole_toolik_2018_calculated_cover.csv", header = TRUE)
 
-TV_2019 <- read.csv("../Data/Toolik_TeamVole_2019_cover.csv", header = TRUE)
+TV_2019 <- read.csv("../Data/TeamVole_toolik_2019_calculated_cover.csv", header = TRUE)
 
-TV_2021 <- read.csv("../Data/Toolik_TeamVole_2021_cover.csv", header = TRUE)
+TV_2021 <- read.csv("../Data/TeamVole_toolik_2021_calculated_cover.csv", header = TRUE)
 
 ```
 
@@ -306,8 +303,8 @@ avg.func.site <- (avg.quad.func) %>% group_by(year, treatment, func.group) %>% s
 avg.func.site$treatment <- factor(avg.func.site$treatment, levels = c("CT", "EX", "PU", "PR"))
 avg.func.site$func.group <- factor(avg.func.site$func.group, levels = c("Deciduous shrubs", 
                                                                           "Evergreen shrubs", 
-                                                                          "Sedge",
-                                                                          "Grass",
+                                                                          "Eriophorum",
+                                                                          "Gramminoid",
                                                                           "Forb",
                                                                           "Lichen",
                                                                           "Moss", 
@@ -320,8 +317,8 @@ ggplot(data = avg.func.site, aes(fill=func.group, x = treatment, y = avg.site)) 
   geom_bar(position="fill", stat="identity")+ #Percent stacked
   scale_fill_manual(" ", values = c("Deciduous shrubs" = "#004c6d",
                                                            "Evergreen shrubs" = "#6996b3",
-                                                           "Sedge" = "#036d3f",
-                                                           "Grass"="#6fa17e",
+                                                           "Eriophorum" = "#036d3f",
+                                                           "Gramminoid"="#6fa17e",
                                                            "Forb"="#c4d6c8",
                                                            "Lichen"="#f6e8c3",
                                                            "Moss"="#dfc27d",
@@ -344,7 +341,7 @@ ggplot(data = avg.func.site, aes(fill=func.group, x = treatment, y = avg.site)) 
   #theme(legend.position="bottom")+
   facet_grid(. ~ year) #vertically stacked
 
-#ggsave("toolik_cover_treatment_avrg.jpeg") #exports a jpeg image of the graph
+ggsave("../Figures/toolik_cover_treatment_avrg.jpeg") #exports a jpeg image of the graph
 ```
 
 ```{r}
@@ -352,8 +349,8 @@ ggplot(data = avg.func.site, aes(fill=func.group, x = treatment, y = avg.site)) 
 avg.quad.func$treatment <- factor(avg.quad.func$treatment, levels = c("CT", "EX", "PU", "PR"))
 avg.quad.func$func.group <- factor(avg.quad.func$func.group, levels = c("Deciduous shrubs", 
                                                                           "Evergreen shrubs", 
-                                                                          "Sedge",
-                                                                          "Grass",
+                                                                          "Eriophorum",
+                                                                          "Gramminoid",
                                                                           "Forb",
                                                                           "Lichen",
                                                                           "Moss", 
@@ -366,8 +363,8 @@ ggplot(data = avg.quad.func, aes(fill=func.group, x = treatment, y = avg.quad)) 
   geom_bar(position="fill", stat="identity")+ #Percent stacked
   scale_fill_manual(" ", values = c("Deciduous shrubs" = "#004c6d",
                                                            "Evergreen shrubs" = "#6996b3",
-                                                           "Sedge" = "#036d3f",
-                                                           "Grass"="#6fa17e",
+                                                           "Eriophorum" = "#036d3f",
+                                                           "Gramminoid"="#6fa17e",
                                                            "Forb"="#c4d6c8",
                                                            "Lichen"="#f6e8c3",
                                                            "Moss"="#dfc27d",
@@ -390,7 +387,7 @@ ggplot(data = avg.quad.func, aes(fill=func.group, x = treatment, y = avg.quad)) 
   #theme(legend.position="bottom")+
   facet_grid(site ~ year) #vertically stacked
 
-#ggsave("toolik_cover_treatment_site_avrg.jpeg") #exports a jpeg image of the graph
+ggsave("../Figures/toolik_cover_treatment_site_avrg.jpeg") #exports a jpeg image of the graph
 ```
 
 
