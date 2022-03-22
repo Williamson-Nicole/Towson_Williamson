@@ -9,25 +9,35 @@ knitr::opts_chunk$set(echo = TRUE)
 <img src="Images/hike.png" class="center">
 
 
-## Helpful tutorials:  
+## **Helpful tutorials:**  
 
 [Links to helpful websites](Rmd/Helpful_links.html)  
 
 [Shareable leaflet map code](Rmd/Sharable-map-code.html) 
 
-## Code for Thesis Data:  
+## **Code for Thesis Data:**  
+
+### *Chapter 1:*  
 
 [LTER 06MAT Plant Cover](Rmd/LTER_06MAT_cover_thesis.html)  
   *This code is currently the most efficient/organized if you are looking for a good example of working with data from start to finish.*
 
 [Simulated Herbivory](Rmd/Simulated_Herbivory.html)  
 
+### *Chapter 2:*  
+
+[NDVI & Plant cover investigation](Rmd/NDVI_exploration.html)
+
+## **Other code:** 
+
+[89MAT updated cover](Rmd/LTER_89MAT_cover.html)
+
 [Toolik Team Vole Plant Cover](Rmd/Team_Vole_cover.html)
 
 [EXAMPLE FOR SARA](Rmd/Sara_data_box_whisker.html)  
   *Code for Sara that we worked through on 03/04/22 to create a simple box plot.*
 
-## Fun graphics/pictures:  
+## **Fun graphics/pictures:**  
 
 [Team vole graphics](Rmd/Team_vole_graphics.html)  
 
