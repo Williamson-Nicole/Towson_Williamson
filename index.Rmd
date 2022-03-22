@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<img src="Images/mountains.png" class="center">
+<img src="Images/hike.png" class="center">
 
 
 ## Helpful tutorials:  
