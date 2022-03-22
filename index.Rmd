@@ -1,5 +1,4 @@
 ---
-title: "Nicole's website for all things Thesis"
 output: html_document
 ---
 
