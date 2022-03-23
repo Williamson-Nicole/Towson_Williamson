@@ -18,6 +18,8 @@ library("tidyr")
 library("dplyr")
 library("readr")
 library("ggplot2")
+library("ggbreak")
+library("patchwork")
 library("ggpubr")
 ```
 
@@ -148,7 +150,7 @@ TV_NDVI_avg_rep$treatment <- factor(TV_NDVI_avg_rep$treatment, levels = c("CT", 
      theme(axis.text.y = element_text(color = "black", size = 8))+
      theme(aspect.ratio = 9/18.5)+
   labs(y = "Mean NDVI", x = "")+
-    theme(legend.position="bottom")+
+    #theme(legend.position="bottom")+
      facet_grid(site ~ .)
   
 ggsave("../Figures/Teamvole_boxplot_NDVI_sites.jpeg")
@@ -223,9 +225,9 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
-  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  theme(legend.position="bottom")+
+  #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
 
@@ -270,10 +272,10 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
-  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
-  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  theme(legend.position="bottom")+
+  #stat_regline_equation(label.x=0.4)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.4)+ #adds R2 
+  stat_cor(method = "pearson", label.x = .4)+ #adds p-value 
+  #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
 
@@ -321,48 +323,492 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  theme(legend.position="bottom")+
+  #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
 
 ggsave("../Figures/Teamvole_regrestion_Rubcha_NDVI.jpeg")
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # LTER NDVI/COVER
+
+## Read in LTER NDVI data 
 
 Read in LTER NDVI data
 ```{r}
-#LTER_NDVI_orig <- read.csv("../Data/2008_2011_LMAT_NDVI.csv", header = TRUE)
+LTER_NDVI_orig <- read.csv("../Data/2011_2018_LMAT_NDVI.csv", header = TRUE)
 ```
 
+## Prep the NDVI data 
 
-
-Read in cover data
+Subset by year, correct DOY column to reflect year
 ```{r}
-#LTER_cover_origninal <- read.csv("../Data/", header = TRUE)
+LTER_NDVI_11 <- LTER_NDVI_orig %>% filter(year == "2011") %>%
+  mutate(doy_adj = doy)
+
+LTER_NDVI_14 <- LTER_NDVI_orig %>% filter(year == "2014")%>%
+  mutate(doy_adj = doy+(365*3))
+
+LTER_NDVI_15 <- LTER_NDVI_orig %>% filter(year == "2015")%>%
+  mutate(doy_adj = doy+(365*4))
+
+LTER_NDVI_16 <- LTER_NDVI_orig %>% filter(year == "2016")%>%
+  mutate(doy_adj = doy+(365*5))
+
+LTER_NDVI_17 <- LTER_NDVI_orig %>% filter(year == "2017")%>%
+  mutate(doy_adj = doy+(365*6))
+
+LTER_NDVI_18 <- LTER_NDVI_orig %>% filter(year == "2018")%>%
+  mutate(doy_adj = doy+(365*7))
 ```
 
+merge data back together
+```{r}
+LTER_NDVI_CLEAN           <- Reduce(MyMerge, list(LTER_NDVI_11, LTER_NDVI_14, LTER_NDVI_15, LTER_NDVI_16, LTER_NDVI_17, LTER_NDVI_18)) 
 
+LTER_NDVI_CLEAN$time <- LTER_NDVI_CLEAN$time %>%
+  recode("initial " = "initial")
+```
+
+## Line graph of NDVI
+```{r}
+#specify factor levels for fertilization and clipping treatments 
+LTER_NDVI_CLEAN$plot <- factor(LTER_NDVI_CLEAN$plot, levels = c("F2", "F5", "F10", "CT"))
+
+
+ggplot(data = LTER_NDVI_CLEAN, aes(x = doy_adj, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  
+  theme_light()+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1),
+        axis.text.y = element_text(color = "black", size = 8),
+        axis.line = element_line(colour = "black", linetype = "solid"), 
+        legend.position="none",
+        plot.title = element_text(hjust = .5))+
+  geom_line(size = .75) +
+  geom_point(size = 1.25) + 
+  labs(y = "NDVI", x = "DOY")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+  theme(axis.title.x = element_text(face = "bold"))+
+  scale_x_break(c(218, 1253)) +
+  scale_x_break(c(1321, 1618)) +
+  scale_x_break(c(1685, 1971)) +
+  scale_x_break(c(2040, 2348)) +
+  scale_x_break(c(2425, 2727))
+
+ggsave("../Figures//LTER_NDVI_linegraph.jpeg")
+```
+
+## Read in LTER cover data
+```{r}
+LTER_cover_orig <- read.csv("../Derived CSVs/LTER_06MAT_relcov_funcgrp_allyrs.csv", header = TRUE)
+```
+
+## Prep the cover data 
+
+Subset by year based on # of quads measured per plot in a given year   
+
+- In 2008 we measured 4 quadrants/plot
+- In 2015 & 2020 we measured with 5 quadrants/plot 
+- In all other years we measured with 8 quadrants
+```{r}
+Q4 <- subset(LTER_cover_orig, year== "2008")
+Q5 <- subset(LTER_cover_orig, year== "2015" | year== "2020")
+Q8 <- subset(LTER_cover_orig, year== "2010" | year== "2011" | year== "2012" | year== "2013" | year== "2014" | year== "2016" | year== "2017" | year== "2018" | year== "2019" |year== "2010" |year== "2021")
+```
+
+Sum across quadrats in a plot 
+```{r}
+Q4_sum_avg_quad <- (Q4) %>% 
+  group_by(year, block, plot, species) %>%
+  summarise_at(vars(rel_cov), list(sum_quad = sum), na.rm = TRUE)
+
+Q5_sum_avg_quad <- (Q5) %>% 
+  group_by(year, block, plot, species)%>% 
+summarise_at(vars(rel_cov), list(sum_quad = sum), na.rm = TRUE)
+
+Q8_sum_avg_quad <- (Q8) %>% 
+  group_by(year, block, plot, species) %>% 
+  summarise_at(vars(rel_cov), list(sum_quad = sum), na.rm = TRUE)
+```
+
+Create functions/vectors for calculating average rel_cov bases on # of quadrats then fill a new column with the average
+```{r}
+avg_Q4_quad <- c(Q4_sum_avg_quad$sum_quad/4)
+avg_Q5_quad <- c(Q5_sum_avg_quad$sum_quad/5)
+avg_Q8_quad <- c(Q8_sum_avg_quad$sum_quad/8)
+
+#creates and fills a new column with the average (by diving that sum by the number of reps specified)
+Q4_sum_avg_quad["avg_quad"] <-avg_Q4_quad
+Q5_sum_avg_quad["avg_quad"] <-avg_Q5_quad
+Q8_sum_avg_quad["avg_quad"] <-avg_Q8_quad
+```
+
+Merge all the years back together
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+Avg_quad           <- Reduce(MyMerge, list(Q4_sum_avg_quad, Q5_sum_avg_quad, Q8_sum_avg_quad))
+```
+
+Average across blocks
+```{r}
+Avg_block <- (Avg_quad) %>% 
+  group_by(year, plot, species) %>% 
+  summarise_at(vars(avg_quad), list(avg_block = mean, block_sd = sd), na.rm = TRUE)
+```
+
+```{r}
+LTER_cover_CLEAN <- Avg_block %>%
+  filter(species == "Bet nan" | species == "Eri vag" | species == "Rub cha") %>%
+  select(-block_sd)
+
+unique(LTER_NDVI_CLEAN$time)
+```
+
+### Join NDVI and COVER data 
+
+Join the dataset, drop columns we don't need
+```{r}
+NDVI_initial <- LTER_NDVI_CLEAN %>%
+  filter(time == "initial")
+
+LTER_initial <- left_join(NDVI_initial,LTER_cover_CLEAN, by= c("year", "plot")) %>%
+  select(-doy_adj, -doy) %>%
+  pivot_wider(names_from = species, values_from = avg_block) %>%
+  rename("Bet_nan" = "Bet nan", "Eri_vag" = "Eri vag", "Rub_cha" = "Rub cha")
+
+#######
+
+NDVI_half <- LTER_NDVI_CLEAN %>%
+  filter(time == "half")
+
+LTER_half <- left_join(NDVI_half,LTER_cover_CLEAN, by= c("year", "plot")) %>%
+  select(-doy_adj, -doy)%>%
+  pivot_wider(names_from = species, values_from = avg_block) %>%
+  rename("Bet_nan" = "Bet nan", "Eri_vag" = "Eri vag", "Rub_cha" = "Rub cha")
+
+#######
+
+NDVI_peak <- LTER_NDVI_CLEAN %>%
+  filter(time == "peak")
+
+LTER_peak <- left_join(NDVI_peak,LTER_cover_CLEAN, by= c("year", "plot")) %>%
+  select(-doy_adj, -doy)%>%
+  pivot_wider(names_from = species, values_from = avg_block) %>%
+  rename("Bet_nan" = "Bet nan", "Eri_vag" = "Eri vag", "Rub_cha" = "Rub cha")
+
+#######
+
+NDVI_post <- LTER_NDVI_CLEAN %>%
+  filter(time == "post-peak")
+
+LTER_post <- left_join(NDVI_post,LTER_cover_CLEAN, by= c("year", "plot")) %>%
+  select(-doy_adj, -doy)%>%
+  pivot_wider(names_from = species, values_from = avg_block) %>%
+  rename("Bet_nan" = "Bet nan", "Eri_vag" = "Eri vag", "Rub_cha" = "Rub cha")
+```
+
+### Scatter plot of NDVI vs species cover
+
+#### Bet nan vs NDVI
+
+INITIAL
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_initial$plot <- factor(LTER_initial$plot, levels = c("CT","F2","F5","F10"))
+
+Bet_nan_initial <-  ggplot(data = LTER_initial, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Bet nan")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Bet_nan_initial)
+```
+
+HALF
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_half$plot <- factor(LTER_half$plot, levels = c("CT","F2","F5","F10"))
+
+Bet_nan_half <-  ggplot(data = LTER_half, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Bet nan")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Bet_nan_half)
+```
+
+PEAK
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_peak$plot <- factor(LTER_peak$plot, levels = c("CT","F2","F5","F10"))
+
+Bet_nan_peak <-  ggplot(data = LTER_peak, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Bet nan")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Bet_nan_peak)
+```
+
+POST-PEAK
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_post$plot <- factor(LTER_post$plot, levels = c("CT","F2","F5","F10"))
+
+Bet_nan_post <-  ggplot(data = LTER_post, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Bet nan")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="bottom")
+
+print(Bet_nan_post)
+```
+
+Combine the graphs
+```{r}
+(Bet_nan_initial+Bet_nan_half)/(Bet_nan_peak+Bet_nan_post) + plot_annotation(tag_levels = 'A') 
+
+ggsave("../Figures/LTER_Betnan_NDVI_reg.jpg")
+```
+
+#### Eri vag vs NDVI
+
+INITIAL
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_initial$plot <- factor(LTER_initial$plot, levels = c("CT","F2","F5","F10"))
+
+Eri_vag_initial <-  ggplot(data = LTER_initial, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Eri vag")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Eri_vag_initial)
+```
+
+HALF
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_half$plot <- factor(LTER_half$plot, levels = c("CT","F2","F5","F10"))
+
+Eri_vag_half <-  ggplot(data = LTER_half, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Eri vag")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Eri_vag_half)
+```
+
+PEAK
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_peak$plot <- factor(LTER_peak$plot, levels = c("CT","F2","F5","F10"))
+
+Eri_vag_peak <-  ggplot(data = LTER_peak, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Eri vag")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="none")
+
+print(Eri_vag_peak)
+```
+
+POST-PEAK
+```{r, message=FALSE}
+#specify factor levels for treatments
+LTER_post$plot <- factor(LTER_post$plot, levels = c("CT","F2","F5","F10"))
+
+Eri_vag_post <-  ggplot(data = LTER_post, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
+  scale_color_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  scale_fill_manual(values = c("CT" = "#d8b365", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+  theme(axis.text.y = element_text(color = "black", size = 8))+
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid"))+
+  labs(y = "NDVI", x = "Eri vag")+ 
+  theme(axis.title.y = element_text(face = "bold"))+
+    theme(axis.title.x = element_text(face = "bold"))+
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  theme(legend.position="bottom")
+
+print(Eri_vag_post)
+```
+
+Combine the graphs
+```{r}
+(Eri_vag_initial+Eri_vag_half)/(Eri_vag_peak+Eri_vag_post) + plot_annotation(tag_levels = 'A')
+
+ggsave("../Figures/LTER_Erivag_NDVI_reg.jpg")
+```
 
 
 
