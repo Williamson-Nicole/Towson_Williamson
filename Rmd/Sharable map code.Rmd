@@ -10,6 +10,10 @@ html_document: default
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
 ```{r, include=FALSE}
 library("xfun")
 ```
@@ -50,8 +54,8 @@ head(toolik_locations) #inspect file
 
 
 leaflet(toolik_locations) %>% 
-  addTiles() %>% 
-  addScaleBar()%>%
+  addTiles() %>%
+  addScaleBar() %>%
   addMarkers(lng = ~Long, lat = ~Lat, popup = ~ Location)
 ```
   
