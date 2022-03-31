@@ -45,12 +45,12 @@ Use `install.packages` to download and install a new R package. You only need to
 Ex: The `select()` function from `MASS` will be masked by `select()` from `dplyar` 
 ```{r, message=FALSE, warning=FALSE}
 library("leaflet")
-library("MASS") #used for post-hoc test (lda)
 library("tidyr")
 library("dplyr")
 library("readr")
 library("ggplot2")
 library("ggpubr")
+library("vegan")
 ```
 
 # Data Wrangling
@@ -540,12 +540,93 @@ stat_cor(method = "pearson", label.x = .2, label.y = .25)+ #adds p-value
   facet_grid(plot ~ .)
 ```
 
-# Map feild site locations
 
+# Species composition measures
+
+## Prep the data 
+
+```{r}
+sum_species <- (relcov_08_21) %>% group_by(year, block, plot, quad, species) %>% 
+  summarise_at(vars(rel_cov), list(relcov_species = sum ), na.rm = TRUE) %>% 
+  ungroup()%>% 
+  filter(species != "St. D", species != "grass", species != "graminoid", species != "bare", species != "frost boil", species != "litter", species != "dicot") 
+
+sum_species <- subset(sum_species, year== "2008" | year== "2021")
+```
+
+## Calculate Shannon Diverity 
+```{r}
+
+H_LTER <- sum_species %>%
+  group_by(year,block, plot, quad) %>%
+  mutate(cov_total = sum(relcov_species)) %>% #calculate H
+  mutate(P = relcov_species/cov_total)%>%
+  mutate(P_LnP = P * log(P)) %>%
+  mutate(H = (sum(P_LnP, na.rm = TRUE))*-1) %>% 
+  select(-cov_total, -P, -P_LnP)%>% #Remove intermediate columns
+  ungroup()%>%
+  mutate(year = as.character(year))
+
+H_quad_avg <- H_LTER %>%
+  filter(species =="Bet nan")%>%
+group_by(year, block, plot) %>%
+  summarise(H_quad_avg = mean(H, na.rm = TRUE), n = n(), sd = sd(H, na.rm = TRUE))%>%
+  ungroup()
+
+##LOGIC CHECK --> n = number of quads. IF there are less than the number you expected to have in a given treatment then that means "Bet nan" wasn't found in one of the quadrants, and you should pick a different species that shows up in all treatments (2008 had 4 quads, 2021 had 8)
+
+H_block_avg <- H_quad_avg %>%
+  group_by(year, plot)%>%
+  summarise(H_block_avg = mean(H_quad_avg, na.rm = TRUE), n = n(), sd = sd(H_quad_avg, na.rm = TRUE))%>%
+  ungroup()
+
+write.csv(H_block_avg, file = "../Derived CSVs/LTER_Diversity_block_avg.csv")
+```
+
+### Box plot graph 
+```{r}
+H_quad_avg$plot <- factor(H_quad_avg$plot, levels = c("CT", "F2", "F5", "F10"))
+
+ggplot(H_quad_avg, aes(x= year, y=H_quad_avg, fill = plot))+
+  geom_boxplot(position=position_dodge(.85))+
+  scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+  labs(y = "Shannon Diversity Index (per m^2)", x = "")
+    #theme(legend.position="bottom")
+  
+#ggsave("../Figures/LTER_shannon_diversity.jpeg")
+```
+## Calculate Richness
+```{r}
+richness_avg_quad <- H_LTER %>%
+group_by(year, block, plot, quad) %>%
+  add_count(year) %>%
+  ungroup()%>%
+  filter(species =="Bet nan")%>%
+    group_by(year, block, plot)%>%
+  summarise(rich_avg_quad = mean(n, na.rm = TRUE), n = n(), sd = sd(n, na.rm = TRUE))%>%
+  ungroup()
+
+richness_avg_block <- richness_avg_quad %>%
+  group_by(year, plot)%>%
+  summarise(richness_avg_block = mean(rich_avg_quad, na.rm = TRUE), n = n(), sd = sd(rich_avg_quad, na.rm = TRUE))%>%
+  ungroup()
+
+write.csv(richness_avg_block, file = "../Derived CSVs/LTER_Richness_block_avg.csv")
+```
+
+
+
+# Map feild site locations
 ```{r}
 locations <- read.csv("../Data/Toolik_location.csv")
 
-head(locations)
 
 leaflet(locations) %>% 
   addTiles() %>%
