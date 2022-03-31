@@ -910,7 +910,7 @@ PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(a
 PG_all$plot <- factor(PG_all$plot, levels = c("CT", "F2", "F5", "F10"))
   PG_all$clip <- factor(PG_all$clip, levels = c("CT", "PU", "PR"))
 
-  BoxPlotall <- ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
+ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
     geom_hline(yintercept = 15, color="#D0CECE")+
       geom_boxplot(position=position_dodge(.85))+
       scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
