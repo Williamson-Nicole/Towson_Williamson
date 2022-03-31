@@ -104,7 +104,6 @@ TV_NDVI_avg <- TV_NDVI_avg_rep %>%
 ```
 
 ### Box plot - NDVI
-
 ```{r}
 TV_NDVI_avg$treatment <- factor(TV_NDVI_avg$treatment, levels = c("CT", "EX", "PU", "PR"))
 
@@ -188,32 +187,18 @@ TV_join <- left_join(TV_NDVI_avg_rep, TV_cover_subset, by= c("year", "site", "tr
 
 Bet nan vs NDVI
 ```{r, message=FALSE}
-#specify factor levels for treatments
-TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
+highlight_CT <- TV_join %>% filter(treatment == "CT")
+highlight_EX <- TV_join %>% filter(treatment == "EX")
+highlight_PU <- TV_join %>% filter(treatment == "PU")
+highlight_PR <- TV_join %>% filter(treatment == "PR")
 
-highlight_2018 <- TV_join %>% filter(year == "2018")
-highlight_2019 <- TV_join %>% filter(year == "2019")
-highlight_2021 <- TV_join %>% filter(year == "2021")
-
-
-
-ggplot(data = highlight_2018, aes(x = Bet_nan, y = NDVI_avg, color = treatment)) +
-  scale_color_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
-  geom_point(shape = 15, size = 2)+
-  geom_point(data=highlight_2019, 
-             aes(x = Bet_nan, y = NDVI_avg), 
-             shape = 17, size = 2)+
-  geom_point(data=highlight_2021, 
-             aes(x = Bet_nan, y = NDVI_avg), 
-             shape=16, size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
-  scale_fill_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
+ggplot(data = TV_join, aes(x = Bet_nan, y = NDVI_avg)) +
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, color = "black")+
+   geom_point(data=highlight_CT, aes(x=Bet_nan,y=NDVI_avg), size = 2, color = "#a6611a")+
+  geom_point(data=highlight_EX, aes(x=Bet_nan,y=NDVI_avg), size = 2, color = "#dfc27d")+
+  geom_point(data=highlight_PU, aes(x=Bet_nan,y=NDVI_avg), size = 2, color = "#80cdc1")+
+  geom_point(data=highlight_PR, aes(x=Bet_nan,y=NDVI_avg), size = 2, color = "#018571")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -225,43 +210,28 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
-  #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
+  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
 
-ggsave("../Figures/Teamvole_regrestion_Betnan_NDVI.jpeg")
+#ggsave("../Figures/Teamvole_regrestion_Betnan_NDVI.jpeg")
 ```
 
 Eri vag vs NDVI
 ```{r, message=FALSE}
-#specify factor levels for treatments
-TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
+highlight_CT <- TV_join %>% filter(treatment == "CT")
+highlight_EX <- TV_join %>% filter(treatment == "EX")
+highlight_PU <- TV_join %>% filter(treatment == "PU")
+highlight_PR <- TV_join %>% filter(treatment == "PR")
 
-highlight_2018 <- TV_join %>% filter(year == "2018")
-highlight_2019 <- TV_join %>% filter(year == "2019")
-highlight_2021 <- TV_join %>% filter(year == "2021")
-
-
-
-ggplot(data = highlight_2018, aes(x = Eri_vag, y = NDVI_avg, color = treatment)) +
-  scale_color_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
-  geom_point(shape = 15, size = 2)+
-  geom_point(data=highlight_2019, 
-             aes(x = Eri_vag, y = NDVI_avg), 
-             shape = 17, size = 2)+
-  geom_point(data=highlight_2021, 
-             aes(x = Eri_vag, y = NDVI_avg), 
-             shape=16, size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
-  scale_fill_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
+ggplot(data = TV_join, aes(x = Eri_vag, y = NDVI_avg)) +
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, color = "black")+
+   geom_point(data=highlight_CT, aes(x=Eri_vag,y=NDVI_avg), size = 2, color = "#a6611a")+
+  geom_point(data=highlight_EX, aes(x=Eri_vag,y=NDVI_avg), size = 2, color = "#dfc27d")+
+  geom_point(data=highlight_PU, aes(x=Eri_vag,y=NDVI_avg), size = 2, color = "#80cdc1")+
+  geom_point(data=highlight_PR, aes(x=Eri_vag,y=NDVI_avg), size = 2, color = "#018571")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -272,9 +242,9 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
-  #stat_regline_equation(label.x=0.4)+ #adds regression line equation
-  #stat_cor(aes(label=..rr.label..), label.x=0.4)+ #adds R2 
-  stat_cor(method = "pearson", label.x = .4)+ #adds p-value 
+  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .4)+ #adds p-value 
   #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
@@ -284,32 +254,19 @@ ggsave("../Figures/Teamvole_regrestion_Erivag_NDVI.jpeg")
 
 Rub cha vs NDVI
 ```{r, message=FALSE}
-#specify factor levels for treatments
-TV_join$treatment <- factor(TV_join$treatment, levels = c("CT","EX","PU","PR"))
 
-highlight_2018 <- TV_join %>% filter(year == "2018")
-highlight_2019 <- TV_join %>% filter(year == "2019")
-highlight_2021 <- TV_join %>% filter(year == "2021")
+highlight_CT <- TV_join %>% filter(treatment == "CT")
+highlight_EX <- TV_join %>% filter(treatment == "EX")
+highlight_PU <- TV_join %>% filter(treatment == "PU")
+highlight_PR <- TV_join %>% filter(treatment == "PR")
 
-
-
-ggplot(data = highlight_2018, aes(x = Rub_cha, y = NDVI_avg, color = treatment)) +
-  scale_color_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
-  geom_point(shape = 15, size = 2)+
-  geom_point(data=highlight_2019, 
-             aes(x = Rub_cha, y = NDVI_avg), 
-             shape = 17, size = 2)+
-  geom_point(data=highlight_2021, 
-             aes(x = Rub_cha, y = NDVI_avg), 
-             shape=16, size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = treatment))+
-  scale_fill_manual(values = c("CT" = "#a6611a", 
-                                "EX" = "#dfc27d",
-                                "PU" = "#80cdc1",
-                                "PR" = "#018571"))+
+ggplot(data = TV_join, aes(x = Rub_cha, y = NDVI_avg)) +
+  geom_point(size = 2)+
+  geom_smooth(method = "lm", se = TRUE, color = "black")+
+   geom_point(data=highlight_CT, aes(x=Rub_cha,y=NDVI_avg), size = 2, color = "#a6611a")+
+  geom_point(data=highlight_EX, aes(x=Rub_cha,y=NDVI_avg), size = 2, color = "#dfc27d")+
+  geom_point(data=highlight_PU, aes(x=Rub_cha,y=NDVI_avg), size = 2, color = "#80cdc1")+
+  geom_point(data=highlight_PR, aes(x=Rub_cha,y=NDVI_avg), size = 2, color = "#018571")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -320,15 +277,16 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Rub cha")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
-  #stat_regline_equation(label.x=0.3)+ #adds regression line equation
-  #stat_cor(aes(label=..rr.label..), label.x=0.3)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  #stat_regline_equation(label.x=0.2)+ #adds regression line equation
+  #stat_cor(aes(label=..rr.label..), label.x=0.2)+ #adds R2 
+  #stat_cor(method = "pearson", label.x = .2)+ #adds p-value 
   #theme(legend.position="bottom")+
   facet_grid(site ~ .)
   #facet_grid(. ~ site)
 
 ggsave("../Figures/Teamvole_regrestion_Rubcha_NDVI.jpeg")
 ```
+
 
 # LTER NDVI/COVER
 
@@ -403,6 +361,32 @@ ggplot(data = LTER_NDVI_CLEAN, aes(x = doy_adj, y = avg_ndvi, color = plot)) +
 
 ggsave("../Figures//LTER_NDVI_linegraph.jpeg")
 ```
+## Box plot NDVI 
+```{r}
+Peak_season_NDVI <- LTER_NDVI_CLEAN %>%
+  filter(time=="peak")
+
+Peak_season_NDVI$plot <- factor(Peak_season_NDVI$plot, levels = c("CT", "F2", "F5", "F10"))
+
+ggplot(data=Peak_season_NDVI, aes(x=year, y=avg_ndvi, fill=plot)) +
+  scale_fill_manual(values = c("CT" = "#E1BA15", 
+                                "F2" = "#41b6c4",
+                                "F5" = "#2c7fb8",
+                                "F10" = "#253494"))+
+geom_bar(stat="identity", position=position_dodge()) +
+  theme_light()+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "NDVI", x = "")
+
+ggsave("../Figures/LTER_avg_NDVI_bargrpah.jpeg")
+
+```
+
 
 ## Read in LTER cover data
 ```{r}
@@ -471,8 +455,6 @@ Avg_block <- (Avg_quad) %>%
 LTER_cover_CLEAN <- Avg_block %>%
   filter(species == "Bet nan" | species == "Eri vag" | species == "Rub cha") %>%
   select(-block_sd)
-
-unique(LTER_NDVI_CLEAN$time)
 ```
 
 ### Join NDVI and COVER data 
@@ -527,17 +509,18 @@ INITIAL
 #specify factor levels for treatments
 LTER_initial$plot <- factor(LTER_initial$plot, levels = c("CT","F2","F5","F10"))
 
-Bet_nan_initial <-  ggplot(data = LTER_initial, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_in <- LTER_initial %>% filter(plot == "CT")
+highlight_F2_in <- LTER_initial %>% filter(plot == "F2")
+highlight_F5_in <- LTER_initial %>% filter(plot == "F5")
+highlight_F10_in <- LTER_initial %>% filter(plot == "F10")
+
+Bet_nan_initial <-  ggplot(data = LTER_initial, aes(x = Bet_nan, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_in, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_in, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_in, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_in, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -548,10 +531,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Bet nan")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
   theme(legend.position="none")
+
 
 print(Bet_nan_initial)
 ```
@@ -561,17 +546,18 @@ HALF
 #specify factor levels for treatments
 LTER_half$plot <- factor(LTER_half$plot, levels = c("CT","F2","F5","F10"))
 
-Bet_nan_half <-  ggplot(data = LTER_half, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_half <- LTER_half %>% filter(plot == "CT")
+highlight_F2_half <- LTER_half %>% filter(plot == "F2")
+highlight_F5_half <- LTER_half %>% filter(plot == "F5")
+highlight_F10_half <- LTER_half %>% filter(plot == "F10")
+
+Bet_nan_half <-  ggplot(data = LTER_half, aes(x = Bet_nan, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_half, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_half, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_half, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_half, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -582,10 +568,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Bet nan")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
   theme(legend.position="none")
+
 
 print(Bet_nan_half)
 ```
@@ -595,17 +583,19 @@ PEAK
 #specify factor levels for treatments
 LTER_peak$plot <- factor(LTER_peak$plot, levels = c("CT","F2","F5","F10"))
 
-Bet_nan_peak <-  ggplot(data = LTER_peak, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_peak <- LTER_peak %>% filter(plot == "CT")
+highlight_F2_peak <- LTER_peak %>% filter(plot == "F2")
+highlight_F5_peak <- LTER_peak %>% filter(plot == "F5")
+highlight_F10_peak <- LTER_peak %>% filter(plot == "F10")
+
+
+Bet_nan_peak <-  ggplot(data = LTER_peak, aes(x = Bet_nan, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_peak, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_peak, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_peak, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_peak, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -616,10 +606,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Bet nan")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
   theme(legend.position="none")
+
 
 print(Bet_nan_peak)
 ```
@@ -629,17 +621,19 @@ POST-PEAK
 #specify factor levels for treatments
 LTER_post$plot <- factor(LTER_post$plot, levels = c("CT","F2","F5","F10"))
 
-Bet_nan_post <-  ggplot(data = LTER_post, aes(x = Bet_nan, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_post <- LTER_post %>% filter(plot == "CT")
+highlight_F2_post <- LTER_post %>% filter(plot == "F2")
+highlight_F5_post <- LTER_post %>% filter(plot == "F5")
+highlight_F10_post <- LTER_post %>% filter(plot == "F10")
+
+
+Bet_nan_post <-  ggplot(data = LTER_post, aes(x = Bet_nan, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_post, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_post, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_post, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_post, aes(x=Bet_nan,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -650,10 +644,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Bet nan")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
   #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  theme(legend.position="bottom")
+  theme(legend.position="none")
+
 
 print(Bet_nan_post)
 ```
@@ -672,17 +668,19 @@ INITIAL
 #specify factor levels for treatments
 LTER_initial$plot <- factor(LTER_initial$plot, levels = c("CT","F2","F5","F10"))
 
-Eri_vag_initial <-  ggplot(data = LTER_initial, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_in <- LTER_initial %>% filter(plot == "CT")
+highlight_F2_in <- LTER_initial %>% filter(plot == "F2")
+highlight_F5_in <- LTER_initial %>% filter(plot == "F5")
+highlight_F10_in <- LTER_initial %>% filter(plot == "F10")
+
+
+Eri_vag_in <-  ggplot(data = LTER_initial, aes(x = Eri_vag, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_in, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_in, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_in, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_in, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -693,12 +691,14 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  stat_cor(method = "pearson", label.x = .15)+ #adds p-value 
   theme(legend.position="none")
 
-print(Eri_vag_initial)
+
+print(Eri_vag_in)
 ```
 
 HALF
@@ -706,17 +706,19 @@ HALF
 #specify factor levels for treatments
 LTER_half$plot <- factor(LTER_half$plot, levels = c("CT","F2","F5","F10"))
 
-Eri_vag_half <-  ggplot(data = LTER_half, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_half <- LTER_half %>% filter(plot == "CT")
+highlight_F2_half <- LTER_half %>% filter(plot == "F2")
+highlight_F5_half <- LTER_half %>% filter(plot == "F5")
+highlight_F10_half <- LTER_half %>% filter(plot == "F10")
+
+
+Eri_vag_half <-  ggplot(data = LTER_half, aes(x = Eri_vag, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_half, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_half, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_half, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_half, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -727,10 +729,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  stat_cor(method = "pearson", label.x = .15)+ #adds p-value 
   theme(legend.position="none")
+
 
 print(Eri_vag_half)
 ```
@@ -740,17 +744,19 @@ PEAK
 #specify factor levels for treatments
 LTER_peak$plot <- factor(LTER_peak$plot, levels = c("CT","F2","F5","F10"))
 
-Eri_vag_peak <-  ggplot(data = LTER_peak, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_peak <- LTER_peak %>% filter(plot == "CT")
+highlight_F2_peak <- LTER_peak %>% filter(plot == "F2")
+highlight_F5_peak <- LTER_peak %>% filter(plot == "F5")
+highlight_F10_peak <- LTER_peak %>% filter(plot == "F10")
+
+
+Eri_vag_peak <-  ggplot(data = LTER_peak, aes(x = Eri_vag, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_peak, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_peak, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_peak, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_peak, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -761,10 +767,12 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
+  stat_cor(method = "pearson", label.x = .15)+ #adds p-value 
   theme(legend.position="none")
+
 
 print(Eri_vag_peak)
 ```
@@ -774,17 +782,19 @@ POST-PEAK
 #specify factor levels for treatments
 LTER_post$plot <- factor(LTER_post$plot, levels = c("CT","F2","F5","F10"))
 
-Eri_vag_post <-  ggplot(data = LTER_post, aes(x = Eri_vag, y = avg_ndvi, color = plot)) +
-  scale_color_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+highlight_CT_post <- LTER_post %>% filter(plot == "CT")
+highlight_F2_post <- LTER_post %>% filter(plot == "F2")
+highlight_F5_post <- LTER_post %>% filter(plot == "F5")
+highlight_F10_post <- LTER_post %>% filter(plot == "F10")
+
+
+Eri_vag_post <-  ggplot(data = LTER_post, aes(x = Eri_vag, y = avg_ndvi)) +
   geom_point(size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
-  scale_fill_manual(values = c("CT" = "#d8b365", 
-                                "F2" = "#41b6c4",
-                                "F5" = "#2c7fb8",
-                                "F10" = "#253494"))+
+    geom_smooth(method = "lm", se = TRUE, color = "black")+
+  geom_point(data=highlight_CT_post, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#d8b365")+
+  geom_point(data=highlight_F2_post, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#41b6c4")+
+  geom_point(data=highlight_F5_post, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#2c7fb8")+
+  geom_point(data=highlight_F10_post, aes(x=Eri_vag,y=avg_ndvi), size = 2, color = "#253494")+
   theme_bw() + 
   theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
@@ -795,17 +805,19 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   labs(y = "NDVI", x = "Eri vag")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
+  ylim(0.2, 0.9)+
   #stat_regline_equation(label.x=0.3)+ #adds regression line equation
   #stat_cor(aes(label=..rr.label..), label.x=0.35)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .3)+ #adds p-value 
-  theme(legend.position="bottom")
+  stat_cor(method = "pearson", label.x = .15)+ #adds p-value 
+  theme(legend.position="none")
+
 
 print(Eri_vag_post)
 ```
 
 Combine the graphs
 ```{r}
-(Eri_vag_initial+Eri_vag_half)/(Eri_vag_peak+Eri_vag_post) + plot_annotation(tag_levels = 'A')
+(Eri_vag_in+Eri_vag_half)/(Eri_vag_peak+Eri_vag_post) + plot_annotation(tag_levels = 'A')
 
 ggsave("../Figures/LTER_Erivag_NDVI_reg.jpg")
 ```
