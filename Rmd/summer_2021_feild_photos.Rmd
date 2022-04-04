@@ -65,7 +65,10 @@ xfun::embed_file('../Images/TheBoys_HerbivoryTransect.jpg', text = 'Click HERE t
 xfun::embed_file('../Images/Jess_Earl_Sourcing.jpg', text = 'Click HERE to download image')
 ```  
 
-
+<img src="../Images/vole_mobile.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/vole_mobile.jpg', text = 'Click HERE to download image')
+``` 
 
 <img src="../Images/Jess_Lauren_MidnightSun.jpg" class="center"> 
 ```{r, echo=FALSE}
@@ -80,3 +83,58 @@ xfun::embed_file('../Images/Ian_Ruby_Miriam_Greenhouse.jpg', text = 'Click HERE 
 ```  
 
 
+<img src="../Images/baby_siksik_1.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/baby_siksik_1.jpg', text = 'Click HERE to download image')
+```  
+
+<img src="../Images/baby_siksik_2.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/baby_siksik_2.jpg', text = 'Click HERE to download image')
+```  
+
+<img src="../Images/baby_siksik_3.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/baby_siksik_3.jpg', text = 'Click HERE to download image')
+```  
+
+
+<img src="../Images/helo_1.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/helo_1.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/helo_2.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/helo_2.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/helo_3.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/helo_3.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/helo_4.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/helo_4.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/road_mt_1.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/road_mt_1.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/road_mt_2.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/road_mt_2.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/midnight_sun.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/midnight_sun.jpg', text = 'Click HERE to download image')
+``` 
+
+<img src="../Images/midnight_sun_mt.jpg" class="center"> 
+```{r, echo=FALSE}
+xfun::embed_file('../Images/midnight_sun_mt.jpg', text = 'Click HERE to download image')
+``` 
