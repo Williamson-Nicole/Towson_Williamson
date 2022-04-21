@@ -53,6 +53,17 @@ library("ggpubr")
 library("vegan")
 ```
 
+Code for merging datasets
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+```
+
+
 # Data Wrangling
 
 ### Load in data and merge datasets:
@@ -78,15 +89,7 @@ str(relcov_21) #tells us what data types (numbers, factors, etc) are in the data
 
 Then merge the years together...all the names of columns need to be exactly the same name (capitalization and spaces included)
 ```{r}
-
-MyMerge       <- function(x, y){
-  df            <- merge(x, y, all = TRUE)
-  rownames(df)  <- df$Row.names
-  df$Row.names  <- NULL
-  return(df)
-}
 relcov_08_21           <- Reduce(MyMerge, list(relcov_21, relcov_08_20))
-
 
 write.csv(relcov_08_21, file = "../Derived CSVs/LTER_06MAT_relcov_allyrs.csv")
 ```
@@ -123,8 +126,13 @@ relcov_08_21$species <- relcov_08_21$species %>%
   #St.D.
 relcov_08_21$species <- relcov_08_21$species %>% 
 recode("St. D. Led Pal" = "St. D", "Dead Evrg" = "St. D", "Dead Bet" = "St. D", "St. D. Bet" = "St. D", "St. D. Sal" = "St. D", "St. D. Bet." = "St. D", "St. D. Evrg" = "St. D")
+
   #litter
 relcov_08_21$species <- recode(relcov_08_21$species, "Eri vag litter" = "litter")
+
+  #combine species to genus level for forbs and Calamagrostis
+relcov_08_21$species <- relcov_08_21$species %>% recode("Ped lap" = "Ped sp.", "Pet fri"="Pet sp.", "Ped lap"="Ped sp.", "Ste lon" = "Ste sp.", "Ste edw"= "Ste sp.", "Cal can"="Cal sp.", "Cal lap"="Cal sp.")
+
 ```
 
 Sum functional cover across species within quadrats. This likely wont change the relative cover for most species unless they were listed more than once in a quadrat but it's good to do to insure accuracy after fixing naming conventions.
@@ -151,8 +159,8 @@ write.csv(species.avg.ct, file = "../Derived CSVs/LTER_06MAT_species_avg_allyrs.
 bare <- c("Bare ground")
 dec_shrub <- c("Deciduous shrubs")
 ev_shrub <- c("Evergreen shrubs")
-grass <- c("Grass")
-sedge <- c("Sedge")
+gram <- c("Gramminoid")
+erivag <- c("Eriophorum")
 lichen <- c("Lichen")
 litter <- c("Litter")
 moss <- c("Moss")
@@ -162,25 +170,18 @@ St.D <- c("Standing dead")
 
 2. Subset the dataset by species within given functional groups 
 ```{r}
-
 bg <- subset(relcov_08_21, species== "bare" |species== "frost boil")
  
 ds <- subset(relcov_08_21, species== "Bet nan"| species== "Vac uli"| species== "Sal pul"| species== "Arc alp"| species== "Sal phl"| species== "Sal arc"|species== "Sal ret")
-
 es <- subset(relcov_08_21, species== "Emp nig"|species== "Led pal"|species=="Vac vit"|species== "Cas tet"|species== "And pol"|species== "Dry int")
-
-gr <- subset(relcov_08_21, species== "Cal can" | species== "grass" | species== "Car big" | species== "Arc lat" | species== "Cal lap" | species== "Fes sp."| species== "graminoid")
-
-sed <- subset(relcov_08_21, species== "Eri vag")
-
+gr <- subset(relcov_08_21, species== "Cal sp." | species== "grass" | species== "Car big" | species== "Arc lat" | species== "Fes sp."| species== "graminoid")
+ev <- subset(relcov_08_21, species== "Eri vag")
 fb <- subset(relcov_08_21, species== "Ped lap"|species== "Pol bis"|species== "Rub cha"|species== "Luz sp."|species== "Pet sp."|species== "Hie alp"|species== "Ped sp."|species== "Arnica sp."|species== "Ste edw"|species== "Pet fri"|species== "Ste lon"|species== "Sau ang"|species== "Hie sp."|species== "Min sp."|species== "Tof sp."|species== "Ste sp."|species== "dicot"|species== "Lag gla"|species== "Sax pun"|species== "Pyr sec"|species== "Equ arv"|species== "Pol viv"|species== "Tof coc"|species== "Pyr sp.")
-
 lich <- subset(relcov_08_21, species== "lichen")
  
 lit <- subset(relcov_08_21, species== "litter")
   
 ms <- subset(relcov_08_21, species== "moss")
-
 std <- subset(relcov_08_21, species== "St. D")
   
 ```
@@ -190,8 +191,8 @@ std <- subset(relcov_08_21, species== "St. D")
 bg["func_grp"] <-bare
 ds["func_grp"] <-dec_shrub
 es["func_grp"] <-ev_shrub
-gr["func_grp"] <-grass
-sed["func_grp"] <-sedge
+gr["func_grp"] <-gram
+ev["func_grp"] <-erivag
 fb["func_grp"] <-Forb
 lich["func_grp"] <-lichen
 lit["func_grp"] <-litter
@@ -202,20 +203,9 @@ std["func_grp"] <-St.D
 4. Then merge these groups back together into one dataset. *Make sure the number of observations in `relcov_func_08_21` matches `relcov_08_21`, but `relcov_func_08_21` should have one more variable (the new func_grp column you created),
 ```{r}
 
-MyMerge       <- function(x, y){
-  df            <- merge(x, y, all = TRUE)
-  rownames(df)  <- df$Row.names
-  df$Row.names  <- NULL
-  return(df)
-}
-
-relcov_func_08_21           <- Reduce(MyMerge, list(bg, ds, es, gr, sed, fb, lich, lit, ms, std))
-
-
+relcov_func_08_21           <- Reduce(MyMerge, list(bg, ds, es, gr, ev, fb, lich, lit, ms, std))
 #export this file
-
 write.csv(relcov_func_08_21, file = "../Derived CSVs/LTER_06MAT_relcov_funcgrp_allyrs.csv")
-
 ```
 
 
@@ -281,12 +271,6 @@ Q8_sum_avg_quad["avg_quad"] <-avg_Q8_quad
 
 5. Merge all the years back together
 ```{r}
-MyMerge       <- function(x, y){
-  df            <- merge(x, y, all = TRUE)
-  rownames(df)  <- df$Row.names
-  df$Row.names  <- NULL
-  return(df)
-}
 Avg_func_quad           <- Reduce(MyMerge, list(Q4_sum_avg_quad, Q5_sum_avg_quad, Q8_sum_avg_quad))
 
 #export this file
@@ -309,8 +293,8 @@ write.csv(Avg_func_block, file = "../Derived CSVs/LTER_06MAT_avg_func_block_ally
 Avg_func_block$plot <- factor(Avg_func_block$plot, levels = c("CT", "F2", "F5", "F10"))
 Avg_func_block$func_grp <- factor(Avg_func_block$func_grp, levels = c("Deciduous shrubs", 
                                                                           "Evergreen shrubs", 
-                                                                          "Grass",
-                                                                          "Sedge",
+                                                                          "Gramminoid",
+                                                                          "Eriophorum",
                                                                           "Forb",
                                                                           "Lichen",
                                                                           "Moss", 
@@ -326,9 +310,9 @@ ggplot(data = Avg_func_block, aes(fill=func_grp, x = year, y = avg_block)) +
     "Deciduous shrubs" = "#004c6d",
                                                            #"Deciduous shrubs" = "red",
                                                            "Evergreen shrubs" = "#6996b3",
-                                                           "Grass" = "#036d3f",
+                                                           "Gramminoid" = "#036d3f",
                                                            #"Grass" = "red",
-                                                           "Sedge"="#6fa17e",
+                                                           "Eriophorum"="#6fa17e",
                                                           #"Sedge"="red",
                                                            "Forb"="#c4d6c8",
                                                           #"Forb"="red",
@@ -389,17 +373,13 @@ data_MANOVA_2021 <- Avg_func_quad %>%
   rename("Deciduous" = "Deciduous shrubs", "Evergreen" = "Evergreen shrubs")
 ```
 
-```{r}
-dplyr::select
-```
-
 
 #### Run the MANOVAs
 ```{r, results='hide'}
 #MANOVA_08<- manova(cbind(Deciduous, Evergreen, Forb, Grass, Lichen, Moss, Sedge) ~ plot, data = data_MANOVA_2008)
 #summary.aov(MANOVA_08)
 
-MANOVA_21<- manova(cbind(Deciduous, Evergreen, Forb, Grass, Lichen, Moss, Sedge) ~ plot, data = data_MANOVA_2021)
+MANOVA_21<- manova(cbind(Deciduous, Evergreen, Forb, Gramminoid, Lichen, Moss, Eriophorum) ~ plot, data = data_MANOVA_2021)
 summary.aov(MANOVA_21)
 ```
 
@@ -446,17 +426,17 @@ highlight_2021 <- wide_avg_func_quad %>%
 
 
 #Deciduous VS Sedge
-ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Sedge, color = plot)) +
+ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Eriophorum, color = plot)) +
   scale_color_manual(values = c("CT" = "#d8b365", 
                                 "F2" = "#41b6c4",
                                 "F5" = "#2c7fb8",
                                 "F10" = "#253494"))+
   geom_point(shape = 1, size = 1.5)+
   geom_point(data=highlight_2008, 
-             aes(x=Deciduous,y=Sedge), 
+             aes(x=Deciduous,y=Eriophorum), 
              shape = 17, size = 2)+
   geom_point(data=highlight_2021, 
-             aes(x=Deciduous,y=Sedge), 
+             aes(x=Deciduous,y=Eriophorum), 
              shape=16, size = 2)+
   geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
   scale_fill_manual(values = c("CT" = "#E2C68E", 
@@ -471,7 +451,7 @@ panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
   theme( axis.line = element_line(colour = "black", 
                       size = 1, linetype = "solid"))+
   scale_y_continuous(breaks= c(0, 0.15, .3))+
-  labs(y = "Sedge", x = "Deciduous shrubs")+ 
+  labs(y = "Eriophorum", x = "Deciduous shrubs")+ 
   theme(axis.title.y = element_text(face = "bold"))+
     theme(axis.title.x = element_text(face = "bold"))+
    #stat_regline_equation(label.x= 0.6, label.y= 0.15)+ #adds regression line
@@ -487,7 +467,7 @@ ggsave("../Figures/LTER_06MAT_correlation_Deciduous_Sedge.jpeg")
 Other graphs:
 ```{r, message=FALSE}
 #Deciduous VS Sedge (not separated by fert treatment )
-ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Sedge)) +
+ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Eriophorum)) +
    geom_point()+
   geom_smooth(method = "lm", se = TRUE)+
    stat_regline_equation(label.x= 0.55, label.y= 0.2)+
@@ -511,8 +491,8 @@ ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Forb, color = plot)) +
   stat_cor(aes(label=..rr.label..), label.x=0.6, label.y=.1)+
   facet_grid(plot ~ .)
 
-#Deciduous VS Forbs
-ggplot(data = wide_avg_func_quad, aes(x = Forb, y = Sedge, color = plot)) +
+#Eriophorum VS Forbs
+ggplot(data = wide_avg_func_quad, aes(x = Forb, y = Eriophorum, color = plot)) +
   scale_color_manual(values = c("CT" = "#d8b365", 
                                 "F2" = "#41b6c4",
                                 "F5" = "#2c7fb8",
@@ -605,6 +585,7 @@ ggplot(H_quad_avg, aes(x= year, y=H_quad_avg, fill = plot))+
 ## Calculate Richness
 ```{r}
 richness_avg_quad <- H_LTER %>%
+  filter(relcov_species != "0")%>%
 group_by(year, block, plot, quad) %>%
   add_count(year) %>%
   ungroup()%>%
@@ -619,6 +600,35 @@ richness_avg_block <- richness_avg_quad %>%
   ungroup()
 
 write.csv(richness_avg_block, file = "../Derived CSVs/LTER_Richness_block_avg.csv")
+```
+
+Look at what species are in the plots 
+```{r}
+CT_08_spec <- H_LTER %>%
+  filter(plot=="CT", year=="2008")
+
+  CT_08_spec<- unique(CT_08_spec$species)
+  
+CT_21_spec <- H_LTER %>%
+  filter(plot=="CT", year=="2021")
+
+  CT_21_spec<- unique(CT_21_spec$species)
+
+F10_08_spec <- H_LTER %>%
+  filter(plot=="F10", year=="2008")
+
+  F10_08_spec<- unique(F10_08_spec$species)
+
+F10_21_spec <- H_LTER %>%
+  filter(plot=="F10", year=="2021")
+
+  F10_21_spec<- unique(F10_21_spec$species)
+  
+write.csv(CT_08_spec, file = "../Derived CSVs/UNIQUE_CT_08.csv")
+write.csv(CT_21_spec, file = "../Derived CSVs/UNIQUE_CT_21.csv")
+write.csv(F10_08_spec, file = "../Derived CSVs/UNIQUE_F10_08.csv")
+write.csv(F10_21_spec, file = "../Derived CSVs/UNIQUE_F10_21.csv")
+
 ```
 
 

@@ -616,7 +616,7 @@ ggplot(data = ht.avg.block, aes(x = d_sub2, y = avg_t_ht3, ymin = avg_t_ht3-std_
   #facet_grid( ~ clip)  #horizontally stacked
 
 
-#ggsave("Linegraph_tiller_heights2.jpeg")
+ggsave("../Figures/Linegraph_tiller_heights2.jpeg")
 
 ```
 
@@ -903,7 +903,7 @@ PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(a
     #theme(legend.position="bottom")+
          facet_grid(clip ~ .)
   
-#ggsave("finalheights_all.jpeg")
+ggsave("../Figures/finalheights_all_BarGraph.jpeg")
 ```
 ## box plot 
 ```{r}
@@ -914,6 +914,7 @@ ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
     geom_hline(yintercept = 15, color="#D0CECE")+
       geom_boxplot(position=position_dodge(.85))+
       scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+  stat_summary(fun.y="mean", color="#ED7D31", size = .1, shape = 18, position=position_dodge(.85))+
      theme_light()+
      scale_y_continuous(limits = c(2.5,23), breaks=seq(0,25,5))+
      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
@@ -923,14 +924,12 @@ ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
      theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
      theme(axis.text.y = element_text(color = "black", size = 8))+
      theme(aspect.ratio = 9/18.5)+
-  labs(y = "Mean final tiller height (cm)", x = "")+
+  labs(y = "Final tiller height (cm)", x = "")+
     #theme(legend.position="bottom")+
      facet_grid(clip ~ .)
   
-#ggsave("finalheights_all_BOXPLOT.jpeg")
+ggsave("../Figures/Finalheights_all_BOXPLOT.jpeg")
 ```
-
- 
 
 STATISTICS III
   calculate 2-way REPEATED MEASURES ANOVAs for tiller heights across fert and clip treatments 
