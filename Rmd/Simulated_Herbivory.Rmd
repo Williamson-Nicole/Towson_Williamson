@@ -914,7 +914,7 @@ ggplot(PG_all, aes(x= d_sub2, y=avg_t_ht1, fill = plot))+
     geom_hline(yintercept = 15, color="#D0CECE")+
       geom_boxplot(position=position_dodge(.85))+
       scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
-  stat_summary(fun.y="mean", color="#ED7D31", size = .1, shape = 18, position=position_dodge(.85))+
+  stat_summary(fun.y="mean", color="#D1D1D1", size = .1, shape = 18, position=position_dodge(.85))+
      theme_light()+
      scale_y_continuous(limits = c(2.5,23), breaks=seq(0,25,5))+
      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
