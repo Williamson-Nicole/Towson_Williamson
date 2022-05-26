@@ -6,8 +6,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<img src="Images/hike.png" class="center">
+<img src="Images/hike.png" class="center">  
 
+
+
+
+## **Nicole Williamson's Masters Thesis - Completed May 2022**
+[CLICK HERE for full thesis document](Figures/Nicole Williamson_Thesis_FINAL.pdf)  
 
 ## **Helpful tutorials:**  
 
