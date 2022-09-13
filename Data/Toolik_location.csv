@@ -1,8 +1,8 @@
-Location,Lat,Long,type
-Toolik field station,68.63,-149.60,station
-06MAT_B1,68.62,-149.61,B1
-06MAT_B2,68.62,-149.61,B2
-06MAT_B3,68.62,-149.61,B3
-Pipeline,68.56,-149.49,PL
-South Toolik,68.61,-149.56,ST
-Imnavait,68.62,-149.33,IM
+Location,Lat,Long
+Toolik field station,68.63,-149.6
+06MAT_B1,68.62,-149.61
+06MAT_B2,68.62,-149.61
+06MAT_B3,68.62,-149.61
+Pipeline,68.56,-149.49
+South Toolik,68.61,-149.56
+Imnavait,68.62,-149.33

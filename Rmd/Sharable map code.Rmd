@@ -1,5 +1,5 @@
 ---
-title: "Sharable site map code"
+title: "Sharable Leaflet map code"
 author: "Nicole Williamson"
 date: "3/4/2022"
 output:  
@@ -47,6 +47,7 @@ toolik_locations <- read.csv("../Data/Toolik_location.csv") #load in file
 
 This will create a basic map with your site locations marked...  
 
+
   **NOTE: `popup = ~ Locations` adds labels to the markers when you click on them**  
 ```{r, message=FALSE}
 toolik_locations <- read.csv("../Data/Toolik_location.csv") #load in file 
@@ -58,7 +59,51 @@ leaflet(toolik_locations) %>%
   addScaleBar() %>%
   addMarkers(lng = ~Long, lat = ~Lat, popup = ~ Location)
 ```
+
+# If the markers do not show up:
+
+There seems to be some sort of error on the leaflet side where the regular markers `addMarkers` do not seem to always be working. If this is the case, try using `addCircleMarkers()` or `addAwesomeMarkers()` instead. If you use `addAwesomeMarkers()` you will need to use this code instead:
+
+```
+awesome <- makeAwesomeIcon(
+  icon = "info",
+  iconColor = "black",
+  markerColor = "blue",
+  library = "fa"
+)
+
+leaflet(toolik_locations) %>% 
+  addTiles() %>%
+  addScaleBar() %>%
+   addAwesomeMarkers(lng = ~Long, lat = ~Lat, icon = awesome, popup = ~ Location)
   
+```
+
+`addCircleMarkers()` should give you this: 
+```{r echo=FALSE}
+leaflet(toolik_locations) %>% 
+  addTiles() %>%
+  addScaleBar() %>%
+  addCircleMarkers(lng = ~Long, lat = ~Lat, popup = ~ Location)
+```
+
+`addAwesomeMarkers()` should give you this:
+```{r echo=FALSE}
+awesome <- makeAwesomeIcon(
+  icon = "info",
+  iconColor = "black",
+  markerColor = "blue",
+  library = "fa"
+)
+
+leaflet(toolik_locations) %>% 
+  addTiles() %>%
+  addScaleBar() %>%
+   addAwesomeMarkers(lng = ~Long, lat = ~Lat, icon = awesome, popup = ~ Location)
+```
+*See [THIS](https://github.com/lennardv2/Leaflet.awesome-markers) site for other marker options*  
+
+
 You can do lots of cool things to customize your map. **For more information on how to do these things and more, check out [THIS SITE.](https://rstudio.github.io/leaflet/)**
 
 - specify the area of the map that shows automatically 
@@ -73,4 +118,6 @@ You can do lots of cool things to customize your map. **For more information on 
 
 
 ### Hope you find this helpful!
+
+--------------------------------------------------------------------------------------
 
