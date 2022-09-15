@@ -1,8 +1,15 @@
 ---
 title: "R_cleaning_code_tiller_heights"
 author: "Nicole"
-date: "9/28/2021"
-output: html_document
+date:  "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
 editor_options: 
   markdown: 
     wrap: 72
@@ -704,7 +711,7 @@ ggsave("../Figures/Linegraph_tiller_number.jpeg")
 ```
 
 
-#STATISTICS II 
+# STATISTICS II 
 
 ## 2-way ANOVAs 
 
@@ -1096,7 +1103,7 @@ ggsave("../Figures/Tusscok_damage_BOXPLOT.jpeg", width = 7, height = 7)
 
 
 
-## Extra 
+# Other 
 ### Scatter plot PR tiller hights calculate slopes of regrowth
 ```{r}
 
