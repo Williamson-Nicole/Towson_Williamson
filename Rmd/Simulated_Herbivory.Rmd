@@ -898,7 +898,7 @@ PG_all_avgs <- (PG_all) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(a
   PG_all_avgs$plot <- factor(PG_all_avgs$plot, levels = c("CT", "F2", "F5", "F10"))
   PG_all_avgs$clip <- factor(PG_all_avgs$clip, levels = c("CT", "PU", "PR"))
 
-  barplotPGall <- ggplot(data=PG_all_avgs, aes(x=d_sub2, y=avg_t_ht, group = plot))+
+ggplot(data=PG_all_avgs, aes(x=d_sub2, y=avg_t_ht, group = plot))+
       geom_bar(aes(fill = plot), stat = "identity", width = 0.8, position= position_dodge(0.9))+
         theme_light()+
       scale_fill_manual(values=c("#d8b365", "#41b6c4", "#2c7fb8", "#253494")) +
