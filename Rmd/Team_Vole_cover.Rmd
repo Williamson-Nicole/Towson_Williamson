@@ -171,7 +171,43 @@ unique(TV_ALL$region)
 unique(TV_ALL$site)
 unique(TV_ALL$treatment)
 unique(TV_ALL$quad)
+unique(TV_ALL$species)
+```
 
+### Calculate cover my species for 2021
+
+This step sums relative cover across species within each individual quadrat. Just in case changing the naming convection created any duplicates. 
+```{r}
+TV_2021_calc <- (TV_ALL) %>% filter(year == "2021", species != "bare", species != "std", species != "frost boil", species != "tussock litter", species != "winterkill", species != "litter") %>% group_by(site, treatment, quad, species) %>% summarise_at(vars(cover), list(cover.spec = sum ), na.rm = TRUE)
+```
+
+Calculate average across quads within treatments  
+*NOTE: this assumes you are averaging across 8 quads*  
+
+  If there is a  year/treatment where we did not sample 8 quads, the you will need to subset that year/treatment and repeat the steps below on that data set separately and adjust the vector formula to divide by the appropriate number of quads sampled then merge the dataset back together  
+  
+```{r}
+#Sum across quads in a plot
+TV_2021_avg.quad.spec <- (TV_2021_calc) %>% group_by(site, treatment, species) %>% summarise_at(vars(cover.spec), list(sum.quad = sum), na.rm = TRUE)
+
+#Vector for calculating average
+Q8.avg <- c(TV_2021_avg.quad.spec$sum.quad/8)
+
+#creates and fills a new column with the average (by diving that sum by the number of reps specified)
+TV_2021_avg.quad.spec["avg.quad"] <-Q8.avg
+
+#export this file
+write.csv(TV_2021_avg.quad.spec, file = "../Derived CSVs/TeamVole_2021_relcov_quad_avg.csv")
+```
+*NOTE: these is another way to have R automatically calculate the averages using Vars, but this was is more accurate and gives you more control*   
+
+Calculate average/SD across sites
+```{r}
+
+TV_2021_avg.spec.site <- (TV_2021_avg.quad.spec) %>% group_by(treatment, species) %>% summarise_at(vars(avg.quad), list(avg.site = mean, site.SD = sd), na.rm = TRUE)
+
+#export this file
+write.csv(TV_2021_avg.spec.site, file = "../Derived CSVs/TeamVole_2021_relcov_site_avg.csv")
 ```
 
 
