@@ -61,6 +61,12 @@ library("readr")
 library("ggplot2")
 library("ggpubr")
 library("vegan")
+
+
+#library("extrafont")
+#font_import()
+#fonts()
+
 ```
 
 Code for merging datasets
@@ -84,7 +90,7 @@ Load in each years .csv files containing the data
 
 relcov_08_20 <- read.csv("../Data/LTER_06MAT_relcov_2008_2020.csv", header = TRUE)
 
-relcov_21 <- read.csv("../Data/LTER_06MAT_relcov_2021.csv", header = TRUE)
+relcov_21 <- read.csv("../Data/LTER_06MAT_relcov_2021.csv", header = TRUE) %>% select(-site)
 
 ```
 
@@ -291,8 +297,8 @@ Avg_func_quad           <- Reduce(MyMerge, list(Q4_sum_avg_quad, Q5_sum_avg_quad
 ```{r}
 Avg_func_block <- (Avg_func_quad) %>% 
   group_by(year, plot, func_grp) %>% 
-  summarise_at(vars(avg_quad), list(avg_block = mean, block_sd = sd), na.rm = TRUE)
-
+summarise(avg_block = mean(avg_quad, na.rm = TRUE), sd = sd(avg_quad, na.rm = TRUE), n = n(), se = sd/sqrt(n)) %>% ungroup()
+ 
 #export this file
 write.csv(Avg_func_block, file = "../Derived CSVs/LTER_06MAT_avg_func_block_allyrs.csv")
 ```
@@ -314,7 +320,7 @@ Avg_func_block$func_grp <- factor(Avg_func_block$func_grp, levels = c("Deciduous
 
 #Creates stacked bar graph#
 ggplot(data = Avg_func_block, aes(fill=func_grp, x = year, y = avg_block)) +
-  geom_bar(position="fill", stat="identity")+ #Percent stacked
+  geom_bar(position="fill", stat="identity", color = "black")+ #Percent stacked
   #geom_bar(position="stack", stat="identity")+ #Stacked
   scale_fill_manual(" ", values = c(
     "Deciduous shrubs" = "#004c6d",
@@ -331,21 +337,21 @@ ggplot(data = Avg_func_block, aes(fill=func_grp, x = year, y = avg_block)) +
                                                            "Litter"="#bf812d",
                                                            "Standing dead"="#8c510a",
                                                            "Bare ground" = "#543005"))+
-  theme_light()+
-  theme(aspect.ratio = 9/18.5)+ #use for vertical stack only
+  theme_bw()+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
-  theme(axis.text.y = element_text(color = "black", size = 6))+
-  theme( axis.line = element_line(colour = "black", 
-                      size = 1, linetype = "solid"))+
-  scale_y_continuous(breaks= c(0, 0.50, 1))+
-  theme(plot.title = element_text(hjust = .5))+
-  labs(y = "Mean relative cover (n = 3)", x = " ")+ 
-  #theme(axis.title.y = element_text(face = "bold"))+ #bolds y axis title
+  theme(axis.text.x = element_text(color = "black", size = 10))+
+  theme(axis.text.y = element_text(color = "black", size = 10))+
+  scale_x_continuous(expand = c(0,0), breaks= c(2008, 2015, 2021)) +
+  scale_y_continuous(expand = c(0,0), breaks= c(0, 0.5, 1))+
+  labs(y = "Relative plant abundance ", x = " ")+ 
+  theme(axis.title.y = element_text(size = 15)) +
   #theme(legend.position="bottom")+ #puts the key at the bottom of the graph and horizontally
-  facet_grid(plot ~ .) #vertically stacked
+  facet_grid(plot ~ .) + #vertically stacked 
+  theme(strip.text.y = element_text(size = 10)) + 
+  theme(panel.spacing.y = unit(5, "mm"))
 
-ggsave("../Figures/LTER_06MAT_stacked_bar_cover.jpeg")
+ggsave("../Figures/LTER_06MAT_stacked_bar_cover.jpeg", width = 19.05, height = 21, units = 'cm', dpi = 300)
+
 ```
 
 ### MANOVA
@@ -433,8 +439,6 @@ highlight_2008 <- wide_avg_func_quad %>%
 highlight_2021 <- wide_avg_func_quad %>% 
   filter(year == "2021")
 
-
-
 #Deciduous VS Sedge
 ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Eriophorum, color = plot)) +
   scale_color_manual(values = c("CT" = "#d8b365", 
@@ -448,29 +452,29 @@ ggplot(data = wide_avg_func_quad, aes(x = Deciduous, y = Eriophorum, color = plo
   geom_point(data=highlight_2021, 
              aes(x=Deciduous,y=Eriophorum), 
              shape=16, size = 2)+
-  geom_smooth(method = "lm", se = TRUE, aes(fill = plot))+
+  geom_smooth(data=dplyr::filter(wide_avg_func_quad, plot == "F10"), method = "lm", aes(fill = plot))+
+  geom_smooth(data=dplyr::filter(wide_avg_func_quad, plot == "F5"), method = "lm", aes(fill = plot))+
   scale_fill_manual(values = c("CT" = "#E2C68E", 
                                 "F2" = "#83D1D9",
                                 "F5" = "#57A3D7",
                                 "F10" = "#8A97E2"))+
   theme_bw() + 
-  theme(panel.grid.major = element_blank(),
-panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
-  theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
-  theme(axis.text.y = element_text(color = "black", size = 8))+
-  theme( axis.line = element_line(colour = "black", 
-                      size = 1, linetype = "solid"))+
-  scale_y_continuous(breaks= c(0, 0.15, .3))+
-  labs(y = "Eriophorum", x = "Deciduous shrubs")+ 
-  theme(axis.title.y = element_text(face = "bold"))+
-    theme(axis.title.x = element_text(face = "bold"))+
-   #stat_regline_equation(label.x= 0.6, label.y= 0.15)+ #adds regression line
-  #stat_cor(aes(label=..rr.label..), label.x=0.6, label.y=.1)+ #adds R2 
-  #stat_cor(method = "pearson", label.x = .5, label.y = .25)+ #adds p-value 
-  theme(legend.position="bottom")+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+
+  theme(axis.text.x = element_text(color = "black", size = 10))+
+  theme(axis.text.y = element_text(color = "black", size = 10))+
+  scale_y_continuous(expand = c(0,0), limits = c(0, .3), breaks = c(.1, .2, .3))+
+  scale_x_continuous(expand = c(0,0), limits = c(0, .8))+
+  labs(y = "Eriophorum abundance", x = "Deciduous shrub abundance")+ 
+  theme(axis.title.y = element_text( size = 15))+
+    theme(axis.title.x = element_text(size = 15))+
+   stat_regline_equation(label.x= 0.52, label.y= 0.25, color = "black", size = 3)+ #adds regression line
+  #stat_cor(aes(label=..rr.label..), label.x=0.4, label.y=.25, color = "black", size = 3)+ #adds R2 
+  stat_cor(method = "pearson", label.x = .64, label.y = .25, color = "black", size = 3)+ #adds p-value 
+  theme(legend.position="top", legend.title=element_blank(), ,
+        legend.box.margin=margin(-10,-10,-10,-10))+
   facet_grid(plot ~ .)
 
-ggsave("../Figures/LTER_06MAT_correlation_Deciduous_Sedge.jpeg")
+ggsave("../Figures/LTER_06MAT_correlation_Deciduous_Sedge.jpeg", width = 19.05, height = 21, units = 'cm', dpi = 300)
 
 ```
 
@@ -557,17 +561,19 @@ H_LTER <- sum_species %>%
   ungroup()%>%
   mutate(year = as.character(year))
 
+#H will be the same for every species within a quadrant. To get mean H across plots and then blocks its easiest to filter the data down to have just one value per quadrat. To do this, pick a species that shows up in every quadrat. In our case, Bet nan works. 
+
 H_quad_avg <- H_LTER %>%
   filter(species =="Bet nan")%>%
 group_by(year, block, plot) %>%
-  summarise(H_quad_avg = mean(H, na.rm = TRUE), n = n(), sd = sd(H, na.rm = TRUE))%>%
+  summarise(H_quad_avg = mean(H, na.rm = TRUE), sd = sd(H, na.rm = TRUE), n = n(), se = sd/sqrt(n))%>%
   ungroup()
 
 ##LOGIC CHECK --> n = number of quads. IF there are less than the number you expected to have in a given treatment then that means "Bet nan" wasn't found in one of the quadrants, and you should pick a different species that shows up in all treatments (2008 had 4 quads, 2021 had 8)
 
 H_block_avg <- H_quad_avg %>%
   group_by(year, plot)%>%
-  summarise(H_block_avg = mean(H_quad_avg, na.rm = TRUE), n = n(), sd = sd(H_quad_avg, na.rm = TRUE))%>%
+  summarise(H_block_avg = mean(H_quad_avg, na.rm = TRUE), sd = sd(H_quad_avg, na.rm = TRUE), n = n(), se = sd/sqrt(n))%>%
   ungroup()
 
 write.csv(H_block_avg, file = "../Derived CSVs/LTER_Diversity_block_avg.csv")
@@ -592,6 +598,7 @@ ggplot(H_quad_avg, aes(x= year, y=H_quad_avg, fill = plot))+
   
 #ggsave("../Figures/LTER_shannon_diversity.jpeg")
 ```
+
 ## Calculate Richness
 ```{r}
 richness_avg_quad <- H_LTER %>%
@@ -601,12 +608,12 @@ group_by(year, block, plot, quad) %>%
   ungroup()%>%
   filter(species =="Bet nan")%>%
     group_by(year, block, plot)%>%
-  summarise(rich_avg_quad = mean(n, na.rm = TRUE), n = n(), sd = sd(n, na.rm = TRUE))%>%
+  summarise(rich_avg_quad = mean(n, na.rm = TRUE), sd = sd(n, na.rm = TRUE), n = n(), se = sd/sqrt(n))%>%
   ungroup()
 
 richness_avg_block <- richness_avg_quad %>%
   group_by(year, plot)%>%
-  summarise(richness_avg_block = mean(rich_avg_quad, na.rm = TRUE), n = n(), sd = sd(rich_avg_quad, na.rm = TRUE))%>%
+  summarise(richness_avg_block = mean(rich_avg_quad, na.rm = TRUE), sd = sd(rich_avg_quad, na.rm = TRUE), n = n(), se = sd/sqrt(n))%>%
   ungroup()
 
 write.csv(richness_avg_block, file = "../Derived CSVs/LTER_Richness_block_avg.csv")

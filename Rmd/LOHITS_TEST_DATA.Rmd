@@ -1,0 +1,102 @@
+---
+title: "Lohit's test data"
+author: "Nicole Williamson"
+date:  "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Helpful Tips  
+
+**Useful keyboard shortcuts**
+*these work for windows, they may be different for Macs*
+
+- `Cntrl` + `Z` functions like the Undo button in word or excel. Undoes whatever action you just did
+- `Cntrl` + `Alt` + `I` inserts a new code chunk
+- `Cntrl` + `Enter` runs the code that your courser is on (good for if you want to run small sections of code within a larger code chunk)
+- `Cntrl` + `F` allows you to find things within the document (can be useful if you want to replace the name of an object everywhere in the document at the same time)
+- `Cntrl` + `Shift` + `O` opens a document outline that you can use to quickly navigate between titled sections of your document 
+- `Cntrl` + `C` to copy, `Cntrl` + `V` to paste
+- `Cntrl` + `S` to save
+
+Use `rm(list = ls())` to Clear workspace (if desired/needed). If run correctly will clear everything from your environment tab. Typically it's good to do this at the start of each of your sessions. Defiantly should do it if you open a new Rmd file.
+```{r, echo = FALSE}
+rm(list = ls())
+```
+
+Use this`getwd()` to check working directory. Will most likely be whatever folder your Rmd file is in. If you need to change it for some reason use `setwd()` 
+```{r, echo = FALSE, include=FALSE}
+getwd()
+#setwd()
+```
+
+# Downloading/loading packages
+
+Use `install.packages` to download and install a new R package. You only need to do this once, then you can just use `library()` to load it and be able to call functions within it. and load the package libraries.  
+
+**TIP: It's generally considered best practice to keep the commands to call all the packages you need to use at the top of the document**  
+
+`tidyr`, `dplyr`, and `readr` are probably the most commonly used packages for data wrangling/cleaning.`ggplot2` is very common for creating publication quality figures.  
+
+**Note: The order which you install packages is important. Functions with the same names will be masked by packages loaded in after the previous.**  
+Ex: The `select()` function from `MASS` will be masked by `select()` from `dplyar` 
+```{r, message=FALSE, warning=FALSE}
+library("tidyr")
+library("dplyr")
+library("readr")
+library("ggplot2")
+```
+
+# Read in data 
+```{r}
+mydata <- read.csv("../Data/LOHITS_TEST_data.csv")
+
+unique(mydata$Observation.Location)
+```
+Split the lat/long into two columns 
+```{r}
+splitdata <- mydata %>% separate(Observation.Location, sep = "\\,", c('lat', 'long')) %>% 
+  separate(lat, sep = "\\ ", c('x', 'lat')) %>%
+  separate(long, sep = "\\}", c('long', 'y')) %>%
+  separate(long, sep = "\\-", c('z', 'long')) %>%
+  mutate(lat = as.numeric(lat)) %>% mutate(long = as.numeric(long)) %>%
+  mutate(long = long * (-1)) %>%
+  select(-x, -y, -z)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

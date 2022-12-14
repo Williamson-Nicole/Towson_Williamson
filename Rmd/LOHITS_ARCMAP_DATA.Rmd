@@ -1,0 +1,37 @@
+---
+title: "LOHIT'S_ArcMap_data"
+author: "Nicole Williamson"
+date: '2022-10-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+rm(list = ls())
+```
+
+```{r}
+library("dplyr")
+library("tidyr")
+library("readr")
+library("ggpubr")
+```
+
+```{r}
+Crime_data <- read.csv("../Data/Part_1_Crime_Data_.csv") %>%
+  select(CrimeDateTime, Location, District, Neighborhood, Longitude, Latitude, Total_Incidents)
+
+Crime_data$date <- as.Date(Crime_data$CrimeDateTime)
+
+Crime_data$time <- format(as.POSIXct(Crime_data$CrimeDateTime), 
+                          format = "%H:%M:%S")
+
+Crime_data <- Crime_data %>% select(-CrimeDateTime)
+
+write.csv(Crime_data, file = "../Derived CSVs/clean_crime.csv")
+```
+

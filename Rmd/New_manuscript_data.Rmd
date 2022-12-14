@@ -1,0 +1,191 @@
+---
+title: "New_manuscript_data"
+author: "Nicole Williamson"
+date: '2022-10-13'
+output: html_document
+---
+
+```{r}
+rm(list = ls())
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load packages
+```{r}
+library("dplyr")
+library("tidyr")
+library("readr")
+library("ggpubr")
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+```
+
+# 2019 vole activity data
+
+## Read in data & fix formatting
+```{r}
+vole_activity_2019 <- read.csv("../Data/LTER_06MAT_vole_activity_2019.csv") %>%
+  mutate(Date = as.Date(Date, "%m/%d/%Y")) %>%
+  select(-latrine) %>%
+  rename(date = Date, site = Site, treatment = Plot, block = Block, position = Uphill.or.Downhill, quad = Quad.., tuss_num = X..of.tussocks, Hole = vole.hole, Runway = vole.trail, Chopped_Litter = chopped.litter, Severed_Litter = severed.litter) %>%
+  pivot_longer(cols = -c(date, site, block, treatment, position, quad, tuss_num), names_to = "vole_activity", values_to = "presence_absence")
+
+vole_activity_2019$site <- vole_activity_2019$site %>% recode("LMAT" = "MAT06")
+vole_activity_2019$position <- vole_activity_2019$position %>% recode("Uphill " = "Uphill")
+```
+
+## Convert to presence/absence data 
+```{r}
+vole_activity_2019$presence_absence[vole_activity_2019$presence_absence > 0] <- 1
+#Makes any number greater than 0 into a 1. This way, if the vole activity was observed there, it’s a 1; if the vole activity was absent, it’s a 0.
+
+str(vole_activity_2019)
+```
+
+## Summerize
+```{r}
+#Should this also be averaged??
+
+#sum the number of occurrences across quads
+sum_vole_activity_quads <- (vole_activity_2019) %>% group_by(site, block, treatment, vole_activity) %>% 
+summarise(occurrences = sum(presence_absence, na.rm = TRUE), n = n()) %>%
+  ungroup()
+
+#Average the number of occurrences across blocks 
+AVG_vole_activity <- (sum_vole_activity_quads) %>% group_by(site, treatment, vole_activity) %>%
+  summarise(avg_occurrences = mean(occurrences, na.rm = TRUE), sd = sd(occurrences, na.rm = TRUE), n = n()) %>%
+  ungroup()
+
+head(AVG_vole_activity)
+tail(AVG_vole_activity)
+
+write.csv(AVG_vole_activity, file = "../Derived CSVs/LTER_vole_activity_avgs.csv")
+```
+
+##Box plots
+```{r}
+sum_vole_activity_quads
+
+sum_vole_activity_quads$treatment <- factor(sum_vole_activity_quads$treatment, levels = c("CT", "F2", "F5", "F10"))
+
+ggplot(sum_vole_activity_quads, aes(x= vole_activity, y=occurrences, fill = treatment))+
+  geom_boxplot()+
+  scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+  labs(y = "Occurrences", x = "Vole Activity")
+    #theme(legend.position="bottom")
+```
+
+##Bar graph
+```{r}
+AVG_vole_activity$treatment <- factor(AVG_vole_activity$treatment, levels = c("CT", "F2", "F5", "F10"))
+AVG_vole_activity$vole_activity <- factor(AVG_vole_activity$vole_activity, levels = c("Chopped_Litter", "Severed_Litter", "Hole", "Runway"))
+
+ggplot(AVG_vole_activity, aes(x= vole_activity, y=avg_occurrences, fill = treatment))+
+  geom_bar(stat="identity", position=position_dodge())+
+  scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+  geom_errorbar(aes(ymin=avg_occurrences-sd, ymax=avg_occurrences+sd), width=.2, position = position_dodge(.9))+
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold", size = 20))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 15, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 15))+
+  labs(y = "Occurrences", x = "")+
+    theme(legend.position="bottom")
+
+ggsave("../Figures/LTER_Vole_Activity_Occurences_bar.jpeg")
+```
+
+# Read in Simulated Herbivory vole damge data
+```{r}
+damage <- read.csv("../Data/sim_herbiv_2022_damage_assesment.csv") %>% select(-Diameter..cm.)
+
+unique(damage$Vole_damge)
+
+#half increments were rounded up to next whole value 
+damage$Vole_damge <- recode(damage$Vole_damge, `0.5` = 1, `1.5` = 2, `3.5` = 4)
+
+damage %>%  mutate(Vole_damge = as.numeric(Vole_damge))
+
+```
+
+# Damage - sum and avg 
+```{r}
+#Sum across all
+
+sum_dam <- (damage) %>% group_by(Block, Fert_treatment, Herb_treatment) %>% summarise_at(vars(Vole_damge), list(sum_damg_plot = sum), na.rm = TRUE) %>%
+  ungroup()
+
+avg_dam_plot <- (damage) %>% group_by(Block, Fert_treatment, Herb_treatment) %>% 
+  summarise(avg_dam_plot = mean(Vole_damge, na.rm = TRUE), sd =sd(Vole_damge, na.rm = TRUE), n=n()) %>%
+  ungroup()
+
+avg_dam <- (avg_dam_plot) %>% group_by(Fert_treatment, Herb_treatment) %>% 
+  summarise(avg_dam = mean(avg_dam_plot, na.rm = TRUE), sd =sd(avg_dam_plot, na.rm = TRUE), n=n()) %>%
+  ungroup()
+```
+
+#Bar graph 
+```{r}
+avg_dam$Fert_treatment <- factor(avg_dam$Fert_treatment, levels = c("CT", "F2", "F5", "F10"))
+ avg_dam$Herb_treatment <- factor(avg_dam$Herb_treatment, levels = c("CT", "PU", "PR"))
+
+ggplot(avg_dam, aes(x= Herb_treatment, y=avg_dam, fill = Fert_treatment))+
+  geom_bar(stat="identity", position=position_dodge())+
+  scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#253494"))+
+  geom_errorbar(aes(ymin=avg_dam-sd, ymax=avg_dam+sd), width=.2, position = position_dodge(.9))+
+     theme_light()+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold", size = 20))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 15, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 15))+
+  labs(y = "Average Damage", x = "")+
+    theme(legend.position="bottom")
+
+ggsave("../Figures/LTER_Vole_damage_bar.jpeg")
+```
+
+## Tussock damage level
+```{r}
+damage2$Fert_treatment <- factor(damage2$Fert_treatment, levels = c("CT", "F2", "F5", "F10"))
+  damage2$Herb_treatment <- factor(damage2$Herb_treatment, levels = c("CT", "PU", "PR"))
+
+ggplot(damage2, aes(x= Herb_treatment, y=Vole_damge, fill = Fert_treatment))+
+    #geom_hline(yintercept = 15, color="#D0CECE")+
+      geom_boxplot(position=position_dodge(.85))+
+      scale_fill_manual(values=c("#E1BA15", "#41b6c4", "#2c7fb8", "#3041BE"))+
+  stat_summary(fun="mean", color="black", size = .2, shape = 4, position=position_dodge(.85))+
+     theme_light()+
+     #scale_y_continuous(limits = c(2.5,23), breaks=seq(0,25,5))+
+     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+     theme(axis.title.y = element_text(face = "bold"))+
+     theme(axis.title.x = element_text(face = "bold"))+
+     theme(plot.title = element_text(hjust = .5))+
+     theme(axis.text.x = element_text(color = "black", size = 8, angle = 45, hjust = 1))+
+     theme(axis.text.y = element_text(color = "black", size = 8))+
+     theme(aspect.ratio = 9/18.5)+
+  labs(y = "Tussock damage level", x = "Clipping treatment")
+    #theme(legend.position="bottom")+
+     #facet_grid(clip ~ .)
+
+ggsave("../Figures/Tussock_Damage.jpeg", width = 7, height = 7)
+```
+

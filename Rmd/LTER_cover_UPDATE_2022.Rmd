@@ -1,0 +1,717 @@
+---
+title: "LTER_cover_UPDATE_2022"
+author: "Nicole Williamson"
+date: '2022-10-05'
+output: html_document
+---
+
+```{r}
+rm(list = ls())
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load packages
+```{r}
+library("dplyr")
+library("tidyr")
+library("readr")
+library("ggpubr")
+```
+
+```{r}
+MyMerge       <- function(x, y){
+  df            <- merge(x, y, all = TRUE)
+  rownames(df)  <- df$Row.names
+  df$Row.names  <- NULL
+  return(df)
+}
+```
+
+# MAT06
+
+# Read in Data
+```{r}
+#2008, 2010-2020
+MAT06_online <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20084.2&entityid=66dcbe2b73b3f5bb606072705e5f1fd7")
+
+MAT06_21_original <- read.csv("../Data/LTER_06MAT_relcov_2021.csv")
+
+MAT06_22_uncalculated <- read.csv("../Data/LTER_raw_cover_2022.csv") %>%
+#Remove "drop" rows and vole activity data, filter so that only MAT06 is included
+  filter(date != "drop" & date != "drop " & species != "# TUSS." & species != "TRAILS" & species != "% LITTER" & species != "HOLES" & site == "MAT06") %>%
+#Transform from wide to long
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad_num", values_to = "cover") %>%
+#Change "<1" cover values to "0.5"
+  mutate(cover = if_else(cover == "<1", "0.5", cover)) %>%
+#Change cover column type to numeric
+  mutate(cover = as.numeric(cover)) %>%
+#Remove NA values (here its all greenhouses because we only did 6 quadrates in the green houses so Q7 & Q8)
+  na.omit(MAT06_22_uncalculated)
+```
+
+## Calculate Relative Cover for 2022 MAT06
+### Fix Naming Errors
+```{r}
+MAT06_22_uncalculated$species <- MAT06_22_uncalculated$species %>%
+  recode("ERI VAG" = "Eri vag", "EV. LITTER" = "litter", "CAR BIG" = "Car big", "GRASS ex." = "grass", "BET NAN" = "Bet nan", "DEAD BET" = "Std Bet", "SAL PUL" = "Sal pul", "SAL RET" = "Sal ret", "ARC ALP" = "Arc alp", "VAC ULI" = "Vac uli", "RUB CHA" = "Rub cha", "PET FRI" = "Pet fri", "POL BIS" = "Pol bis", "LED PAL" = "Led pal", "CAS TET" = "Cas tet", "VAC VIT" = "Vac vit", "EMP NIG" = "Emp nig", "PED LAP" = "Ped lap", "AND POL" = "And pol", "DEAD EV." = "Std. Eri", "MOSS" = "moss", "LICHEN" = "lichen", "LITTER" = "litter", "FR BOIL" = "Fr boil", "BARE GR." = "bare")   
+
+MAT06_22_uncalculated <- (MAT06_22_uncalculated) %>% group_by(year, region, site, block, treatment, quad_num, species) %>% summarise_at(vars(cover), list(cover = sum ), na.rm = TRUE) %>% ungroup()
+```
+
+### Calculate Relative Cover
+```{r}
+#First we sum cover values across all species within a quadrat to get total cover
+MAT06_22_quadsum <- (MAT06_22_uncalculated) %>% 
+  group_by(year, region, site, treatment, block, quad_num) %>%
+  summarise(sum_quad = sum(cover)) %>%
+  ungroup()
+
+#Then we join the new table that we just created (containing the sum of all the species cover for a quadrat), with original table
+MAT06_22_join <- left_join(MAT06_22_uncalculated, MAT06_22_quadsum, by= c("year", "region", "site", "treatment", "block", "quad_num"))
+
+#Then we divide each cover value for a species in a quadrat by the sum of all cover values in that quadrat, and then drop the old raw cover value
+MAT06_22 <- MAT06_22_join %>%
+  mutate(relcov = cover/sum_quad) %>%
+  select(-sum_quad, -cover)
+```
+
+## Joing Data sets 
+Join online data set with the newest years data (2021-2022).
+
+### First we must make all the columns/ coulmn names match 
+```{r}
+MAT06_online <- MAT06_online %>% rename(quad = Plot) %>% rename(relcov = Rel.cover) %>% select(-Accepted.Latin.Name.or.category)
+    names(MAT06_online) <- tolower(names(MAT06_online)) 
+
+MAT06_22 <- MAT06_22 %>% select(-region) %>% rename(quad = quad_num)
+
+MAT06_21_original <- MAT06_21_original %>% rename(relcov = rel.cov) %>% rename(treatment = plot)
+```
+
+### Join the datasets
+
+Join the datasets and then clean it up. ie- fix naming discrepencies 
+```{r}
+MAT06_new <- Reduce(MyMerge, list(MAT06_online, MAT06_22, MAT06_21_original))
+
+MAT06_new$site <- MAT06_new$site %>%
+  recode("06MAT" = "MAT06")
+
+MAT06_new$quad <- MAT06_new$quad %>%
+  recode("Q1" = "1", "Q2" = "2","Q3" = "3", "Q4" = "4", "Q5" = "5", "Q6" = "6", "Q7" = "7", "Q8" = "8")
+
+MAT06_new$species <- MAT06_new$species %>%
+  recode("bare " = "bare", "Fr boil" = "frost boil", "Grass ex." = "grass", "Lichen" = "lichen", "Lichen " = "lichen", "Litter" = "litter", "Moss" = "moss", "Dead Bet" = "Std Bet nan", "Dead Evrg" = "Std evrg", "Ev litter" = "litter", "St. D. Bet." = "Std Bet nan", "St. D. Led" = "Std Led pal", "St. D. Led Pal" = "Std Led pal", "St. D. Sal" = "Std Sal pul", "St. D. Sal Pul" = "Std Sal pul", "Std Bet" = "Std Bet nan", "Std. Eri" = "Std Eri vag", "St. D. Sal pul" = "Std Sal pul")
+
+MAT06_new <- (MAT06_new) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(relcov), list(relcov = sum ), na.rm = TRUE) %>% ungroup()
+
+unique(MAT06_new$species)
+
+#species_test <- unique(MAT06_new$species)
+#write.csv(species_test, file = "../Derived CSVs/species_list.csv")
+```
+
+## Add latin names to automatically fill them in 
+```{r}
+#load in lat names, drop functional group 
+LatNames <- read.csv("../Data/SpeciesList_LatNames.csv")
+
+unique(LatNames$species)
+
+#Join the two datasets
+MAT06_final <- left_join(MAT06_new, LatNames)
+```
+
+# MAT89
+
+#Read in Data
+
+## Online data
+```{r}
+MAT89_1999 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1388.7&entityid=04b4c3382cf2b1dabe9e7693738e7ec3") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2000 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1391.8&entityid=c9b7a980cd3578443cf8deb2e5917fad") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2001 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1395.7&entityid=92db37855a83b1c5a397ab11b3e0e4e4") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2002 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1399.8&entityid=9fe62d51fad3cab86a2fb8599ef34be3") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2004 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10012.6&entityid=c59c93759ad43fc6683310fdce253b17") %>%
+  filter(Site == "Toolik MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2005 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10013.6&entityid=404a127b36a98dd9abdd222a3d1be9fa") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2006 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10011.6&entityid=d0088c0740e0a0016061f93081f7499f")  %>%
+  filter(Site == "Toolik MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2007 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10029.4&entityid=4912b7c8633b2029a54be15ddd8f2530") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2008 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10490.2&entityid=ac4eff0e90c8a289ca1550347ebfca82") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2010 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10491.2&entityid=26a761cd76ef8fe2fd71f240b740970b") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2011 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10492.2&entityid=9ef7ccb20a51871cf7873623f233bd3b") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover)%>%
+  mutate(relcov = as.numeric(relcov))
+
+MAT89_2013 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20048.1&entityid=dddf0ae9a1920ddbd9f2c63ccaae1774") %>%
+  filter(Site == "MAT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100)%>%
+  select(-Perct_cov)
+  
+MAT89_2014 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20085.1&entityid=5f5d40d647ad9e7fe7ac54cdd284996b") %>%
+  filter(Site == "LTER 1981 Moist Acidic Tussock") %>%
+  rename(year = ï..Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov)
+
+MAT89_2012_17 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20090.1&entityid=7bc3b05092c8d000af8c47335b17115c") %>%
+  select(-Treatment.End.Year, -Plant.name.or.category, -Accepted.Latin.Name.or.category, -ï..Treatment.Start.Year) %>%
+  filter(Site == "LTER Moist Acidic Tussock 1989" | Site == "LTER Moist Acidic Tussock 1989: 1996 Exclosures") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species.Code, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov) %>%
+  #remove 2013 &  2014 since we have separate data sets for those
+  filter(year != "2013", year != "2014")
+```
+
+### Join Online datasets
+```{r}
+MAT89_all_online <- Reduce(MyMerge, list(MAT89_1999, MAT89_2000, MAT89_2001, MAT89_2002, MAT89_2004, MAT89_2005, MAT89_2006, MAT89_2007, MAT89_2008, MAT89_2010, MAT89_2011, MAT89_2012_17)) %>%
+  mutate(block = as.numeric(block)) %>%  mutate(year = as.numeric(year)) %>%  mutate(quad = as.numeric(quad))
+```
+
+### Check for duplicates
+```{r}
+#If the number of observations in "MAT89_all_online_test" is less than "MAT89_all_online" then there are duplicate rows we need to find an fix 
+MAT89_all_online_duptest <- (MAT89_all_online) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(relcov), list(relcov = sum ), na.rm = TRUE) %>% ungroup()
+# After running this code we see that there are 18 less observations and thus 18 duplicates we need to find
+```
+
+### Remove duplicates
+```{r}
+#First need to create unique codes
+MAT89_all_online_ID <- unite(MAT89_all_online, year, site, treatment, block, quad, species, col = 'ID', sep = '/', remove = FALSE)
+
+# Then remove rows with duplicate ID values 
+MAT89_all_online_dups_removed <- MAT89_all_online_ID %>% distinct(ID, .keep_all = TRUE) %>% select(-ID)
+```
+
+### Fix Naming Errors 
+```{r}
+MAT89_all_online_dups_removed$site <- MAT89_all_online_dups_removed$site %>%
+  recode("MAT" = "MAT89", "LTER Moist Acidic Tussock 1989" = "MAT89", "Toolik MAT" = "MAT89", "LTER Moist Acidic Tussock 1989: 1996 Exclosures" = "MAT89")
+
+unique(MAT89_all_online_dups_removed$site)
+
+MAT89_all_online_dups_removed$treatment <- MAT89_all_online_dups_removed$treatment %>%
+  recode("Control" = "CT", "Control Unfenced" = "NFCT", "Phosphorus" = "P", "Nitrogen Phosphorus Unfenced" = "NFNP", "Greenhouse Control" = "GHCT", "Nitrogen Phosphorus" = "NP", "Nitrogen" = "N", "Small Fenced No Fertilizer" = "SFCT")
+
+MAT89_all_online_dups_removed$species <- MAT89_all_online_dups_removed$species %>%
+  recode("Andromeda polifolia" = "And pol", "Betula nana" = "Bet nan", "Carex bigelowii" = "Car big", "Cassiope tetragona" = "Cas tet", "Empetrum nigrum" = "Emp nig", "Eriophorum vaginatum" = "Eri vag", "Ledum palustre" = "Led pal", "Vaccinium vitis-idaea" = "Vac vit", "Rubus chamaemorus" = "Rub cha", "Salix pulchra" = "Sal pul", "Pedicularis labradorica" = "Ped lap", "Polygonum bistorta" = "Pol bis", "Vaccinium uliginosum" = "Vac uli", "Salix phlebophylla" = "Sal phl", "Pedicularis sp." = "Ped sp.", "Carex sp. 1" = "Car sp.", "Arctostaphylos alpina" = "Arc alp", "Poa arctica?" = "grass", "Liverwort sp. " = "liverwort sp.", "stand. dead betula" = "Std Bet nan", "Carex sp. 3" = "Car sp.", "Grass sp. 2" = "grass", "Carex sp. 2" = "Car sp.", "Pedicularis sp. " = "Ped sp.", "Pedicularis sp. 1" = "Ped sp.", "Pedicularis sp.  " = "Ped sp.", "Luzula sp." = "Luz sp.", "Frost boil" = "frost boil", "Arctostaphylous alpina" = "Arc alp", "Pedicularis lapponica" = "Ped lap", "Carex sp." = "Car sp.", "Stellaria edwardsii" = "Ste edw", "Standing Dead Betula nana" = "Std Bet nan", "Polygonum viviparum" = "Pol viv", "Calamagrostis lapponica" = "Cal lap", "Grass 4" = "grass", "standing dead Betula nana" = "Std Bet nan", "Unknown Grass" = "grass", "Lichen" = "lichen", "Litter" = "litter", "Moss" = "moss", "Bare" = "bare", "Arctagrostis latifolia" = "Arc lat", "Eriphorum vaginatum" = "Eri vag", "Standing dead Betula nana" = "Std Bet nan", "Standing dead Salix sp." = "Std Sal sp.", "Stellaria longipes" = "Ste lon", "St. D. Bet." = "Std Bet nan", "Arctagrostis" = "Arc sp.", "St. D. Sal." = "Std Sal sp.", "Ste Edw" = "Ste edw", "St. D. Sal" = "Std Sal sp.", "Luzula" = "Luz sp.", "Woody Cover" = "Woody", "St. D. Sal pul" = "Std Sal pul", "Tofieldia" = "Tof sp.", "Car mic" = "Car mic", "Dead ledum" = "Std Led pal")
+
+MAT89_all_online_dups_removed <- MAT89_all_online_dups_removed %>% filter(species != "vole trail ", species != "vole hole", species != "vole litter" , species != "Vole feces", species != "", species != "mushrooms", species != "caribou feces", species != "human trail", species != "Water", species != "vole poop", species != "vole trail", species != "vole turds", species != "Mushrooms", species != "removed", species != "Water ", species != "Tube", species != "Hole", species != "Vole litter", species != "Vole litter", species != "Mushroom") 
+
+MAT89_all_online_dups_removed <- (MAT89_all_online_dups_removed) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(relcov), list(relcov = sum), na.rm = TRUE) %>% ungroup()
+ 
+#species_test <- unique(MAT89_all_online$species)
+#write.csv(species_test, file = "../Derived CSVs/species_list.csv")
+
+#unique(MAT89_all_online$species)
+```
+
+## New data 
+```{r}
+MAT89_uncalculated_2018 <- read.csv("../Data/LTER_89MAT_raw_cover_2018.csv", header = TRUE) %>%
+  filter(date != "drop" & date != "drop ")%>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad", values_to = "cover") 
+  
+MAT89_uncalculated_2019 <- read.csv("../Data/LTER_89MAT_raw_cover_2019.csv", header = TRUE)%>%
+  filter(date != "drop" & date != "drop ")%>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad", values_to = "cover")
+
+MAT89_uncalculated_2021 <- read.csv("../Data/LTER_89MAT_raw_cover_2021.csv", header = TRUE)%>%
+  filter(date != "drop" & date != "drop ")%>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad", values_to = "cover")
+
+MAT89_uncalculated_2022 <- read.csv("../Data/LTER_raw_cover_2022.csv") %>%
+  filter(date != "drop" & date != "drop " & species != "# TUSS." & species != "TRAILS" & species != "% LITTER" & species != "HOLES" & site == "MAT89") %>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad", values_to = "cover") %>%
+  mutate(cover = if_else(cover == "<1", "0.5", cover))%>%
+   mutate(cover = as.numeric(cover))%>%
+  na.omit(MAT06_22_uncalculated)
+```
+
+### Calculate Relative cover
+
+### Combine datasets
+We can start with combining all the recent years data together into one data set since they are all raw uncalculated cover values. 
+```{r}
+MAT89_uncalculated_18_22 <- Reduce(MyMerge, list(MAT89_uncalculated_2018, MAT89_uncalculated_2019, MAT89_uncalculated_2021, MAT89_uncalculated_2022)) %>% 
+  filter(species != "# of shrooms", species != "# TUSS.", species != "chopped vole litter ", species != "Green House Structure", species != "sampling", species != "tarp", species != "trampling", species != "GH structure", species != "sampled ", species != "trampled", species != "trampled ", species != "Distructive", species != "Smapled", species != "Mushrooms", species != "Trampled", species != "latrienes (%)", species != "Severed vole litter", species != "Structure", species != "tussock #", species != "Unk.1", species != "Unk.N2", species != "vole hole (#)", species != "vole trail (%)", species != "Sampled", species != "Sampling", species != "Trample", species != "Trampling") %>%
+  select(-region, -date)
+```
+
+### Fix Naming Errors
+```{r}
+
+MAT89_uncalculated_18_22$species <- MAT89_uncalculated_18_22$species %>%
+  recode("AND POL" = "And pol", "ARC ALP" = "Arc alp", "BARE GR." = "bare", "BET NAN" = "Bet nan", "Calcan" = "Cal can", "CAR BIG" = "Car big", "Car big/other" = "grass", "CAS TET" = "Cas tet", "DEAD BET" = "Std Bet nan", "DEAD EV." = "Std Eri vag", "EMP NIG" = "Emp nig", "ERI VAG" = "Eri vag", "EV. LITTER" = "litter", "FR BOIL" = "frost boil", "Grass" = "grass", "GRASS ex." = "grass",  "LED PAL" = "Led pal", "LICHEN" = "lichen", "LITTER" = "litter", "MOSS" = "moss", "Other dead" = "Std", "other S.D" = "Std", "Other S.D." = "Std", "PED LAP" = "Ped lap", "PET FRI" = "Pet fri", "POL BIS" = "Pol bis", "RUB CHA" = "Rub cha", "SAL PUL" = "Sal pul", "SAL RET" = "Sal ret", "St. D. Bet." = "Std Bet nan", "St. D. other" = "Std", "St.D. other" = "Std", "VAC ULI" = "Vac uli", "VAC VIT" = "Vac vit", "Winter kill" = "Win kill", "Mushrooms" = "mushroom")
+
+MAT89_uncalculated_18_22 <- (MAT89_uncalculated_18_22) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(cover), list(cover = sum ), na.rm = TRUE) %>% ungroup()
+
+MAT89_uncalculated_18_22$site <- MAT89_uncalculated_18_22$site %>%
+  recode("89MAT" = "MAT89") 
+
+MAT89_uncalculated_18_22$quad <- MAT89_uncalculated_18_22$quad %>%
+  recode("Q1" = "1", "Q2" = "2", "Q3" = "3", "Q4" = "4", "Q5" = "5", "Q6" = "6", "Q7" = "7", "Q8" = "8") 
+
+MAT89_uncalculated_18_22$treatment <- MAT89_uncalculated_18_22$treatment %>%
+  recode("EXC-NP" = "EXNP", "exc-NP" = "EXNP", "EXNPNF" = "NFNP")
+
+#species_test <- unique(MAT89_uncalculated_18_22$species)
+#write.csv(species_test, file = "../Derived CSVs/species_list.csv")
+
+```
+
+### Calculate Relative Cover
+```{r}
+#First we sum cover values across all species within a quadrat to get total cover
+MAT89_18_22_quadsum <- (MAT89_uncalculated_18_22) %>% 
+  group_by(year, site, treatment, block, quad) %>%
+  summarise(sum_quad = sum(cover)) %>%
+  ungroup()
+
+#Then we join the new table that we just created (containing the sum of all the species cover for a quadrat), with original table
+MAT89_18_22_join <- left_join(MAT89_uncalculated_18_22, MAT89_18_22_quadsum, by= c("year", "site", "treatment", "block", "quad"))
+
+#Then we divide each cover value for a species in a quadrat by the sum of all cover values in that quadrat, and then drop the old raw cover value
+MAT89_18_22 <- MAT89_18_22_join %>%
+  mutate(relcov = cover/sum_quad) %>%
+  select(-sum_quad, -cover) 
+```
+
+## Join online data with new data 
+```{r}
+MAT89_clean <- Reduce(MyMerge, list(MAT89_18_22, MAT89_all_online_dups_removed)) %>%
+  mutate(quad = as.numeric(quad)) 
+```
+**Note** - EXNP only in 2021 and 2022 because the fences were removed
+
+## Add latin names
+```{r}
+#load in lat names, drop functional group 
+LatNames <- read.csv("../Data/SpeciesList_LatNames.csv")
+
+#Join the two datasets
+MAT89_final <- left_join(MAT89_clean, LatNames)
+```
+
+# MAT81
+
+# Read in data
+```{r}
+MAT81_uncalculated_2021 <- read.csv("../Data/LTER_81MAT_raw_cover_2021.csv") %>%
+  filter(date != "drop" & date != "drop " & species != "# TUSS." & species != "TRAILS" & species != "% LITTER" & species != "HOLES") %>%
+  pivot_longer(cols = -c(date, region, year, site, treatment, block, species), names_to = "quad", values_to = "cover") %>%
+  select(-date, -region)
+
+MAT81_uncalculated_2022 <- read.csv("../Data/LTER_raw_cover_2022.csv") %>%
+  filter(date != "drop" & date != "drop " & species != "# TUSS." & species != "TRAILS" & species != "% LITTER" & species != "HOLES" & site == "MAT81") %>%
+  pivot_longer(cols = -c(date, region, year, site, treatment, block, species), names_to = "quad", values_to = "cover") %>%
+  mutate(cover = if_else(cover == "<1", "0.5", cover))%>%
+   mutate(cover = as.numeric(cover)) %>%
+  select(-date, -region)
+```
+
+## Calculate Relative Cover
+
+### Join datasets 
+```{r}
+MAT81_uncalculated_21_22 <- Reduce(MyMerge, list(MAT81_uncalculated_2021, MAT81_uncalculated_2022))
+```
+
+
+### Fix Naming Errors
+```{r}
+MAT81_uncalculated_21_22$species <- MAT81_uncalculated_21_22$species %>%
+  recode("ERI VAG" = "Eri vag", "EV. LITTER" = "litter", "CAR BIG" = "Car big", "GRASS ex." = "grass", "BET NAN" = "Bet nan", "DEAD BET" = "Std Bet nan", "SAL PUL" = "Sal pul", "SAL RET" = "Sal ret", "ARC ALP" = "Arc alp", "VAC ULI" = "Vac uli", "RUB CHA" = "Rub cha", "PET FRI" = "Pet fri", "POL BIS" = "Pol bis", "LED PAL" = "Led pal", "CAS TET" = "Cas tet", "VAC VIT" = "Vac vit", "EMP NIG" = "Emp nig", "PED LAP" = "Ped lap", "AND POL" = "And pol", "DEAD EV." = "Std Eri vag", "MOSS" = "moss", "LICHEN" = "lichen", "LITTER" = "litter", "FR BOIL" = "frost boil", "BARE GR." = "bare", "Std. Eri" = "Std Eri vag")   
+
+MAT81_uncalculated_21_22 <- (MAT81_uncalculated_21_22) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(cover), list(cover = sum ), na.rm = TRUE) %>% ungroup()
+
+unique(MAT81_uncalculated_21_22$treatment)
+
+species_test <- unique(MAT81_uncalculated_21_22$species)
+write.csv(species_test, file = "../Derived CSVs/species_list.csv")
+```
+
+### Calculate Relative Cover
+```{r}
+#First we sum cover values across all species within a quadrat to get total cover
+MAT81_21_22_quadsum <- (MAT81_uncalculated_21_22) %>% 
+  group_by(year,site, treatment, block, quad) %>%
+  summarise(sum_quad = sum(cover)) %>%
+  ungroup()
+
+#Then we join the new table that we just created (containing the sum of all the species cover for a quadrat), with original table
+MAT81_21_22_join <- left_join(MAT81_uncalculated_21_22, MAT81_21_22_quadsum, by= c("year", "site", "treatment", "block", "quad"))
+
+#Then we divide each cover value for a species in a quadrat by the sum of all cover values in that quadrat, and then drop the old raw cover value
+MAT81_21_22_new <- MAT81_21_22_join %>%
+  mutate(relcov = cover/sum_quad) %>%
+  select(-sum_quad, -cover)
+```
+
+## Add latin names to automatically fill them in 
+```{r}
+#load in lat names, drop functional group 
+LatNames <- read.csv("../Data/SpeciesList_LatNames.csv")
+
+#Join the two datasets
+MAT81_21_22_final <- left_join(MAT81_21_22_new, LatNames)
+```
+
+#DHT89
+
+# Read in data 
+
+## Online data
+```{r}
+DHT89_2004 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10012.6&entityid=c59c93759ad43fc6683310fdce253b17")%>%
+  filter(Site == "Toolik DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+DHT89_2005 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10013.6&entityid=404a127b36a98dd9abdd222a3d1be9fa") %>%
+  filter(Site == "DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+DHT89_2006 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10011.6&entityid=d0088c0740e0a0016061f93081f7499f") %>%
+  filter(Site == "Toolik DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+  
+DHT89_2007 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10029.4&entityid=4912b7c8633b2029a54be15ddd8f2530") %>%
+  filter(Site == "DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+DHT89_2008 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10490.2&entityid=ac4eff0e90c8a289ca1550347ebfca82")%>%
+  filter(Site == "DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+DHT89_2010 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10491.2&entityid=26a761cd76ef8fe2fd71f240b740970b") %>%
+  filter(Site == "DH") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+  
+# Years 2013, 2014, 2016, & 2017 are all in the same online data set but I loaded them in as individual years because they have slightly different naming conventions year to year ans makes it hard to make usre your properly corrected errors
+
+DHT89_2013 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20091.1&entityid=8e44b0e6acabd8d88b360e9d38044964") %>%
+  filter(Site == "LTER 1989 Dry Heath" | Site == "LTER 1989 Dry Heath 1996 Fence plots") %>%
+  filter(Year == "2013") %>%
+  select(-Treatment.End.Year, -Plant.name.or.category, -Accepted.Latin.Name.or.category, -ï..Treatment.Start.Year)%>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov) 
+
+DHT89_2014 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20091.1&entityid=8e44b0e6acabd8d88b360e9d38044964") %>%
+  filter(Site == "LTER 1989 Dry Heath" | Site == "LTER 1989 Dry Heath 1996 Fence plots") %>%
+  filter(Year == "2014") %>%
+  select(-Treatment.End.Year, -Plant.name.or.category, -Accepted.Latin.Name.or.category, -ï..Treatment.Start.Year)%>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov) 
+
+DHT89_2016 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20091.1&entityid=8e44b0e6acabd8d88b360e9d38044964") %>%
+  filter(Site == "LTER 1989 Dry Heath" | Site == "LTER 1989 Dry Heath 1996 Fence plots") %>%
+  filter(Year == "2016") %>%
+  select(-Treatment.End.Year, -Plant.name.or.category, -Accepted.Latin.Name.or.category, -ï..Treatment.Start.Year)%>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov) 
+
+DHT89_2017 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20091.1&entityid=8e44b0e6acabd8d88b360e9d38044964") %>%
+  filter(Year == "2017") %>%
+  select(-Treatment.End.Year, -Plant.name.or.category, -Accepted.Latin.Name.or.category, -ï..Treatment.Start.Year)%>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100) %>%
+  select(-Perct_cov) 
+```
+
+Fix 2013-2017 treatment/site naming conventions
+```{r}
+#2013 
+DHT89_2013_UNfenced <- DHT89_2013 %>% filter(site == "LTER 1989 Dry Heath")
+  DHT89_2013_UNfenced$site <- DHT89_2013_UNfenced$site %>% recode("LTER 1989 Dry Heath" = "DHT89")
+  DHT89_2013_UNfenced$treatment <- DHT89_2013_UNfenced$treatment %>% recode("Nitrogen Phosphorus" = "NP")
+
+DHT89_2013_fenced <- DHT89_2013 %>% filter(site == "LTER 1989 Dry Heath 1996 Fence plots")
+  DHT89_2013_fenced$site <- DHT89_2013_fenced$site %>% recode("LTER 1989 Dry Heath 1996 Fence plots" = "DHT89")
+  DHT89_2013_fenced$treatment <- DHT89_2013_fenced$treatment %>% recode("Nitrogen Phosphorus" = "NFNP", "Nitrogen Phosphorus Small Fenced" = "SFNP", "Nitrogen Phosphorus Large Fence" = "LFNP", "Control" = "NFCT", "Control Small Fenced" = "SFCT", "Control Large Fence" = "LFCT")
+  
+#2014
+DHT89_2014$site <- DHT89_2014$site %>% recode("LTER 1989 Dry Heath" = "DHT89", "LTER 1989 Dry Heath 1996 Fence plots" = "DHT89")
+
+DHT89_2014$treatment <- DHT89_2014$treatment %>% recode("Nitrogen Phosphorus" = "NP", "Control" = "CT", "Nitrogen Phosphorus Unfenced" = "NFNP")
+  
+#2016
+DHT89_2016$site <- DHT89_2016$site %>% recode("LTER 1989 Dry Heath" = "DHT89", "LTER 1989 Dry Heath 1996 Fence plots" = "DHT89")
+DHT89_2016$treatment <- DHT89_2016$treatment %>% recode("Control" = "CT", "Nitrogen Phosphorus" = "NP", "Nitrogen Phosphorus Unfenced" = "NFNP")
+
+#2017 
+DHT89_2017$site <- DHT89_2017$site %>% recode("LTER 1989 Dry Heath 1996 Fence plots" = "DHT89")
+DHT89_2017$treatment <- DHT89_2017$treatment %>% recode("Control Unfenced" = "NFCT", "Control Large Fence" = "LFCT", "Control Small Fenced" = "SFCT", "Nitrogen Phosphorus Unfenced" = "NFNP", "Nitrogen Phosphorus Small Fenced" = "SFNP")
+  
+#Merge them together
+DHT89_13_14_16_17 <- Reduce(MyMerge, list(DHT89_2013_UNfenced, DHT89_2013_fenced, DHT89_2014, DHT89_2016, DHT89_2017)) 
+```
+
+
+### Join Online datasets
+```{r}
+DHT89_all_online <- Reduce(MyMerge, list(DHT89_2004, DHT89_2005, DHT89_2006, DHT89_2007, DHT89_2008, DHT89_2010, DHT89_13_14_16_17)) %>% mutate(year = as.numeric(year)) %>% mutate(quad = as.numeric(quad)) %>%
+  filter(species != "vole litter", species != "Caribou poop", species != "vole trail ", species != "Squirrel feces", species != "Vole feces", species != "caribou poop", species != "Rock cover", species != "Rocks", species != "Ptarm poop", species != "rocks", species != "Fungi", species != "Mushroom", species != "Vole litter", species != "caribou feces", species != "Animal litter", species != "Caribou feces", species != "animal litter")
+```
+
+### Check for duplicates
+```{r}
+#If the number of observations in "DHT89_all_online_dup_test" is less than "DHT89_all_online" then there are duplicate rows we need to find and remove
+DHT89_all_online_dup_test <- (DHT89_all_online) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(relcov), list(relcov = sum ), na.rm = TRUE) %>% ungroup()
+# After running this code we see that there is 1 less observations and thus 1 duplicate
+
+#-----------------------------------------------------------------------------------------------------------
+# Run the following to see what the duplicate is... you can go back to DHT89_all_online to look at the relcov values
+
+#dup_test <- DHT89_all_online %>% select(-relcov)
+
+#dup <- duplicated(dup_test)
+
+#dup_test[dup, ]
+```
+
+### Remove duplicates
+```{r}
+#First need to create unique codes
+DHT89_all_online_ID <- unite(DHT89_all_online, year, site, treatment, block, quad, species, col = 'ID', sep = '/', remove = FALSE)
+
+# Then remove rows with duplicate ID values 
+DHT89_all_online_dups_removed <- DHT89_all_online_ID %>% distinct(ID, .keep_all = TRUE) %>% select(-ID)
+
+# the number of observations should now match DHT89_all_online_dup_test
+```
+
+### Fix Naming Errors 
+```{r}
+DHT89_all_online$site <- DHT89_all_online$site %>% recode("Toolik DH" = "DHT89", "DH" = "DHT89")
+
+DHT89_all_online$species <- DHT89_all_online$species %>% recode("Andromeda polifolia" = "And pol", "Betula nana" = "Bet nan", "Carex bigelowii" = "Car big", "Cassiope tetragona" = "Cas tet", "Empetrum nigrum" = "Emp nig", "Eriophorum vaginatum" = "Eri vag", "Ledum palustre" = "Led pal", "Vaccinium vitis-idaea" = "Vac vit", "Rubus chamaemorus" = "Rub cha", "Salix pulchra" = "Sal pul", "Pedicularis labradorica" = "Ped lap", "Polygonum bistorta" = "Pol bis", "Vaccinium uliginosum" = "Vac uli", "Salix phlebophylla" = "Sal phl", "Pedicularis sp." = "Ped sp.", "Carex sp. 1" = "Car sp.", "Arctostaphylos alpina" = "Arc alp", "Poa arctica?" = "Poa arc", "Liverwort sp. " = "liverwort sp.", "stand. dead betula" = "Std Bet nan", "Carex sp. 3" = "Car sp.", "Grass sp. 2" = "grass", "Carex sp. 2" = "Car sp.", "Pedicularis sp. " = "Ped sp.", "Pedicularis sp. 1" = "Ped sp.", "Pedicularis sp.  " = "Ped sp.", "Luzula sp." = "Luz sp.", "Frost boil" = "frost boil", "Arctostaphylous alpina" = "Arc alp", "Pedicularis lapponica" = "Ped lap", "Carex sp." = "Car sp.", "Stellaria edwardsii" = "Ste edw", "Standing Dead Betula nana" = "Std Bet nan", "Polygonum viviparum" = "Pol viv", "Calamagrostis lapponica" = "Cal lap", "Grass 4" = "grass", "standing dead Betula nana" = "Std Bet nan", "Unknown Grass" = "grass", "Lichen" = "lichen", "Litter" = "litter", "Moss" = "moss", "Bare" = "bare", "Arctagrostis latifolia" = "Arc lat", "Eriphorum vaginatum" = "Eri vag", "Standing dead Betula nana" = "Std Bet nan", "Standing dead Salix sp." = "Std Sal sp.", "Stellaria longipes" = "Ste lon", "St. D. Bet." = "Std Bet nan", "Arctagrostis" = "Arc sp.", "St. D. Sal." = "Std Sal sp.", "Ste Edw" = "Ste edw", "St. D. Sal" = "Std Sal sp.", "Luzula" = "Luz sp.", "Woody Cover" = "Woody", "St. D. Sal pul" = "Std Sal pul", "Tofieldia" = "Tof sp.", "Car mic" = "Car mic", "Dead ledum" = "Std Led pal", "Loiseleuria procumbens" = "Loi pro", "Trisetum spicatum" = "Tri spi", "Hierochloe alpina" = "Hie alp", "Carex microchaeta" = "Car mic", "Diapensia lapponica" = "Dia lap", "Poa pratensis" = "Poa pra", "Calamagrostis canadensis" = "Cal can", "Chamerion latifolium" = "Cha lat", "loiseleuria procumbens" = "Loi pro", "Arctagrostis sp." = "Arc sp.", "Diapensia lapponica`" = "Dia lap", "Antennaria sp." = "Ant sp.", "Poa pratensistensis" = "Poa pra", "Grass 20" = "grass", "Grass 22" = "grass", "Grass 23" = "grass", "Car spp." = "Car sp.", "Epilobium" = "Epi sp.", "Ped spp." = "Ped sp.", "Grass 13" = "grass", "Grass 14" = "grass", "Grass 2?" = "grass", "STD Bet" = "Std Bet nan", "Poa arct" = "Poa arc", "Dicot Z" = "dicot", "Arc Alp" = "Arc alp", "Car sp" = "Car sp.", "Grass" = "grass", "Grass 1" = "grass", "Dead Arc" = "Std", "Epi lat" = "Epi sp.", "Epi ang" = "Epi sp.", "Poa pre" = "Poa pra") 
+
+DHT89_all_online <- (DHT89_all_online) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(relcov), list(relcov = sum ), na.rm = TRUE) %>% ungroup()
+
+unique(DHT89_all_online$species)
+```
+
+## New Data 
+```{r}
+DHT89_22_uncalculated <- read.csv("../Data/LTER_raw_cover_2022.csv") %>%
+  filter(date != "drop" & date != "drop " & species != "# TUSS." & species != "TRAILS" & species != "% LITTER" & species != "HOLES" & site == "DHT89") %>%
+  select(-Q4, -Q5, -Q6, -Q7, -Q8) %>%
+  pivot_longer(cols = -c(date, year, region, site, treatment, block, species), names_to = "quad", values_to = "cover") %>%
+  mutate(cover = if_else(cover == "<1", "0.5", cover)) %>%
+  mutate(cover = as.numeric(cover)) %>%
+  select(-date, -region)
+```
+
+### Calculate Relative Cover
+
+### Fix Naming Errors
+```{r}
+DHT89_22_uncalculated$species <- DHT89_22_uncalculated$species %>%
+  recode("ERI VAG" = "Eri vag", "EV. LITTER" = "litter", "CAR BIG" = "Car big", "GRASS ex." = "grass", "BET NAN" = "Bet nan", "DEAD BET" = "Std Bet nan", "SAL PUL" = "Sal pul", "SAL RET" = "Sal ret", "ARC ALP" = "Arc alp", "VAC ULI" = "Vac uli", "RUB CHA" = "Rub cha", "PET FRI" = "Pet fri", "POL BIS" = "Pol bis", "LED PAL" = "Led pal", "CAS TET" = "Cas tet", "VAC VIT" = "Vac vit", "EMP NIG" = "Emp nig", "PED LAP" = "Ped lap", "AND POL" = "And pol", "DEAD EV." = "Std Eri vag", "MOSS" = "moss", "LICHEN" = "lichen", "LITTER" = "litter", "FR BOIL" = "frost boil", "BARE GR." = "bare", "Std. Eri" = "Std Eri vag")   
+
+DHT89_22_uncalculated$quad <- DHT89_22_uncalculated$quad %>% recode("Q1" = "1", "Q2" = "2", "Q3" = "3")
+
+DHT89_22_uncalculated <- (DHT89_22_uncalculated) %>% group_by(year, site, block, treatment, quad, species) %>% summarise_at(vars(cover), list(cover = sum ), na.rm = TRUE) %>% ungroup()
+```
+
+### Calculate Relative Cover
+```{r}
+#First we sum cover values across all species within a quadrat to get total cover
+DHT89_22_quadsum <- (DHT89_22_uncalculated) %>% 
+  group_by(year,site, treatment, block, quad) %>%
+  summarise(sum_quad = sum(cover)) %>%
+  ungroup()
+
+#Then we join the new table that we just created (containing the sum of all the species cover for a quadrat), with original table
+DHT89_22_join <- left_join(DHT89_22_uncalculated, DHT89_22_quadsum, by= c("year", "site", "treatment", "block", "quad"))
+
+#Then we divide each cover value for a species in a quadrat by the sum of all cover values in that quadrat, and then drop the old raw cover value
+DHT89_22_new <- DHT89_22_join %>%
+  mutate(relcov = cover/sum_quad) %>%
+  select(-sum_quad, -cover)
+```
+
+## Join online data with new data
+```{r}
+DHT89_clean <- Reduce(MyMerge, list(DHT89_22_new, DHT89_all_online)) %>% mutate(quad = as.numeric(quad))
+```
+
+## Add latin names to automatically fill them in 
+```{r}
+#load in lat names, drop functional group 
+LatNames <- read.csv("../Data/SpeciesList_LatNames.csv")
+
+species <- unique(DHT89_clean$species)
+
+species_test <- unique(DHT89_clean$species)
+write.csv(species_test, file = "../Derived CSVs/species_list.csv")
+
+#Join the two datasets
+DHT89_final <- left_join(DHT89_clean, LatNames)
+```
+
+# MNT
+
+#Read in data
+```{r}
+MNT_1999 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1388.7&entityid=04b4c3382cf2b1dabe9e7693738e7ec3") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov)) 
+
+MNT_2000 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1391.8&entityid=c9b7a980cd3578443cf8deb2e5917fad") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2001 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1395.7&entityid=92db37855a83b1c5a397ab11b3e0e4e4") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2002 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.1399.8&entityid=9fe62d51fad3cab86a2fb8599ef34be3") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2004 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10012.6&entityid=c59c93759ad43fc6683310fdce253b17") %>%
+  filter(Site == "Toolik MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2005 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10013.6&entityid=404a127b36a98dd9abdd222a3d1be9fa") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2006 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10011.6&entityid=d0088c0740e0a0016061f93081f7499f") %>%
+  filter(Site == "Toolik MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2008 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10490.2&entityid=ac4eff0e90c8a289ca1550347ebfca82") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+MNT_2013 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.20048.1&entityid=dddf0ae9a1920ddbd9f2c63ccaae1774") %>%
+  filter(Site == "MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, Perct_cov = Relative.Cover) %>%
+  mutate(Perct_cov = as.numeric(Perct_cov)) %>%
+  mutate(relcov = Perct_cov / 100)%>%
+  select(-Perct_cov)
+```
+
+## Join datasets 
+```{r}
+MNT_all_online <- Reduce(MyMerge, list(MNT_1999, MNT_2000, MNT_2001, MNT_2002, MNT_2004, MNT_2005, MNT_2006, MNT_2008, MNT_2013)) %>% mutate(year = as.numeric(year)) %>%
+  filter(species != "vole hole", species != "tussock #",  species != "vole trail", species != "eaten tussock", species != "Caribou feces", species != "caribou poop", species != "vole poop", species != "water", species != "vole litter", species != "dying tussock",  species != "chewed tussock",  species != "birds nest",  species != "caribou feces", species != "Water", species != "mushroom", species != "dead tussock")
+
+unique(MNT_all_online$species)
+```
+
+## Fix naming errors 
+```{r}
+MNT_all_online$species <- MNT_all_online$species %>%
+  recode("Carex bigelowii" = "Car big", "Cassiope tetragona" = "Cas tet", "Equisetum arvense"="Equ arv", "Eriophorum vaginatum"="Eri vag", "Pedicularis capitata"="Ped cap", "Polygonum viviparum"="Pol viv", "Rhododendron lapponicum"="Rho lap", "Sedge sp. 2"="sedge", "Salix arctica"="Sal arc", "Tofieldia coccinea"="Tof coc", "Oxytropis sp"="Oxy sp", "Arctostaphylos alpina"="Arc alp", "Calamagrostis canadensis"="Cal can", "Andromeda polifolia"="And pol", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="", ""="")
+unique(MNT_all_online$species)
+```
+
+
+
+# SAG
+```{r}
+SAG_2004 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10012.6&entityid=c59c93759ad43fc6683310fdce253b17") %>%
+  filter(Site != "Toolik MAT" & Site != "Toolik DH" & Site != "Toolik MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+SAG_2006 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10011.6&entityid=d0088c0740e0a0016061f93081f7499f") %>%
+  filter(Site != "Toolik MAT" & Site != "Toolik DH" & Site != "Toolik MNT") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+SAG_2008 <- read.csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-arc.10490.2&entityid=ac4eff0e90c8a289ca1550347ebfca82") %>%
+  filter(Site == "SAG") %>%
+  rename(year = Year, site = Site, treatment = Treatment, block = Block, quad = Plot, species = Species, relcov = Relative.Cover) %>%
+  mutate(relcov = as.numeric(relcov))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

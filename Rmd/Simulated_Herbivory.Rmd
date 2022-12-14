@@ -1,6 +1,6 @@
 ---
 title: "R_cleaning_code_tiller_heights"
-author: "Nicole"
+author: "Nicole Williamson"
 date:  "`r Sys.Date()`"
 output:  
   html_document:
@@ -588,7 +588,9 @@ ht.avg.rep <- (TH_all) %>% group_by(d_sub2, block, plot, clip, clip_id) %>% summ
 ht.avg.clip <- (ht.avg.rep) %>% group_by(d_sub2, block, plot, clip) %>% summarise_at(vars(avg_t_ht1), list(avg_t_ht2 = mean, std_ht2 = sd, max_ht2 = max, min_ht2 = min), na.rm = TRUE)
 
 #average across the blocks
-ht.avg.block <- (ht.avg.clip) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(avg_t_ht2), list(avg_t_ht3 = mean, std_ht3 = sd, max_ht3 = max, min_ht3 = min), na.rm = TRUE)
+ht.avg.block <- (ht.avg.clip) %>% 
+  group_by(d_sub2, plot, clip) %>% 
+summarise(avg_t_ht3 = mean(avg_t_ht2, na.rm = TRUE), sd = sd(avg_t_ht2, na.rm = TRUE), n = n(), se = sd/sqrt(n)) %>% ungroup()
 ```
 
 !!Important!! \~ make sure you have the "na.rm = TRUE" at the end of the
@@ -617,6 +619,8 @@ tnum.avg.clip <- (tnum.avg.rep) %>% group_by(d_sub2, block, plot, clip) %>% summ
 
 #average across the blocks
 tnum.avg.block <- (tnum.avg.clip) %>% group_by(d_sub2, plot, clip) %>% summarise_at(vars(avg_t_num2), list(avg_t_num3 = mean, std_num3 = sd, max_num3 = max, min_num3 = min), na.rm = TRUE)
+
+write.csv(tnum.avg.block, file = "../Derived CSVs/test.data.csv")
 ```
 
 
@@ -970,7 +974,17 @@ Num_all           <- Reduce(MyMerge, list(Num2018, Num2019, Num2020, Num2021))
 
 #Rename date column data
 Num_all$d_sub2 <- recode(Num_all$d_sub2, "4" = "2018", "8" = "2019", "9" = "2020", "13" = "2021")
+
 ```
+
+Averages 
+```{r}
+tnum.avg.clip <- (damage) %>% group_by(Block, Fert_treatment, Herb_treatment) %>% summarise_at(vars(Diameter..cm.), list(avg_diam = mean, std_diam = sd), na.rm = TRUE)
+
+#average diameter across the blocks
+diam.avg.block <- (diam.avg.clip) %>% group_by(Fert_treatment, Herb_treatment) %>% summarise_at(vars(avg_diam), list(avg_diam = mean, std_diam = sd), na.rm = TRUE)
+```
+
 
 ```{r}
 Num_all$plot <- factor(Num_all$plot, levels = c("CT", "F2", "F5", "F10"))

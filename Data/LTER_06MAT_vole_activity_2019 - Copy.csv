@@ -1,0 +1,65 @@
+Date,Site,Block,Plot,Uphill or Downhill,Quad #,# of tussocks,vole hole,vole trail,chopped litter,severed litter,latrine
+7/22/2019,LMAT,1,CT,Uphill ,1,6,0,0,3,0,0
+7/22/2019,LMAT,1,CT,Uphill ,2,2,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Uphill ,3,6,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Uphill ,4,5,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Downhill,1,5,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Downhill,2,4,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Downhill,3,4,0,0,0,0,0
+7/22/2019,LMAT,1,CT,Downhill,4,5,0,0,1,0,0
+7/13/2019,LMAT,1,F2,Uphill,1,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Uphill,2,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Uphill,3,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Uphill,4,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Downhill,1,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Downhill,2,,0,0,0,0,0
+7/13/2019,LMAT,1,F2,Downhill,3,,0,4,0,0,0
+7/13/2019,LMAT,1,F2,Downhill,4,,0,0,0,0,0
+7/22/2019,LMAT,1,F5,Uphill,1,1,0,0,0,0,0
+7/22/2019,LMAT,1,F5,Uphill,2,3,0,0,0,0,0
+7/22/2019,LMAT,1,F5,Uphill,3,3,0,1,0,0,0
+7/22/2019,LMAT,1,F5,Uphill,4,3,0,0,0,0,0
+7/22/2019,LMAT,1,F5,Downhill,1,5,0,0,1,1,0
+7/22/2019,LMAT,1,F5,Downhill,2,2,1,0,0,0,0
+7/22/2019,LMAT,1,F5,Downhill,3,2,0,0,0,0,0
+7/22/2019,LMAT,1,F5,Downhill,4,4,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Uphill,1,3,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Uphill,2,4,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Uphill,3,2,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Uphill,4,5,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Downhill,1,3,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Downhill,2,4,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Downhill,3,3,0,0,0,0,0
+7/23/2019,LMAT,2,F2,Downhill,4,4,0,0,0,0,0
+7/23/2019,LMAT,3,CT,Uphill,1,3,0,0,0,0,0
+7/23/2019,LMAT,3,CT,Uphill,2,4,0,0,0,2,0
+7/23/2019,LMAT,3,CT,Uphill,3,4,0,0,3,0,0
+7/23/2019,LMAT,3,CT,Uphill,4,4,0,0,0,0,0
+7/23/2019,LMAT,3,CT,Downhill,1,4,0,0,12,2,0
+7/23/2019,LMAT,3,CT,Downhill,2,4,0,1,10,2,0
+7/23/2019,LMAT,3,CT,Downhill,3,4,1,1,9,2,0
+7/23/2019,LMAT,3,CT,Downhill,4,6,0,0,7,0,0
+7/23/2019,LMAT,3,F2,Uphill,1,2,2,0,0,3,0
+7/23/2019,LMAT,3,F2,Uphill,2,2,0,0,0,0,0
+7/23/2019,LMAT,3,F2,Uphill,3,3,0,0,0,0,0
+7/23/2019,LMAT,3,F2,Uphill,4,4,2,0,0,0,0
+7/23/2019,LMAT,3,F2,Downhill,1,1,0,0,0,0,0
+7/23/2019,LMAT,3,F2,Downhill,2,0,0,0,0,0,0
+7/23/2019,LMAT,3,F2,Downhill,3,0,0,0,0,0,0
+7/23/2019,LMAT,3,F2,Downhill,4,0,0,0,0,0,0
+7/23/2019,LMAT,3,F5,Uphill,1,4,0,0,0,6,0
+7/23/2019,LMAT,3,F5,Uphill,2,2,1,0,0,2,0
+7/23/2019,LMAT,3,F5,Uphill,3,3,1,1,0,0,0
+7/23/2019,LMAT,3,F5,Uphill,4,3,0,1,0,0,0
+7/23/2019,LMAT,3,F5,Downhill,1,4,0,0,0,6,0
+7/23/2019,LMAT,3,F5,Downhill,2,5,1,0,8,4,0
+7/23/2019,LMAT,3,F5,Downhill,3,6,1,1,9,6,0
+7/23/2019,LMAT,3,F5,Downhill,4,2,0,0,0,2,0
+7/23/2019,LMAT,3,F10,Uphill,1,4,1,2,6,2,0
+7/23/2019,LMAT,3,F10,Uphill,2,1,0,1,0,0,0
+7/23/2019,LMAT,3,F10,Uphill,3,1,0,0,0,0,0
+7/23/2019,LMAT,3,F10,Uphill,4,1,0,0,0,0,0
+7/23/2019,LMAT,3,F10,Downhill,1,4,2,0,3,5,0
+7/23/2019,LMAT,3,F10,Downhill,2,2,1,1,3,0,0
+7/23/2019,LMAT,3,F10,Downhill,3,2,1,0,7,0,0
+7/23/2019,LMAT,3,F10,Downhill,4,4,0,1,3,3,0
